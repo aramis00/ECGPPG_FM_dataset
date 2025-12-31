@@ -68,10 +68,10 @@
     <nav>
         <ul class="nav-tabs">
             <li class="active" data-tab="models">Foundation Models</li>
-            <li data-tab="benchmarks">Architecture & Benchmarks</li>
             <li data-tab="datasets-12lead">12-Lead ECG Datasets</li>
             <li data-tab="datasets-reduced">Reduced-Lead & PPG Datasets</li>
             <li data-tab="compare">Compare Models</li>
+            <li data-tab="benchmarks">Compare Model Compute</li>
         </ul>
     </nav>
 
@@ -99,20 +99,13 @@
             </table>
         </section>
 
-        <!-- Architecture & Benchmarks Section -->
+        <!-- Compare Model Compute Section -->
         <section id="benchmarks" class="tab-content">
             <div class="section-header">
-                <h2>Architecture & Computational Benchmarks</h2>
-                <p>Model architecture details and computational requirements across different hardware.</p>
+                <h2>Compare Model Compute</h2>
+                <p>Computational benchmarks across different hardware. Click model names to view full details including architecture.</p>
             </div>
 
-            <h3>Model Architectures</h3>
-            <table id="architecture-table" class="display">
-                <thead><tr><th>Model</th><th>Architecture Description</th></tr></thead>
-                <tbody id="architecture-tbody"></tbody>
-            </table>
-
-            <h3 style="margin-top: 30px;">Computational Benchmarks</h3>
             <div class="legend">
                 <strong>Hardware:</strong>
                 <button class="filter-btn benchmark-filter active" data-hw="a100">NVIDIA A100</button>
