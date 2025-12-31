@@ -1378,7 +1378,8 @@ function createDatasetLinks(pretrainData) {
     const datasets = pretrainData.split(/[,;]+/).map(d => d.trim()).filter(d => d);
     return datasets.map(dataset => {
         const cleanName = dataset.replace(/\*$/, '').trim();
-        return `<span class="clickable" onclick="showDataset('${cleanName}')">${dataset}</span>`;
+        // Use data attribute instead of onclick to avoid escaping issues
+        return `<span class="clickable dataset-link" data-dataset="${cleanName.replace(/"/g, '&quot;')}">${dataset}</span>`;
     }).join(', ');
 }
 
@@ -1609,6 +1610,18 @@ function setupModal() {
     });
 }
 
+// Setup dataset link click handlers using event delegation
+function setupDatasetLinks() {
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('dataset-link')) {
+            const datasetName = e.target.getAttribute('data-dataset');
+            if (datasetName) {
+                showDataset(datasetName);
+            }
+        }
+    });
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     populateModels();
@@ -1618,5 +1631,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupFilters();
     setupCompare();
     setupModal();
+    setupDatasetLinks();
     console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
 });
