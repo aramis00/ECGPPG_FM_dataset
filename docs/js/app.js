@@ -1458,37 +1458,73 @@ function populateReduced() {
     $('#datasets-reduced-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
 }
 
-// Show model modal
+// Show model modal with ALL details
 function showModel(name) {
     const m = MODELS.find(x => x.model === name);
     if (!m) return;
+
+    // Format eval fields as checkmarks
+    const evalCheck = (val) => {
+        if (val === 1 || val === '1' || val === true) return '✓';
+        if (val === 0 || val === '0' || val === false || val === 'na' || !val) return '-';
+        return val;
+    };
+
     document.getElementById('modal-title').textContent = m.model;
     document.getElementById('modal-body').innerHTML = `
         <div class="info-row"><span class="info-label">Title</span>${m.title || '-'}</div>
         <div class="info-row"><span class="info-label">Year</span>${m.Year || '-'}</div>
         <div class="info-row"><span class="info-label">Backbone</span>${m.Backbone || '-'}</div>
-        <div class="info-row"><span class="info-label">Method</span>${m['Pretrain Method'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Modality</span>${m['Pretrain modality'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Pretrain Method</span>${m['Pretrain Method'] || '-'}</div>
         <div class="info-row"><span class="info-label">Pretrain Dataset</span>${m['Pretrain Dataset'] || '-'}</div>
         <div class="info-row"><span class="info-label">Data Size</span>${m['ECGs (n)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">ECG Leads</span>${m.ECGlead || '-'}</div>
+        <div class="info-row"><span class="info-label">Sampling Rate (Hz)</span>${m.sampling_rate || '-'}</div>
+        <div class="info-row"><span class="info-label">Evaluation Data</span>${m.eval_data || '-'}</div>
         <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
+        <div class="info-row"><span class="info-label">Linear Probe</span>${evalCheck(m.eval_LP)}</div>
+        <div class="info-row"><span class="info-label">Fine-tuning</span>${evalCheck(m.eval_FT)}</div>
+        <div class="info-row"><span class="info-label">Zero-shot</span>${evalCheck(m.eval_zeroshot)}</div>
+        <div class="info-row"><span class="info-label">Data Efficiency</span>${evalCheck(m.eval_data_efficiency)}</div>
+        <div class="info-row"><span class="info-label">Reduced Lead</span>${evalCheck(m.eval_reduced_lead)}</div>
+        <div class="info-row"><span class="info-label">Ablation Study</span>${evalCheck(m.eval_ablation)}</div>
+        <div class="info-row"><span class="info-label">Fairness Eval</span>${evalCheck(m.eval_fairness)}</div>
+        <div class="info-row"><span class="info-label">Privacy Eval</span>${evalCheck(m.eval_privacy)}</div>
+        <div class="info-row"><span class="info-label">Compute Info</span>${m.eval_compute || '-'}</div>
+        <div class="info-row"><span class="info-label">Explainability</span>${m.eval_explainability || '-'}</div>
         <div class="info-row">${createLinks(m)}</div>
     `;
     document.getElementById('modal').style.display = 'block';
 }
 
-// Show dataset modal
+// Show dataset modal with ALL details
 function showDataset(name) {
     let d = DATASETS_12LEAD.find(x => x.Dataset === name) || DATASETS_REDUCED.find(x => x.Dataset === name);
     if (!d) return;
     const usedBy = findModelsUsingDataset(name);
     const link = d.dataset_link || d.data_link;
+    const is12Lead = DATASETS_12LEAD.some(x => x.Dataset === name);
+
     document.getElementById('modal-title').textContent = d.Dataset;
     document.getElementById('modal-body').innerHTML = `
         <div class="info-row"><span class="info-label">Records</span>${d.Record || d['Record (n)'] || '-'}</div>
         <div class="info-row"><span class="info-label">Patients</span>${d['Patient (n)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Year</span>${d.Year || '-'}</div>
+        <div class="info-row"><span class="info-label">Sites</span>${d.site || '-'}</div>
         <div class="info-row"><span class="info-label">Country</span>${d.Country || '-'}</div>
+        <div class="info-row"><span class="info-label">Setting</span>${d['Setting '] || d.Setting || '-'}</div>
+        ${!is12Lead ? `<div class="info-row"><span class="info-label">PPG</span>${d.PPG === 1 ? '✓' : '-'}</div>` : ''}
+        ${!is12Lead ? `<div class="info-row"><span class="info-label">ECG</span>${d.ECG === 1 ? '✓' : '-'}</div>` : ''}
+        <div class="info-row"><span class="info-label">Sample Rate (Hz)</span>${d['Sample rate (Hz)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Duration (sec)</span>${d['Time (sec)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Number of Leads</span>${d['No. of leads '] || d['No. of ECG leads'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Demographics/Clinical</span>${d['Demographic/ clinical data'] || '-'}</div>
+        <div class="info-row"><span class="info-label">ECG Labels</span>${d['ECG label'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Data Type</span>${d['Data type'] || '-'}</div>
         <div class="info-row"><span class="info-label">Access</span>${getAccessBadge(d.Access)}</div>
+        <div class="info-row"><span class="info-label">Related Dataset</span>${d.related_dataset || d.derived_dataset || '-'}</div>
         <div class="info-row"><span class="info-label">Used By Models</span>${usedBy.length ? usedBy.join(', ') : 'None'}</div>
         <div class="info-row">${link ? `<a href="${link}" target="_blank" class="link-btn">Access Dataset</a>` : '-'}</div>
     `;
