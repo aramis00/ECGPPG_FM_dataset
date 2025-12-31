@@ -1,5 +1,5 @@
-// Embedded data (to avoid CORS issues when opening locally)
-const EMBEDDED_MODELS = [
+// Data
+const MODELS = [
   {
     "model": "ECG-JEPA",
     "title": "Learning general representation of 12-lead electrocardiogram with a joint-embedding predictive architecture",
@@ -77,7 +77,7 @@ const EMBEDDED_MODELS = [
     "Weightlink": "https://huggingface.co/heartwise/SSL_Pretrained_model/tree/main",
     "eval_data": "MIMIC-IV-test, PTB, CLSA, UKB, UCSF*, MGH*, CSH*, JGH*, UW*, NYP*, CHUM*",
     "ECGlead": 12,
-    "sampling_rate": NaN,
+    "sampling_rate": null,
     "eval_LP": 0,
     "eval_FT": 1,
     "eval_zeroshot": "na",
@@ -358,7 +358,7 @@ const EMBEDDED_MODELS = [
     "eval_privacy": 0,
     "eval_compute": "Hardware,  training time, finetuning time",
     "eval_explainability": "Attention based interpretability",
-    "ecgs_numeric": NaN
+    "ecgs_numeric": null
   },
   {
     "model": "PPG-PT",
@@ -388,7 +388,7 @@ const EMBEDDED_MODELS = [
     "eval_privacy": 0,
     "eval_compute": "Hardware,  training time, finetuning time",
     "eval_explainability": "Attention based interpretability",
-    "ecgs_numeric": NaN
+    "ecgs_numeric": null
   },
   {
     "model": "HeartBERT",
@@ -418,7 +418,7 @@ const EMBEDDED_MODELS = [
     "eval_privacy": 0,
     "eval_compute": "Hardware",
     "eval_explainability": 0,
-    "ecgs_numeric": NaN
+    "ecgs_numeric": null
   },
   {
     "model": "PaPaGei-S/-P",
@@ -448,7 +448,7 @@ const EMBEDDED_MODELS = [
     "eval_privacy": 0,
     "eval_compute": "Hardware",
     "eval_explainability": 0,
-    "ecgs_numeric": NaN
+    "ecgs_numeric": null
   },
   {
     "model": "PulsePPG",
@@ -478,11 +478,11 @@ const EMBEDDED_MODELS = [
     "eval_privacy": 0,
     "eval_compute": "Hardware,  training time",
     "eval_explainability": 0,
-    "ecgs_numeric": NaN
+    "ecgs_numeric": null
   }
 ];
 
-const EMBEDDED_DATASETS_12LEAD = [
+const DATASETS_12LEAD = [
   {
     "Dataset": "HEED",
     "Record": "11.7 M",
@@ -500,7 +500,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "C",
     "dataset_link": "https://bdsp.io/content/heedb/4.0/",
     "citation": "{RN66,\n   author = {Koscova, Zuzana and Li, Qiao and Robichaux, Chad and Moura Junior, Valdery and Ghanta, Manohar and Gupta, Aditya and Rosand, Jonathan and Aguirre, Aaron and Hong, Shenda and Albert, David E},\n   title = {The Harvard-Emory ECG Database},\n   journal = {medRxiv},\n   pages = {2024.09. 27.24314503},\n   DOI = {10.1101/2024.09.27.24314503},\n   url = {https://doi.org/10.1101/2024.09.27.24314503},\n   year = {2024},\n   type = {Journal Article}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 11700000,
     "patients_numeric": 2100000
   },
@@ -571,7 +571,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Dataset": "IKEM",
     "Record": "98.1 K",
     "Patient (n)": "30.3 K",
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "Czech Republic",
     "Setting ": "hospital diagnostic ECG",
@@ -584,7 +584,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://doi.org/10.5281/zenodo.8393007",
     "citation": "{RN73,\n   author = {Sej\u00e1k, Michal and Sido, Jakub and \u017dahour, David},\n   title = {IKEM dataset v1.0.0},\n   DOI = {10.5281/zenodo.8393007},\n   url = {https://doi.org/10.5281/zenodo.8393007},\n   year = {2023},\n   type = {Dataset}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 98100,
     "patients_numeric": 30300
   },
@@ -605,7 +605,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "R",
     "dataset_link": "https://www.ukbiobank.ac.uk/",
     "citation": "{RN75,\n   author = {Zheng, Jianwei and Guo, Hangyuan and Chu, Huimin},\n   title = {A large scale 12-lead electrocardiogram database for arrhythmia study},\n   month = {2022},\n   DOI = {10.13026/WGEX-ER52},\n   url = {https://doi.org/10.13026/wgex-er52},\n   year = {2022},\n   type = {Dataset}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 91100,
     "patients_numeric": 82700
   },
@@ -626,7 +626,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://doi.org/10.13026/wgex-er52",
     "citation": "{RN75,\n   author = {Zheng, Jianwei and Guo, Hangyuan and Chu, Huimin},\n   title = {A large scale 12-lead electrocardiogram database for arrhythmia study},\n   month = {2022},\n   DOI = {10.13026/WGEX-ER52},\n   url = {https://doi.org/10.13026/wgex-er52},\n   year = {2022},\n   type = {Dataset}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 45200,
     "patients_numeric": 45200
   },
@@ -647,7 +647,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://doi.org/10.6084/m9.figshare.c.5779802.v1",
     "citation": "{RN76,\n   author = {Liu, Hui and Wang, Yinglong and Chen, Da and Zhang, Xiyu and Li, Huijie and Bian, Lipan and Shu, Minglei and Chen, Dan},\n   title = {A large-scale multi-label 12-lead electrocardiogram database with standardized diagnostic statements},\n   month = {2022/5/25},\n   DOI = {10.6084/M9.FIGSHARE.C.5779802.V1},\n   url = {https://doi.org/10.6084/m9.figshare.c.5779802.v1},\n   year = {2022},\n   type = {Dataset}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 25800,
     "patients_numeric": 25700
   },
@@ -689,7 +689,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://doi.org/10.6084/m9.figshare.27078763",
     "citation": "{RN79,\n   author = {Tan, Jian and Fan, Haoyi and Luo, Jiawei and Zhou, Yanjie and Wang, Ning and Wang, Xizheng and Liu, Guizhi and Liu, Chengyu and Wang, Zongmin},\n   title = {A pediatric ECG database with disease diagnosis covering 11643 children},\n   journal = {Scientific Data},\n   volume = {12},\n   number = {1},\n   pages = {867},\n   ISSN = {2052-4463},\n   url = {https://doi.org/10.1038/s41597-025-05225-z},\n   year = {2025},\n   type = {Journal Article}\n}",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 14200,
     "patients_numeric": 11600
   },
@@ -697,7 +697,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Dataset": "Georgia*",
     "Record": "10.3 K",
     "Patient (n)": "10.2 K",
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "US",
     "Setting ": "hospital diagnostic ECG ",
@@ -710,7 +710,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://physionet.org/content/challenge-2020/1.0.2/training/georgia/#files-panel",
     "citation": "{RN80,\n   author = {Perez Alday, Erick Andres and Gu, Annie and Shah, Amit and Liu, Chengyu and Sharma, Ashish and Seyedi, Salman and Bahrami Rad, Ali and Reyna, Matthew and Clifford, Gari},\n   title = {Classification of 12-lead ECGs: The PhysioNet/Computing in Cardiology Challenge 2020},\n   month = {2022},\n   DOI = {10.13026/DVYD-KD57},\n   url = {https://doi.org/10.13026/dvyd-kd57},\n   year = {2022},\n   type = {Dataset}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 10300,
     "patients_numeric": 10200
   },
@@ -718,7 +718,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Dataset": "CPSC 2018, CPSC 2018 extra",
     "Record": "10.3 K",
     "Patient (n)": "9.5 K",
-    "Year": NaN,
+    "Year": null,
     "site": 11,
     "Country": "China",
     "Setting ": "hospital diagnostic ECG",
@@ -731,7 +731,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://physionet.org/content/challenge-2020/1.0.2/training/cpsc_2018/#files-panel",
     "citation": "{RN80,\n   author = {Perez Alday, Erick Andres and Gu, Annie and Shah, Amit and Liu, Chengyu and Sharma, Ashish and Seyedi, Salman and Bahrami Rad, Ali and Reyna, Matthew and Clifford, Gari},\n   title = {Classification of 12-lead ECGs: The PhysioNet/Computing in Cardiology Challenge 2020},\n   month = {2022},\n   DOI = {10.13026/DVYD-KD57},\n   url = {https://doi.org/10.13026/dvyd-kd57},\n   year = {2022},\n   type = {Dataset}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 10300,
     "patients_numeric": 9500
   },
@@ -752,7 +752,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://doi.org/10.5281/zenodo.4905618",
     "citation": "{RN81,\n   author = {Cardoso, C. S. and Sabino, E. C. and Oliveira, C. D. and de Oliveira, L. C. and Ferreira, A. M. and Cunha-Neto, E. and Bierrenbach, A. L. and Ferreira, J. E. and Haikal, D. S. and Reingold, A. L. and Ribeiro, A. L.},\n   title = {Longitudinal study of patients with chronic Chagas cardiomyopathy in Brazil (SaMi-Trop project): a cohort profile},\n   journal = {BMJ Open},\n   volume = {6},\n   number = {5},\n   pages = {e011181},\n   keywords = {Aged\nBiomarkers/blood\nBrazil/epidemiology\nChagas Cardiomyopathy/blood/drug therapy/*epidemiology/physiopathology\nChronic Disease/drug therapy/*epidemiology\nDisease Progression\nFemale\nFollow-Up Studies\nHeart Failure/*epidemiology/physiopathology/prevention & control\nHumans\nImmunosuppressive Agents/*therapeutic use\nLongitudinal Studies\nMale\nMiddle Aged\nNatriuretic Peptide, Brain/*blood\nNitroimidazoles/*therapeutic use\nPeptide Fragments/*blood\nPopulation Surveillance\nPredictive Value of Tests\nPrognosis\nProspective Studies\nQuality of Life\nSocioeconomic Factors\nBiomarkers\nChemical pathology\nChagas disease\nCohort Studies},\n   ISSN = {2044-6055 (Electronic)\n2044-6055 (Linking)},\n   DOI = {10.1136/bmjopen-2016-011181},\n   url = {https://doi.org/10.1136/bmjopen-2016-011181},\n   year = {2016},\n   type = {Journal Article}\n}\n",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 2000,
     "patients_numeric": 1600
   },
@@ -773,7 +773,7 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://doi.org/10.7302/gk9v-ka27",
     "citation": "{RN83,\n   author = {Asthana, Vishwaratn and Monovoukas, Demetri and Kucharski, Kevin and Chopra, Zoey and Perkins, Sidney and Bugga, Pallavi},\n   title = {Pre-/Post-STEMI ECG Database},\n   month = {2024},\n   DOI = {10.7302/GK9V-KA27},\n   url = {https://doi.org/10.7302/gk9v-ka27},\n   year = {2024},\n   type = {Dataset}\n}",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 266,
     "patients_numeric": 266
   },
@@ -794,13 +794,13 @@ const EMBEDDED_DATASETS_12LEAD = [
     "Access": "O",
     "dataset_link": "https://physionet.org/content/echonext/1.1.0/",
     "citation": "{RN84,\n   author = {Elias, Pierre and Finer, Joshua},\n   title = {Echonext: A dataset for detecting echocardiogram-confirmed structural heart disease from ecgs},\n   publisher = {PhysioNet},\n   year = {2025},\n   type = {Generic}\n}",
-    "related_dataset": NaN,
+    "related_dataset": null,
     "records_numeric": 100000,
     "patients_numeric": 36300
   }
 ];
 
-const EMBEDDED_DATASETS_REDUCED = [
+const DATASETS_REDUCED = [
   {
     "Dataset": "MIMIC-III Waveform Database",
     "Record (n)": "67.8K (MIMIC-III matched subset: 22.3K)",
@@ -836,14 +836,14 @@ const EMBEDDED_DATASETS_REDUCED = [
     "ECG": 1,
     "Sample rate (Hz)": 125,
     "Time (sec)": "variable (mean 7 hr)",
-    "No. of ECG leads": NaN,
+    "No. of ECG leads": null,
     "Demographic/ clinical data": "Age, gender, monitor alarm, length of stay",
     "ECG label": "No individual beat/ rhythm annotation; other waveforms present: ABP, capnography. respiratory, CVP, etc",
     "Data type": "csv",
     "Access": "R",
     "data_link": "https://stanford.redivis.com/WAVES/datasets",
     "citation": "{RN86,\n   author = {Miller, Daniel and Dhillon, Gurpreet S. and Bambos, N. and Shin, A. and Scheinker, David},\n   title = {WAVES \u2013 the Lucile Packard children\u2019s hospital pediatric physiological waveforms dataset},\n   journal = {Sci. Data},\n   volume = {10},\n   ISSN = {2052-4463},\n   DOI = {10.1038/s41597-023-02037-x},\n   url = {http://dx.doi.org/10.1038/s41597-023-02037-x},\n   year = {2023},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 550000,
     "patients_numeric": 50400.0
   },
@@ -866,7 +866,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://khdp.net/database/data-search-detail/698/icu-cardiac-arrest/1.0",
     "citation": "{RN88,\n   title = {SCOPE: A survival and cardiac arrest outcome dataset with PPG and ECG waveforms from intensive care units},\n   publisher = {Korea Health Data Platform},\n   url = {https://khdp.net/database/data-search-detail/698/icu-cardiac-arrest/1.0},\n   year = {2025},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 4500,
     "patients_numeric": 4500.0
   },
@@ -912,7 +912,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O (currently N/A due to data revision)",
     "data_link": "https://doi.org/10.24432/C5VS5G",
     "citation": "{RN90,\n   author = {Samad, Muntaha and Angel, Mirana and Rinehart, Joseph and Kanomata, Yuzo and Baldi, Pierre and Cannesson, Maxime},\n   title = {Medical Informatics Operating Room Vitals and Events Repository (MOVER): a public-access operating room database},\n   journal = {JAMIA Open},\n   volume = {6},\n   number = {4},\n   pages = {ooad084},\n   keywords = {anesthesiology\nartificial intelligence\nelectronic medical record\nphysiology\nsurgery},\n   ISSN = {2574-2531},\n   DOI = {10.1093/jamiaopen/ooad084},\n   url = {https://doi.org/10.1093/jamiaopen/ooad084},\n   year = {2023},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 83500,
     "patients_numeric": 58800.0
   },
@@ -935,7 +935,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.13026/C2F305",
     "citation": "{RN92,\n   author = {Moody, George B. and Mark, Roger G.},\n   title = {MIT-BIH Arrhythmia Database},\n   month = {1992},\n   DOI = {10.13026/C2F305},\n   url = {https://doi.org/10.13026/C2F305},\n   year = {1992},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 48,
     "patients_numeric": 47.0
   },
@@ -943,7 +943,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "Long-term ST",
     "Record (n)": 86,
     "Patient (n)": 80,
-    "Year": NaN,
+    "Year": null,
     "site": "multi",
     "Country": "Slovenia, Italy",
     "Setting": "Ambulatory \u2013 Holter (ECG)",
@@ -958,7 +958,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.13026/C2G01T",
     "citation": "{RN93,\n   author = {Jager, Franc and Taddei, Alessandro and Moody, George B. and Emdin, Michele and Antolic, Gorazd and Dorn, Roman and Smrdel, Ales and Marchesi, Carlo and Mark, Roger G.},\n   title = {The Long-Term ST database},\n   month = {1995},\n   DOI = {10.13026/C2G01T},\n   url = {https://doi.org/10.13026/C2G01T},\n   year = {1995},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 86,
     "patients_numeric": 80.0
   },
@@ -966,7 +966,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "European ST-T",
     "Record (n)": 90,
     "Patient (n)": 79,
-    "Year": NaN,
+    "Year": null,
     "site": "multi",
     "Country": "8 Europe countries",
     "Setting": "Ambulatory (ECG)",
@@ -981,7 +981,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.13026/C2D59Z",
     "citation": "{RN94,\n   author = {Taddei, A. and Distante, G. and Emdin, M. and Pisani, P. and Moody, G. B. and Zeelenberg, C. and Marchesi, C.},\n   title = {The European ST-T database: standard for evaluating systems for the analysis of ST-T changes in ambulatory electrocardiography},\n   journal = {Eur. Heart J.},\n   volume = {13},\n   number = {9},\n   pages = {1164-1172},\n   ISSN = {0195-668X},\n   DOI = {10.1093/oxfordjournals.eurheartj.a060332},\n   url = {https://doi.org/10.1093/oxfordjournals.eurheartj.a060332},\n   year = {1992},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 90,
     "patients_numeric": 79.0
   },
@@ -989,7 +989,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "St Petersburg INCART",
     "Record (n)": 75,
     "Patient (n)": 32,
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "Russia",
     "Setting": "Ambulatory \u2013 Holter (ECG)",
@@ -1004,15 +1004,15 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.13026/C2V88N",
     "citation": "{RN96,\n   author = {Tihonenko, Viktor and Khaustov, Alexander and Ivanov, Sergey and Rivin, Alexei},\n   title = {St.-Petersburg institute of cardiological technics 12-lead arrhythmia database},\n   month = {2007},\n   DOI = {10.13026/C2V88N},\n   url = {https://doi.org/10.13026/C2V88N},\n   year = {2007},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 75,
     "patients_numeric": 32.0
   },
   {
     "Dataset": "MIT-BIH Atrial fibrillation",
     "Record (n)": 25,
-    "Patient (n)": NaN,
-    "Year": NaN,
+    "Patient (n)": null,
+    "Year": null,
     "site": 1,
     "Country": "US",
     "Setting": "Ambulatory \u2013 Holter (ECG)",
@@ -1021,21 +1021,21 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Sample rate (Hz)": 250,
     "Time (sec)": "10 hr",
     "No. of ECG leads": 2,
-    "Demographic/ clinical data": NaN,
+    "Demographic/ clinical data": null,
     "ECG label": "Beat & rhythm annotations (beat-to-beat, expert reviewed)",
     "Data type": "wfdb",
     "Access": "O",
     "data_link": "https://doi.org/10.13026/C2MW2D",
     "citation": "{RN97,\n   author = {Moody, George B. and Mark, Roger G.},\n   title = {MIT-BIH Atrial Fibrillation Database},\n   month = {1992},\n   DOI = {10.13026/C2MW2D},\n   url = {https://doi.org/10.13026/C2MW2D},\n   year = {1992},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 25,
-    "patients_numeric": NaN
+    "patients_numeric": null
   },
   {
     "Dataset": "Long term AF",
     "Record (n)": 84,
-    "Patient (n)": NaN,
-    "Year": NaN,
+    "Patient (n)": null,
+    "Year": null,
     "site": 1,
     "Country": "US",
     "Setting": "Ambulatory \u2013 Holter (ECG)",
@@ -1044,15 +1044,15 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Sample rate (Hz)": 128,
     "Time (sec)": "24~25 hr",
     "No. of ECG leads": 2,
-    "Demographic/ clinical data": NaN,
+    "Demographic/ clinical data": null,
     "ECG label": "Beat & rhythm annotations (beat-to-beat, expert reviewed)",
     "Data type": "wfdb",
     "Access": "O",
     "data_link": "https://physionet.org/content/ltafdb/1.0.0/",
     "citation": "{RN98,\n   author = {Petrutiu, Simona and Sahakian, Alan V. and Swiryn, Steven},\n   title = {The long-term AF database},\n   month = {2003},\n   DOI = {10.13026/C2QG6Q},\n   url = {https://doi.org/10.13026/C2QG6Q},\n   year = {2003},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 84,
-    "patients_numeric": NaN
+    "patients_numeric": null
   },
   {
     "Dataset": "IRIDIA-AF",
@@ -1073,7 +1073,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://zenodo.org/records/8405941",
     "citation": "{RN117,\n   author = {Gilon, C\u00e9dric and Gr\u00e9goire, Jean-Marie and Mathieu, Marianne and Carlier, St\u00e9phane and Bersini, Hugues},\n   title = {IRIDIA-AF, a large paroxysmal atrial fibrillation long-term electrocardiogram monitoring database},\n   journal = {Scientific data},\n   volume = {10},\n   number = {1},\n   pages = {714},\n   ISSN = {2052-4463},\n   year = {2023},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 167,
     "patients_numeric": 152.0
   },
@@ -1081,22 +1081,22 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "CPSC 2021 Paroxysmal Afib",
     "Record (n)": "1.4K",
     "Patient (n)": 63,
-    "Year": NaN,
+    "Year": null,
     "site": "multi",
-    "Country": NaN,
+    "Country": null,
     "Setting": "Ambulatory or wearable (ECG)",
     "PPG": 0,
     "ECG": 1,
     "Sample rate (Hz)": 200,
     "Time (sec)": "variable (mean 20 min)",
     "No. of ECG leads": "12 (Holter); 3 (wearable)",
-    "Demographic/ clinical data": NaN,
+    "Demographic/ clinical data": null,
     "ECG label": "Rhythm abnormality Dx. group (non-AF, paroxysmal AF, persistent AF); beat & rhythm annotations",
     "Data type": "wfdb",
     "Access": "O",
     "data_link": "https://physionet.org/content/cpsc2021/1.0.0/",
     "citation": "{RN99,\n   author = {Wang, Xingyao and Ma, Caiyun and Zhang, Xiangyu and Gao, Hongxiang and Clifford, Gari and Liu, Chengyu},\n   title = {Paroxysmal atrial fibrillation events detection from dynamic ECG recordings: The 4th China Physiological Signal Challenge 2021},\n   month = {2021},\n   DOI = {10.13026/KSYA-QW89},\n   url = {https://doi.org/10.13026/ksya-qw89},\n   year = {2021},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 1400,
     "patients_numeric": 63.0
   },
@@ -1113,13 +1113,13 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Sample rate (Hz)": 250,
     "Time (sec)": "70 min",
     "No. of ECG leads": "1 (ML I)",
-    "Demographic/ clinical data": NaN,
+    "Demographic/ clinical data": null,
     "ECG label": "Beat & rhythm annotation (expert reviewed)",
     "Data type": "wfdb",
     "Access": "O",
     "data_link": "https://physionet.org/content/icentia11k-continuous-ecg/1.0/",
     "citation": "{RN100,\n   author = {Tan, Shawn and Androz, Guillaume and Chamseddine, A. and Fecteau, P. and Courville, Aaron C. and Bengio, Yoshua and Cohen, Joseph Paul},\n   title = {Icentia11K: An unsupervised representation learning dataset for arrhythmia subtype discovery},\n   journal = {arXiv preprint arXiv:1910.09570},\n   volume = {abs/1910.09570},\n   ISSN = {2331-8422},\n   url = {https://doi.org/10.48550/arXiv.1910.09570},\n   year = {2019},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 54000,
     "patients_numeric": 11000.0
   },
@@ -1127,7 +1127,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "CapnoBase",
     "Record (n)": 42,
     "Patient (n)": 42,
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "Canada",
     "Setting": "Telemetry/ clinical grade monitoring \u2013 intraoperative (ECG and PPG)",
@@ -1136,13 +1136,13 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Sample rate (Hz)": 100,
     "Time (sec)": "8 min",
     "No. of ECG leads": 1,
-    "Demographic/ clinical data": NaN,
+    "Demographic/ clinical data": null,
     "ECG label": "ECG R peak; PPG pulse peak label (expert reviewed); other waveforms present: capnography",
     "Data type": "csv",
     "Access": "R",
     "data_link": "https://doi.org/10.5683/SP2/NLB8IT",
     "citation": "{RN102,\n   author = {Karlen, Walter},\n   title = {CapnoBase IEEE TBME Respiratory Rate Benchmark},\n   publisher = {Borealis},\n   month = {2021},\n   DOI = {10.5683/SP2/NLB8IT},\n   url = {https://doi.org/10.5683/SP2/NLB8IT},\n   year = {2021},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 42,
     "patients_numeric": 42.0
   },
@@ -1165,7 +1165,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "R",
     "data_link": "https://sleepdata.org/datasets/mesa",
     "citation": "{RN104,\n   author = {National Sleep Research, Resource},\n   title = {Multi-ethnic study of atherosclerosis (MESA)},\n   publisher = {National Sleep Research Resource},\n   month = {2016},\n   DOI = {10.25822/N7HQ-C406},\n   url = {https://doi.org/10.25822/n7hq-c406},\n   year = {2016},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 2000,
     "patients_numeric": 2000.0
   },
@@ -1173,7 +1173,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "SDB",
     "Record (n)": 146,
     "Patient (n)": "146 (pediatrics: 56 SDB, 90 NonSDB)",
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "Canada",
     "Setting": "Telemetry/ clinical grade monitoring \u2013 pediatrics (suspected sleep apnea) \u2013 polysomnography (ECG and PPG)",
@@ -1182,13 +1182,13 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Sample rate (Hz)": 62.5,
     "Time (sec)": ">3 hr",
     "No. of ECG leads": 1,
-    "Demographic/ clinical data": NaN,
+    "Demographic/ clinical data": null,
     "ECG label": "Apneas/hypopnea index (AHI); SpO2 (1 Hz)",
     "Data type": "csv",
     "Access": "O",
     "data_link": "https://doi.org/10.6084/m9.figshare.1209662",
     "citation": "{RN113,\n   author = {Garde, Ainara and Dehkordi, Parastoo and Karlen, Walter and Wensley, David and Ansermino, J Mark and Dumont, Guy A},\n   title = {Development of a screening tool for sleep disordered breathing in children using the phone Oximeter\u2122},\n   journal = {PloS one},\n   volume = {9},\n   number = {11},\n   pages = {e112959},\n   ISSN = {1932-6203},\n   url = {https://figshare.com/articles/dataset/Development_of_a_Screening_Tool_for_Sleep_Disordered_Breathing_in_Children_Using_the_Phone_Oximeter/1209662},\n   year = {2014},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 146,
     "patients_numeric": 146.0
   },
@@ -1211,7 +1211,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "R",
     "data_link": "https://sleepdata.org/datasets/numom2b/",
     "citation": "{RN114,\n   author = {Facco, Francesca L and Parker, Corette B and Reddy, Uma M and Silver, Robert M and Louis, Judette M and Basner, Robert C and Chung, Judith H and Schubert, Frank P and Pien, Grace W and Redline, Susan},\n   title = {NuMoM2b Sleep-Disordered Breathing study: objectives and methods},\n   journal = {American journal of obstetrics and gynecology},\n   volume = {212},\n   number = {4},\n   pages = {542. e1-542. e127},\n   ISSN = {0002-9378},\n   year = {2015},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 5337,
     "patients_numeric": 3163.0
   },
@@ -1219,7 +1219,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "PPG-BP",
     "Record (n)": 657,
     "Patient (n)": "219 (healthy)",
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "China",
     "Setting": "Telemetry/ clinical grade monitoring \u2013 3 min measurement (PPG)",
@@ -1234,7 +1234,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.6084/m9.figshare.5459299.v5",
     "citation": "{RN112,\n   author = {Liang, Yongbo and Liu, Guiyong and Chen, Zhencheng and Elgendi, Mohamed},\n   title = {PPG-BP Database},\n   publisher = {figshare},\n   month = {2022/9/22},\n   DOI = {10.6084/M9.FIGSHARE.5459299.V5},\n   url = {https://doi.org/10.6084/m9.figshare.5459299.v5},\n   year = {2022},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 657,
     "patients_numeric": 219.0
   },
@@ -1242,7 +1242,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "PPG DaLiA",
     "Record (n)": 15,
     "Patient (n)": 15,
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "Germany",
     "Setting": "Wearable \u2013 usual daytime activity (ECG and PPG)",
@@ -1257,7 +1257,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.24432/C53890",
     "citation": "{RN105,\n   author = {Schmidt, Attila Reiss Ina Indlekofer},\n   title = {PPG-DaLiA},\n   publisher = {UCI Machine Learning Repository},\n   month = {2019},\n   DOI = {10.24432/C53890},\n   url = {https://doi.org/10.24432/C53890},\n   year = {2019},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 15,
     "patients_numeric": 15.0
   },
@@ -1265,7 +1265,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "WESAD",
     "Record (n)": 15,
     "Patient (n)": 15,
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "Germany",
     "Setting": "Wearable \u2013 induced emotion (ECG and PPG)",
@@ -1280,7 +1280,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://doi.org/10.24432/C57K5T",
     "citation": "{RN107,\n   author = {Philip Schmidt, Attila Reiss},\n   title = {WESAD (Wearable Stress and Affect Detection)},\n   publisher = {UCI Machine Learning Repository},\n   month = {2018},\n   DOI = {10.24432/C57K5T},\n   url = {https://doi.org/10.24432/C57K5T},\n   year = {2018},\n   type = {Dataset}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 15,
     "patients_numeric": 15.0
   },
@@ -1288,7 +1288,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "TROIKA 115,116 (= IEEEPPG)",
     "Record (n)": 12,
     "Patient (n)": "12 (all male)",
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "China",
     "Setting": "Wearable \u2013 treadmill (ECG and PPG)",
@@ -1303,7 +1303,7 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://zenodo.org/records/3902710",
     "citation": "{RN110,\n   author = {Zhang, Zhilin and Pi, Zhouyue and Liu, Benyuan},\n   title = {TROIKA: a general framework for heart rate monitoring using wrist-type photoplethysmographic signals during intensive physical exercise},\n   journal = {IEEE Trans. Biomed. Eng.},\n   volume = {62},\n   number = {2},\n   pages = {522-531},\n   ISSN = {0018-9294},\n   DOI = {10.1109/TBME.2014.2359372},\n   url = {http://doi.org/10.1109/TBME.2014.2359372},\n   year = {2015},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 12,
     "patients_numeric": 12.0
   },
@@ -1311,14 +1311,14 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Dataset": "ECSMP",
     "Record (n)": 89,
     "Patient (n)": "89 (healthy)",
-    "Year": NaN,
+    "Year": null,
     "site": 1,
     "Country": "China",
     "Setting": "Telemetry/ clinical grade monitoring (ECG holter, PPG wearable) \u2013 induced emotion + sleep (sleep ECG collected the night before)",
     "PPG": 1,
     "ECG": 1,
     "Sample rate (Hz)": "512 (ECG holter); 64 (PPG)",
-    "Time (sec)": NaN,
+    "Time (sec)": null,
     "No. of ECG leads": 1,
     "Demographic/ clinical data": "Age, gender; sleep-related (sleep time, sleep efficiency, apnea index, apnea type), questionnaires (emotion, sleep quality, depression), Profile of Mood States (POMS?)",
     "ECG label": "Sleep stage (deep, light, REM); additional waveforms during emotion induction: BT (4 Hz), EDA (4 Hz), ACC (32 Hz), inter-beat-interval (from PPG), HR (1 Hz, from PPG), EEG (250 Hz)",
@@ -1326,559 +1326,243 @@ const EMBEDDED_DATASETS_REDUCED = [
     "Access": "O",
     "data_link": "https://data.mendeley.com/datasets/vn5nknh3mn/2",
     "citation": "{RN115,\n   author = {Gao, Zhilin and Cui, Xingran and Wan, Wang and Zheng, Wenming and Gu, Zhongze},\n   title = {ECSMP: A dataset on emotion, cognition, sleep, and multi-model physiological signals},\n   journal = {Data in Brief},\n   volume = {39},\n   pages = {107660},\n   ISSN = {2352-3409},\n   year = {2021},\n   type = {Journal Article}\n}\n",
-    "derived_dataset": NaN,
+    "derived_dataset": null,
     "records_numeric": 89,
     "patients_numeric": 89.0
   }
 ];
 
-// Data storage
-let modelsData = [];
-let datasets12leadData = [];
-let datasetsReducedData = [];
-let modelsTable, datasets12leadTable, datasetsReducedTable;
-
-// Dataset name normalization for matching
-function normalizeDatasetName(name) {
-    if (!name) return '';
-    return name.toLowerCase()
-        .replace(/[-_\s]+/g, '')
-        .replace(/[^a-z0-9]/g, '');
-}
-
-// Find which models use a specific dataset
-function findModelsUsingDataset(datasetName) {
-    const normalized = normalizeDatasetName(datasetName);
-    const matches = [];
-
-    modelsData.forEach(model => {
-        const pretrainData = (model['Pretrain Dataset'] || '').toLowerCase();
-        // Check for various name patterns
-        if (pretrainData.includes(normalized) ||
-            pretrainData.includes(datasetName.toLowerCase()) ||
-            normalizeDatasetName(pretrainData).includes(normalized)) {
-            matches.push(model.model);
-        }
-    });
-
-    return matches;
-}
-
-// Get model type badge
-function getModelTypeBadge(model) {
-    const lead = String(model.ECGlead || '').trim();
-    const modality = String(model['Pretrain modality'] || '').toLowerCase().trim();
-
-    if (modality.includes('ppg')) {
-        return '<span class="badge badge-ppg">PPG</span>';
-    } else if (lead === '1') {
-        return '<span class="badge badge-1lead">Single-Lead</span>';
-    } else {
-        return '<span class="badge badge-12lead">12-Lead</span>';
-    }
-}
-
-// Get model type for filtering
+// Helper functions
 function getModelType(model) {
-    const lead = String(model.ECGlead || '').trim();
-    const modality = String(model['Pretrain modality'] || '').toLowerCase().trim();
-
-    if (modality.includes('ppg')) {
-        return 'ppg';
-    } else if (lead === '1') {
-        return '1lead';
-    } else {
-        return '12lead';
-    }
+    const modality = (model['Pretrain modality'] || '').toLowerCase();
+    if (modality.includes('ppg')) return 'ppg';
+    const leads = model.ECGlead;
+    if (leads === 1 || leads === 2) return '1lead';
+    return '12lead';
 }
 
-// Create clickable dataset links
-function createDatasetLinks(pretrainData) {
-    if (!pretrainData) return '-';
-
-    // Split by common separators
-    const datasets = pretrainData.split(/[,;]+/).map(d => d.trim()).filter(d => d);
-
-    return datasets.map(dataset => {
-        const cleanName = dataset.replace(/\*$/, '').trim();
-        return `<span class="dataset-link" onclick="showDatasetModal('${cleanName}')">${cleanName}</span>`;
-    }).join(' ');
+function getTypeBadge(model) {
+    const type = getModelType(model);
+    const labels = { '12lead': '12-Lead ECG', '1lead': 'Single-Lead', 'ppg': 'PPG' };
+    return `<span class="badge badge-${type}">${labels[type]}</span>`;
 }
 
-// Get access badge
 function getAccessBadge(access) {
     if (!access) return '-';
-    const accessStr = String(access).trim();
-
-    if (accessStr.startsWith('O')) {
-        return `<span class="badge badge-open">${accessStr}</span>`;
-    } else if (accessStr.startsWith('R')) {
-        return `<span class="badge badge-restricted">${accessStr}</span>`;
-    } else if (accessStr.startsWith('C')) {
-        return `<span class="badge badge-credentialed">${accessStr}</span>`;
-    }
-    return accessStr;
+    const a = String(access).trim();
+    if (a.startsWith('O')) return `<span class="badge badge-open">${a}</span>`;
+    if (a.startsWith('R')) return `<span class="badge badge-restricted">${a}</span>`;
+    if (a.startsWith('C')) return `<span class="badge badge-credentialed">${a}</span>`;
+    return a;
 }
 
-// Create model links
-function createModelLinks(model) {
-    let links = '';
+function createLinks(model) {
+    let html = '';
+    if (model.doi) html += `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>`;
+    if (model.Codelink) html += `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>`;
+    if (model.Weightlink) html += `<a href="${model.Weightlink}" target="_blank" class="link-btn secondary">Weights</a>`;
+    return html || '-';
+}
 
-    if (model.doi) {
-        links += `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>`;
-    }
-    if (model.Codelink) {
-        links += `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>`;
-    }
-    if (model.Weightlink && !model.Weightlink.includes('PKUDigitalHealth/ECGFounder')) {
-        links += `<a href="${model.Weightlink}" target="_blank" class="link-btn secondary">Weights</a>`;
-    }
-
-    return links || '-';
+function findModelsUsingDataset(datasetName) {
+    const name = datasetName.toLowerCase();
+    return MODELS.filter(m => {
+        const pd = (m['Pretrain Dataset'] || '').toLowerCase();
+        const ed = (m['eval_data'] || '').toLowerCase();
+        return pd.includes(name) || ed.includes(name);
+    }).map(m => m.model);
 }
 
 // Populate models table
-function populateModelsTable() {
+function populateModels() {
     const tbody = document.getElementById('models-tbody');
     tbody.innerHTML = '';
-
-    modelsData.forEach(model => {
-        const row = document.createElement('tr');
-        row.setAttribute('data-type', getModelType(model));
-
-        row.innerHTML = `
-            <td><span class="clickable" onclick="showModelModal('${model.model}')">${model.model}</span></td>
-            <td>${model.Year || '-'}</td>
-            <td>${getModelTypeBadge(model)}</td>
-            <td>${model.Backbone || '-'}</td>
-            <td>${model['Pretrain Method'] || '-'}</td>
-            <td>${createDatasetLinks(model['Pretrain Dataset'])}</td>
-            <td>${model['ECGs (n)'] || '-'}</td>
-            <td>${createModelLinks(model)}</td>
+    
+    MODELS.forEach(m => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-type', getModelType(m));
+        tr.innerHTML = `
+            <td><span class="clickable" onclick="showModel('${m.model}')">${m.model}</span></td>
+            <td>${m.Year || '-'}</td>
+            <td>${getTypeBadge(m)}</td>
+            <td>${m.Backbone || '-'}</td>
+            <td>${m['Pretrain Method'] || '-'}</td>
+            <td>${m['Pretrain Dataset'] || '-'}</td>
+            <td data-order="${m.ecgs_numeric || 0}">${m['ECGs (n)'] || '-'}</td>
+            <td>${createLinks(m)}</td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
     });
-
-    // Initialize DataTable
-    if (modelsTable) {
-        modelsTable.destroy();
-    }
-    modelsTable = $('#models-table').DataTable({
-        pageLength: 25,
-        order: [[1, 'desc']],
-        language: {
-            search: "Search models:"
-        }
-    });
+    
+    $('#models-table').DataTable({ pageLength: 25, order: [[1, 'desc']] });
 }
 
-// Populate 12-lead datasets table
-function populate12LeadDatasetsTable() {
+// Populate 12-lead datasets
+function populate12Lead() {
     const tbody = document.getElementById('datasets-12lead-tbody');
     tbody.innerHTML = '';
-
-    datasets12leadData.forEach(dataset => {
-        const usedBy = findModelsUsingDataset(dataset.Dataset);
-        const usedByHtml = usedBy.length > 0
-            ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ')
-            : '<span style="color:#999">-</span>';
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><span class="clickable" onclick="showDatasetModal('${dataset.Dataset}')">${dataset.Dataset}</span></td>
-            <td>${dataset.Record || '-'}</td>
-            <td>${dataset['Patient (n)'] || '-'}</td>
-            <td>${dataset.Country || '-'}</td>
-            <td>${(dataset['Setting '] || '').substring(0, 30)}${(dataset['Setting '] || '').length > 30 ? '...' : ''}</td>
-            <td>${getAccessBadge(dataset.Access)}</td>
-            <td>${usedByHtml}</td>
-            <td>${dataset.dataset_link ? `<a href="${dataset.dataset_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
+    
+    DATASETS_12LEAD.forEach(d => {
+        const usedBy = findModelsUsingDataset(d.Dataset);
+        const usedHtml = usedBy.length ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span class="clickable" onclick="showDataset('${d.Dataset}')">${d.Dataset}</span></td>
+            <td data-order="${d.records_numeric || 0}">${d.Record || '-'}</td>
+            <td data-order="${d.patients_numeric || 0}">${d['Patient (n)'] || '-'}</td>
+            <td>${d.Country || '-'}</td>
+            <td>${(d['Setting '] || '-').substring(0, 30)}</td>
+            <td>${getAccessBadge(d.Access)}</td>
+            <td>${usedHtml}</td>
+            <td>${d.dataset_link ? `<a href="${d.dataset_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
     });
-
-    if (datasets12leadTable) {
-        datasets12leadTable.destroy();
-    }
-    datasets12leadTable = $('#datasets-12lead-table').DataTable({
-        pageLength: 25,
-        order: [[0, 'asc']],
-        language: {
-            search: "Search datasets:"
-        }
-    });
+    
+    $('#datasets-12lead-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
 }
 
-// Populate reduced-lead datasets table
-function populateReducedDatasetsTable() {
+// Populate reduced datasets
+function populateReduced() {
     const tbody = document.getElementById('datasets-reduced-tbody');
     tbody.innerHTML = '';
-
-    datasetsReducedData.forEach(dataset => {
-        const usedBy = findModelsUsingDataset(dataset.Dataset);
-        const usedByHtml = usedBy.length > 0
-            ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ')
-            : '<span style="color:#999">-</span>';
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><span class="clickable" onclick="showDatasetModal('${dataset.Dataset}')">${dataset.Dataset}</span></td>
-            <td>${(dataset['Record (n)'] || '-').toString().substring(0, 25)}</td>
-            <td>${dataset.PPG === 1 ? '<span class="check-yes">✓</span>' : '<span class="check-no">-</span>'}</td>
-            <td>${dataset.ECG === 1 ? '<span class="check-yes">✓</span>' : '<span class="check-no">-</span>'}</td>
-            <td>${dataset.Country || '-'}</td>
-            <td>${getAccessBadge(dataset.Access)}</td>
-            <td>${usedByHtml}</td>
-            <td>${dataset.data_link ? `<a href="${dataset.data_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
+    
+    DATASETS_REDUCED.forEach(d => {
+        const usedBy = findModelsUsingDataset(d.Dataset);
+        const usedHtml = usedBy.length ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span class="clickable" onclick="showDataset('${d.Dataset}')">${d.Dataset}</span></td>
+            <td data-order="${d.records_numeric || 0}">${d['Record (n)'] || '-'}</td>
+            <td>${d.PPG === 1 ? '<span class="check-yes">✓</span>' : '-'}</td>
+            <td>${d.ECG === 1 ? '<span class="check-yes">✓</span>' : '-'}</td>
+            <td>${d.Country || '-'}</td>
+            <td>${getAccessBadge(d.Access)}</td>
+            <td>${usedHtml}</td>
+            <td>${d.data_link ? `<a href="${d.data_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
     });
+    
+    $('#datasets-reduced-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
+}
 
-    if (datasetsReducedTable) {
-        datasetsReducedTable.destroy();
-    }
-    datasetsReducedTable = $('#datasets-reduced-table').DataTable({
-        pageLength: 25,
-        order: [[0, 'asc']],
-        language: {
-            search: "Search datasets:"
-        }
+// Show model modal
+function showModel(name) {
+    const m = MODELS.find(x => x.model === name);
+    if (!m) return;
+    document.getElementById('modal-title').textContent = m.model;
+    document.getElementById('modal-body').innerHTML = `
+        <div class="info-row"><span class="info-label">Title</span>${m.title || '-'}</div>
+        <div class="info-row"><span class="info-label">Year</span>${m.Year || '-'}</div>
+        <div class="info-row"><span class="info-label">Backbone</span>${m.Backbone || '-'}</div>
+        <div class="info-row"><span class="info-label">Method</span>${m['Pretrain Method'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Pretrain Dataset</span>${m['Pretrain Dataset'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Data Size</span>${m['ECGs (n)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
+        <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
+        <div class="info-row">${createLinks(m)}</div>
+    `;
+    document.getElementById('modal').style.display = 'block';
+}
+
+// Show dataset modal
+function showDataset(name) {
+    let d = DATASETS_12LEAD.find(x => x.Dataset === name) || DATASETS_REDUCED.find(x => x.Dataset === name);
+    if (!d) return;
+    const usedBy = findModelsUsingDataset(name);
+    const link = d.dataset_link || d.data_link;
+    document.getElementById('modal-title').textContent = d.Dataset;
+    document.getElementById('modal-body').innerHTML = `
+        <div class="info-row"><span class="info-label">Records</span>${d.Record || d['Record (n)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Patients</span>${d['Patient (n)'] || '-'}</div>
+        <div class="info-row"><span class="info-label">Country</span>${d.Country || '-'}</div>
+        <div class="info-row"><span class="info-label">Access</span>${getAccessBadge(d.Access)}</div>
+        <div class="info-row"><span class="info-label">Used By Models</span>${usedBy.length ? usedBy.join(', ') : 'None'}</div>
+        <div class="info-row">${link ? `<a href="${link}" target="_blank" class="link-btn">Access Dataset</a>` : '-'}</div>
+    `;
+    document.getElementById('modal').style.display = 'block';
+}
+
+// Setup tabs
+function setupTabs() {
+    document.querySelectorAll('.nav-tabs li').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.nav-tabs li').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
     });
 }
 
-// Populate comparison checkboxes
-function populateCompareCheckboxes() {
+// Setup filters
+function setupFilters() {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filter = btn.dataset.filter;
+            document.querySelectorAll('#models-tbody tr').forEach(row => {
+                row.style.display = (filter === 'all' || row.dataset.type === filter) ? '' : 'none';
+            });
+        });
+    });
+}
+
+// Setup compare
+function setupCompare() {
     const container = document.getElementById('model-checkboxes');
-    container.innerHTML = '';
-
-    modelsData.forEach(model => {
-        const div = document.createElement('label');
-        div.className = 'checkbox-item';
-        div.innerHTML = `
-            <input type="checkbox" value="${model.model}" onchange="updateCompareButton()">
-            <span>${model.model}</span>
-            ${getModelTypeBadge(model)}
-        `;
-        container.appendChild(div);
+    MODELS.forEach(m => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="checkbox" value="${m.model}"><span>${m.model}</span>`;
+        label.querySelector('input').addEventListener('change', updateCompareBtn);
+        container.appendChild(label);
     });
+    
+    document.getElementById('compare-btn').addEventListener('click', compareModels);
 }
 
-// Update compare button state
-function updateCompareButton() {
+function updateCompareBtn() {
     const checked = document.querySelectorAll('#model-checkboxes input:checked');
     const btn = document.getElementById('compare-btn');
     btn.disabled = checked.length < 2 || checked.length > 4;
     btn.textContent = `Compare Selected (${checked.length})`;
 }
 
-// Compare models
 function compareModels() {
-    const checked = document.querySelectorAll('#model-checkboxes input:checked');
-    const selectedModels = Array.from(checked).map(cb => cb.value);
-
-    const models = modelsData.filter(m => selectedModels.includes(m.model));
-
-    const thead = document.getElementById('comparison-thead');
-    const tbody = document.getElementById('comparison-tbody');
-
-    // Create header
-    thead.innerHTML = `
-        <tr>
-            <th>Property</th>
-            ${models.map(m => `<th>${m.model}</th>`).join('')}
-        </tr>
-    `;
-
-    // Properties to compare
-    const properties = [
-        { key: 'Year', label: 'Year' },
-        { key: 'Backbone', label: 'Backbone' },
-        { key: 'Pretrain modality', label: 'Modality' },
-        { key: 'Pretrain Method', label: 'Method' },
-        { key: 'Pretrain Dataset', label: 'Pretrain Data' },
-        { key: 'ECGs (n)', label: 'Data Size' },
-        { key: 'ECGlead', label: 'ECG Leads' },
-        { key: 'sampling_rate', label: 'Sample Rate' },
-        { key: 'task', label: 'Tasks' },
-        { key: 'performance', label: 'Performance' }
-    ];
-
-    tbody.innerHTML = properties.map(prop => `
-        <tr>
-            <td>${prop.label}</td>
-            ${models.map(m => `<td>${m[prop.key] || '-'}</td>`).join('')}
-        </tr>
-    `).join('');
-
-    // Add links row
-    tbody.innerHTML += `
-        <tr>
-            <td>Links</td>
-            ${models.map(m => `<td>${createModelLinks(m)}</td>`).join('')}
-        </tr>
-    `;
-
-    document.getElementById('comparison-table-container').style.display = 'block';
+    const selected = Array.from(document.querySelectorAll('#model-checkboxes input:checked')).map(cb => cb.value);
+    const models = MODELS.filter(m => selected.includes(m.model));
+    
+    const props = ['Year', 'Backbone', 'Pretrain Method', 'Pretrain Dataset', 'ECGs (n)', 'ECGlead', 'task', 'performance'];
+    
+    document.getElementById('comparison-thead').innerHTML = '<tr><th>Property</th>' + models.map(m => `<th>${m.model}</th>`).join('') + '</tr>';
+    document.getElementById('comparison-tbody').innerHTML = props.map(p => 
+        '<tr><td>' + p + '</td>' + models.map(m => `<td>${m[p] || '-'}</td>`).join('') + '</tr>'
+    ).join('');
+    document.getElementById('comparison-table').style.display = 'table';
 }
 
-// Show dataset modal
-function showDatasetModal(datasetName) {
-    // Search in both dataset arrays
-    let dataset = datasets12leadData.find(d =>
-        normalizeDatasetName(d.Dataset).includes(normalizeDatasetName(datasetName)) ||
-        normalizeDatasetName(datasetName).includes(normalizeDatasetName(d.Dataset))
-    );
-
-    if (!dataset) {
-        dataset = datasetsReducedData.find(d =>
-            normalizeDatasetName(d.Dataset).includes(normalizeDatasetName(datasetName)) ||
-            normalizeDatasetName(datasetName).includes(normalizeDatasetName(d.Dataset))
-        );
-    }
-
-    const modal = document.getElementById('dataset-modal');
-    const title = document.getElementById('modal-title');
-    const body = document.getElementById('modal-body');
-
-    title.textContent = datasetName;
-
-    if (dataset) {
-        const usedBy = findModelsUsingDataset(datasetName);
-
-        body.innerHTML = `
-            <div class="modal-info">
-                <label>Records</label>
-                <span>${dataset.Record || dataset['Record (n)'] || '-'}</span>
-            </div>
-            <div class="modal-info">
-                <label>Patients</label>
-                <span>${dataset['Patient (n)'] || '-'}</span>
-            </div>
-            <div class="modal-info">
-                <label>Country</label>
-                <span>${dataset.Country || '-'}</span>
-            </div>
-            <div class="modal-info">
-                <label>Setting</label>
-                <span>${dataset['Setting '] || dataset.Setting || '-'}</span>
-            </div>
-            <div class="modal-info">
-                <label>Access</label>
-                ${getAccessBadge(dataset.Access)}
-            </div>
-            ${dataset.PPG !== undefined ? `
-            <div class="modal-info">
-                <label>Signals</label>
-                <span>
-                    ${dataset.PPG === 1 ? '<span class="badge badge-ppg">PPG</span>' : ''}
-                    ${dataset.ECG === 1 ? '<span class="badge badge-12lead">ECG</span>' : ''}
-                </span>
-            </div>
-            ` : ''}
-            <div class="modal-info">
-                <label>Used by Models</label>
-                <div class="used-by-list">
-                    ${usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join('') : '<span style="color:#999">Not used by any indexed model</span>'}
-                </div>
-            </div>
-            <div class="modal-info">
-                <label>Access Link</label>
-                ${dataset.dataset_link || dataset.data_link
-                    ? `<a href="${dataset.dataset_link || dataset.data_link}" target="_blank" class="link-btn">Access Dataset</a>`
-                    : '<span>-</span>'}
-            </div>
-        `;
-    } else {
-        const usedBy = findModelsUsingDataset(datasetName);
-        body.innerHTML = `
-            <p>This dataset is referenced in model pretraining but may not be in our indexed dataset list.</p>
-            <div class="modal-info">
-                <label>Used by Models</label>
-                <div class="used-by-list">
-                    ${usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join('') : '-'}
-                </div>
-            </div>
-        `;
-    }
-
-    modal.style.display = 'block';
-}
-
-// Show model modal
-function showModelModal(modelName) {
-    const model = modelsData.find(m => m.model === modelName);
-    if (!model) return;
-
-    const modal = document.getElementById('model-modal');
-    const title = document.getElementById('model-modal-title');
-    const body = document.getElementById('model-modal-body');
-
-    title.textContent = model.model;
-
-    body.innerHTML = `
-        <div class="modal-info">
-            <label>Paper Title</label>
-            <p>${model.title || '-'}</p>
-        </div>
-        <div class="modal-info">
-            <label>Year</label>
-            <span>${model.Year || '-'}</span>
-        </div>
-        <div class="modal-info">
-            <label>Type</label>
-            ${getModelTypeBadge(model)}
-        </div>
-        <div class="modal-info">
-            <label>Backbone</label>
-            <span>${model.Backbone || '-'}</span>
-        </div>
-        <div class="modal-info">
-            <label>Pretraining Method</label>
-            <span>${model['Pretrain Method'] || '-'}</span>
-        </div>
-        <div class="modal-info">
-            <label>Pretraining Data</label>
-            <div style="margin-top:5px">${createDatasetLinks(model['Pretrain Dataset'])}</div>
-        </div>
-        <div class="modal-info">
-            <label>Data Size</label>
-            <span>${model['ECGs (n)'] || '-'}</span>
-        </div>
-        <div class="modal-info">
-            <label>ECG Leads</label>
-            <span>${model.ECGlead || '-'}</span>
-        </div>
-        <div class="modal-info">
-            <label>Sample Rate</label>
-            <span>${model.sampling_rate ? model.sampling_rate + ' Hz' : '-'}</span>
-        </div>
-        <div class="modal-info">
-            <label>Tasks</label>
-            <p>${model.task || '-'}</p>
-        </div>
-        <div class="modal-info">
-            <label>Performance</label>
-            <p>${model.performance || '-'}</p>
-        </div>
-        <div class="modal-info">
-            <label>Links</label>
-            <div style="margin-top:5px">
-                ${model.doi ? `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>` : ''}
-                ${model.Codelink ? `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>` : ''}
-                ${model.Weightlink ? `<a href="${model.Weightlink}" target="_blank" class="link-btn secondary">Weights</a>` : ''}
-            </div>
-        </div>
-    `;
-
-    modal.style.display = 'block';
-}
-
-// Tab navigation
-function setupTabs() {
-    document.querySelectorAll('.nav-tabs li').forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Update active tab
-            document.querySelectorAll('.nav-tabs li').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            // Show corresponding content
-            const tabId = tab.getAttribute('data-tab');
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(tabId).classList.add('active');
-        });
+// Setup modal
+function setupModal() {
+    document.querySelector('.close').addEventListener('click', () => {
+        document.getElementById('modal').style.display = 'none';
+    });
+    document.getElementById('modal').addEventListener('click', (e) => {
+        if (e.target.id === 'modal') e.target.style.display = 'none';
     });
 }
 
-// Filter buttons
-function setupFilters() {
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const filter = btn.getAttribute('data-filter');
-
-            // Filter table rows
-            if (modelsTable) {
-                if (filter === 'all') {
-                    modelsTable.search('').columns().search('').draw();
-                } else {
-                    // Custom filtering
-                    $.fn.dataTable.ext.search.pop(); // Remove previous filter
-                    $.fn.dataTable.ext.search.push((settings, data, dataIndex) => {
-                        if (settings.nTable.id !== 'models-table') return true;
-                        const row = modelsTable.row(dataIndex).node();
-                        return row.getAttribute('data-type') === filter;
-                    });
-                    modelsTable.draw();
-                    $.fn.dataTable.ext.search.pop(); // Clean up
-                }
-            }
-        });
-    });
-}
-
-// Modal close handlers
-function setupModals() {
-    document.querySelectorAll('.modal .close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', () => {
-            closeBtn.closest('.modal').style.display = 'none';
-        });
-    });
-
-    window.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
-            e.target.style.display = 'none';
-        }
-    });
-}
-
-// Compare button handler
-function setupCompare() {
-    document.getElementById('compare-btn').addEventListener('click', compareModels);
-}
-
-// Load data and initialize
-async function init() {
-    try {
-        // Use embedded data (works without a server)
-        modelsData = EMBEDDED_MODELS;
-        datasets12leadData = EMBEDDED_DATASETS_12LEAD;
-        datasetsReducedData = EMBEDDED_DATASETS_REDUCED;
-
-
-        // Populate tables
-        populateModelsTable();
-        populate12LeadDatasetsTable();
-        populateReducedDatasetsTable();
-        populateCompareCheckboxes();
-
-        // Setup interactions
-        setupTabs();
-        setupFilters();
-        setupModals();
-        setupCompare();
-
-        console.log('Data loaded successfully:', {
-            models: modelsData.length,
-            datasets12lead: datasets12leadData.length,
-            datasetsReduced: datasetsReducedData.length
-        });
-
-    } catch (error) {
-        console.error('Error loading data:', error);
-        document.querySelector('main').innerHTML = `
-            <div style="text-align:center;padding:50px;">
-                <h2>Error Loading Data</h2>
-                <p>Please make sure the JSON data files are available.</p>
-                <p style="color:#999">${error.message}</p>
-            </div>
-        `;
-    }
-}
-
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', init);
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    populateModels();
+    populate12Lead();
+    populateReduced();
+    setupTabs();
+    setupFilters();
+    setupCompare();
+    setupModal();
+    console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
+});

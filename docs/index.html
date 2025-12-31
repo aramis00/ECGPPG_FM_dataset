@@ -4,196 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECG/PPG Foundation Models & Datasets</title>
-
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background: #f5f7fa; }
+        header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 40px 20px; text-align: center; }
+        header h1 { margin: 0 0 10px 0; }
+        header p { margin: 0; opacity: 0.9; }
+        nav { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .nav-tabs { list-style: none; margin: 0; padding: 0; display: flex; max-width: 1200px; margin: 0 auto; }
+        .nav-tabs li { padding: 15px 25px; cursor: pointer; border-bottom: 3px solid transparent; }
+        .nav-tabs li:hover { background: #f5f7fa; }
+        .nav-tabs li.active { border-bottom-color: #1a73e8; color: #1a73e8; font-weight: 600; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .tab-content { display: none; background: white; border-radius: 12px; padding: 30px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .tab-content.active { display: block; }
+        .section-header { margin-bottom: 20px; }
+        .section-header h2 { margin: 0 0 10px 0; color: #1a73e8; }
+        .legend { margin-bottom: 20px; padding: 12px 16px; background: #f8f9fa; border-radius: 8px; font-size: 0.9em; }
+        .legend strong { margin-right: 15px; }
+        .legend span { margin-right: 15px; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 600; }
+        .badge-open { background: #d4edda; color: #155724; }
+        .badge-restricted { background: #fff3cd; color: #856404; }
+        .badge-credentialed { background: #f8d7da; color: #721c24; }
+        .badge-12lead { background: #cce5ff; color: #004085; }
+        .badge-1lead { background: #d4edda; color: #155724; }
+        .badge-ppg { background: #f5c6cb; color: #721c24; }
+        .link-btn { display: inline-block; padding: 4px 10px; background: #1a73e8; color: white; text-decoration: none; border-radius: 4px; font-size: 0.85em; margin: 2px; }
+        .link-btn:hover { background: #1557b0; }
+        .link-btn.secondary { background: #6c757d; }
+        .filter-buttons { margin-bottom: 15px; }
+        .filter-btn { padding: 8px 16px; margin-right: 8px; border: 2px solid #1a73e8; background: white; color: #1a73e8; border-radius: 20px; cursor: pointer; }
+        .filter-btn.active { background: #1a73e8; color: white; }
+        table.dataTable { width: 100% !important; }
+        .clickable { color: #1a73e8; cursor: pointer; }
+        .clickable:hover { text-decoration: underline; }
+        .check-yes { color: #28a745; font-weight: bold; }
+        .check-no { color: #999; }
+        .model-tag { display: inline-block; background: #e8f0fe; color: #1a73e8; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin: 2px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: white; max-width: 700px; margin: 50px auto; border-radius: 12px; max-height: 80vh; overflow-y: auto; }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { margin: 0; }
+        .modal-body { padding: 20px; }
+        .close { font-size: 28px; cursor: pointer; color: #999; }
+        .close:hover { color: #333; }
+        .info-row { padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .info-label { font-weight: 600; color: #666; display: block; margin-bottom: 5px; }
+        #model-checkboxes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        #model-checkboxes label { padding: 8px 12px; background: #f8f9fa; border-radius: 6px; cursor: pointer; }
+        #model-checkboxes input:checked + span { color: #1a73e8; font-weight: 600; }
+        #compare-btn { padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        #compare-btn:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="container">
-            <h1>ECG/PPG Foundation Models & Open Datasets</h1>
-            <p class="subtitle">A comprehensive collection of open-source foundation models and publicly available datasets</p>
-        </div>
+        <h1>ECG/PPG Foundation Models & Open Datasets</h1>
+        <p>A comprehensive collection of open-source foundation models and publicly available datasets</p>
     </header>
 
-    <!-- Navigation -->
     <nav>
-        <div class="container">
-            <ul class="nav-tabs">
-                <li class="active" data-tab="models">Foundation Models</li>
-                <li data-tab="datasets-12lead">12-Lead ECG Datasets</li>
-                <li data-tab="datasets-reduced">Reduced-Lead & PPG Datasets</li>
-                <li data-tab="compare">Compare Models</li>
-            </ul>
-        </div>
+        <ul class="nav-tabs">
+            <li class="active" data-tab="models">Foundation Models</li>
+            <li data-tab="datasets-12lead">12-Lead ECG Datasets</li>
+            <li data-tab="datasets-reduced">Reduced-Lead & PPG Datasets</li>
+            <li data-tab="compare">Compare Models</li>
+        </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="container">
-
-        <!-- Models Section -->
         <section id="models" class="tab-content active">
             <div class="section-header">
                 <h2>Foundation Models</h2>
-                <p>Click on any model or dataset name to view details. Use the search box to filter.</p>
+                <p>Click on any model name to view details.</p>
             </div>
-
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">All (16)</button>
-                <button class="filter-btn" data-filter="12lead">12-Lead ECG (11)</button>
-                <button class="filter-btn" data-filter="1lead">Single-Lead ECG (2)</button>
-                <button class="filter-btn" data-filter="ppg">PPG (3)</button>
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="12lead">12-Lead ECG</button>
+                <button class="filter-btn" data-filter="1lead">Single-Lead ECG</button>
+                <button class="filter-btn" data-filter="ppg">PPG</button>
             </div>
-
+            <div class="legend">
+                <strong>Method:</strong>
+                <span>CL = Contrastive Learning</span>
+                <span>M/R/G = Masked/Reconstructive/Generative</span>
+                <span>SL = Supervised Learning</span>
+            </div>
             <table id="models-table" class="display">
-                <thead>
-                    <tr>
-                        <th>Model</th>
-                        <th>Year</th>
-                        <th>Type</th>
-                        <th>Backbone</th>
-                        <th>Method</th>
-                        <th>Pretrain Data</th>
-                        <th>Data Size</th>
-                        <th>Links</th>
-                    </tr>
-                </thead>
-                <tbody id="models-tbody">
-                    <!-- Populated by JavaScript -->
-                </tbody>
+                <thead><tr><th>Model</th><th>Year</th><th>Type</th><th>Backbone</th><th>Method</th><th>Pretrain Data</th><th>Data Size</th><th>Links</th></tr></thead>
+                <tbody id="models-tbody"></tbody>
             </table>
         </section>
 
-        <!-- 12-Lead Datasets Section -->
         <section id="datasets-12lead" class="tab-content">
             <div class="section-header">
                 <h2>12-Lead ECG Datasets</h2>
-                <p>Click on a dataset name to see which models were trained on it.</p>
             </div>
-
-            <div class="access-legend">
-                <span class="legend-item"><span class="badge badge-open">O</span> Open</span>
-                <span class="legend-item"><span class="badge badge-restricted">R</span> Restricted (DUA)</span>
-                <span class="legend-item"><span class="badge badge-credentialed">C</span> Credentialed</span>
+            <div class="legend">
+                <strong>Access:</strong>
+                <span class="badge badge-open">O</span> Open
+                <span class="badge badge-restricted">R</span> Restricted (DUA)
+                <span class="badge badge-credentialed">C</span> Credentialed
             </div>
-
             <table id="datasets-12lead-table" class="display">
-                <thead>
-                    <tr>
-                        <th>Dataset</th>
-                        <th>Records</th>
-                        <th>Patients</th>
-                        <th>Country</th>
-                        <th>Setting</th>
-                        <th>Access</th>
-                        <th>Used By</th>
-                        <th>Link</th>
-                    </tr>
-                </thead>
-                <tbody id="datasets-12lead-tbody">
-                    <!-- Populated by JavaScript -->
-                </tbody>
+                <thead><tr><th>Dataset</th><th>Records</th><th>Patients</th><th>Country</th><th>Setting</th><th>Access</th><th>Used By</th><th>Link</th></tr></thead>
+                <tbody id="datasets-12lead-tbody"></tbody>
             </table>
         </section>
 
-        <!-- Reduced-Lead Datasets Section -->
         <section id="datasets-reduced" class="tab-content">
             <div class="section-header">
                 <h2>Reduced-Lead ECG & PPG Datasets</h2>
-                <p>Datasets containing single/few-lead ECG and/or PPG signals.</p>
             </div>
-
-            <div class="access-legend">
-                <span class="legend-item"><span class="badge badge-open">O</span> Open</span>
-                <span class="legend-item"><span class="badge badge-restricted">R</span> Restricted (DUA)</span>
-                <span class="legend-item"><span class="badge badge-credentialed">C</span> Credentialed</span>
+            <div class="legend">
+                <strong>Access:</strong>
+                <span class="badge badge-open">O</span> Open
+                <span class="badge badge-restricted">R</span> Restricted (DUA)
+                <span class="badge badge-credentialed">C</span> Credentialed
             </div>
-
             <table id="datasets-reduced-table" class="display">
-                <thead>
-                    <tr>
-                        <th>Dataset</th>
-                        <th>Records</th>
-                        <th>PPG</th>
-                        <th>ECG</th>
-                        <th>Country</th>
-                        <th>Access</th>
-                        <th>Used By</th>
-                        <th>Link</th>
-                    </tr>
-                </thead>
-                <tbody id="datasets-reduced-tbody">
-                    <!-- Populated by JavaScript -->
-                </tbody>
+                <thead><tr><th>Dataset</th><th>Records</th><th>PPG</th><th>ECG</th><th>Country</th><th>Access</th><th>Used By</th><th>Link</th></tr></thead>
+                <tbody id="datasets-reduced-tbody"></tbody>
             </table>
         </section>
 
-        <!-- Compare Models Section -->
         <section id="compare" class="tab-content">
             <div class="section-header">
                 <h2>Compare Models</h2>
                 <p>Select 2-4 models to compare side by side.</p>
             </div>
-
-            <div class="compare-selector">
-                <div id="model-checkboxes" class="checkbox-grid">
-                    <!-- Populated by JavaScript -->
-                </div>
-                <button id="compare-btn" class="btn-primary" disabled>Compare Selected</button>
-            </div>
-
-            <div id="comparison-table-container" style="display: none;">
-                <table id="comparison-table" class="comparison-table">
-                    <thead id="comparison-thead">
-                        <!-- Populated by JavaScript -->
-                    </thead>
-                    <tbody id="comparison-tbody">
-                        <!-- Populated by JavaScript -->
-                    </tbody>
+            <div id="model-checkboxes"></div>
+            <button id="compare-btn" disabled>Compare Selected (0)</button>
+            <div id="comparison-result" style="margin-top: 20px;">
+                <table id="comparison-table" class="display" style="display:none;">
+                    <thead id="comparison-thead"></thead>
+                    <tbody id="comparison-tbody"></tbody>
                 </table>
             </div>
         </section>
-
     </main>
 
-    <!-- Dataset Detail Modal -->
-    <div id="dataset-modal" class="modal">
+    <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modal-title">Dataset Details</h2>
-            <div id="modal-body">
-                <!-- Populated by JavaScript -->
+            <div class="modal-header">
+                <h3 id="modal-title">Details</h3>
+                <span class="close">&times;</span>
             </div>
+            <div class="modal-body" id="modal-body"></div>
         </div>
     </div>
 
-    <!-- Model Detail Modal -->
-    <div id="model-modal" class="modal">
-        <div class="modal-content modal-large">
-            <span class="close">&times;</span>
-            <h2 id="model-modal-title">Model Details</h2>
-            <div id="model-modal-body">
-                <!-- Populated by JavaScript -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>Data files available:
-                <a href="https://github.com/aramis00/ECGPPG_FM_dataset/tree/main/data">CSV & JSON</a>
-            </p>
-            <p>Contribute on <a href="https://github.com/aramis00/ECGPPG_FM_dataset">GitHub</a></p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="js/app.js"></script>
