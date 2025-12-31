@@ -1424,6 +1424,38 @@ const BENCHMARKS_CPU = [
 
 let currentBenchmarkData = BENCHMARKS_A100;
 
+// Benchmark model name mappings to match MODELS data
+const BENCHMARK_NAME_MAP = {
+    'ecg_jepa': 'ECG-JEPA',
+    'heartlang': 'HeartLang',
+    'ecg_cpc': 'CPC',
+    's4_supervised': 'S4 (supervised)',
+    'hubert_ecg': 'HuBERT-ECG',
+    'ecgfm': 'ECG-FM',
+    'deepecg': 'DeepECG',
+    'esi': 'ESI',
+    'melp': 'MELP',
+    'merl_resnet18': 'MERL (ResNet18)',
+    'merl_vit_tiny': 'MERL (ViT-Tiny)',
+    'ecgfm_ked': 'KED',
+    'st_mem': 'ST-MEM',
+    'ecgfounder_12lead': 'ECGFounder (12-lead)',
+    'ecgfounder_1lead': 'ECGFounder (1-lead)',
+    'heartgpt_ecg': 'ECG-PT',
+    'heartgpt_ppg': 'PPG-PT',
+    'heartbert': 'HeartBERT',
+    'papagei': 'PaPaGei',
+    'pulseppg': 'PulsePPG'
+};
+
+function getBenchmarkDisplayName(rawName) {
+    return BENCHMARK_NAME_MAP[rawName] || rawName;
+}
+
+// Architecture lookup by model name
+const ARCHITECTURE_MAP = {};
+ARCHITECTURES.forEach(a => { ARCHITECTURE_MAP[a.model] = a.architecture; });
+
 // Helper functions
 function getModelType(model) {
     const modality = (model['Pretrain modality'] || '').toLowerCase();
@@ -1551,10 +1583,12 @@ function populateReduced() {
     $('#datasets-reduced-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
 }
 
-// Show model modal with ALL details
+// Show model modal with ALL details (excluding eval_* columns)
 function showModel(name) {
     const m = MODELS.find(x => x.model === name);
     if (!m) return;
+
+    const architecture = ARCHITECTURE_MAP[m.model] || '-';
 
     document.getElementById('modal-title').textContent = m.model;
     document.getElementById('modal-body').innerHTML = `
@@ -1570,6 +1604,8 @@ function showModel(name) {
         <div class="info-row"><span class="info-label">Evaluation Data</span>${m.eval_data || '-'}</div>
         <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
+        <div class="info-row"><span class="info-label">Architecture</span><span style="font-size: 0.9em;">${architecture}</span></div>
+        <div class="info-row"><span class="info-label">Citation</span><pre style="font-size: 0.8em; white-space: pre-wrap; margin: 0;">${m.citation || '-'}</pre></div>
         <div class="info-row">${createLinks(m)}</div>
     `;
     document.getElementById('modal').style.display = 'block';
@@ -1736,24 +1772,6 @@ function setupDatasetLinks() {
     });
 }
 
-// Populate architecture table
-function populateArchitecture() {
-    const tbody = document.getElementById('architecture-tbody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    ARCHITECTURES.forEach(a => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><span class="clickable" onclick="showModel('${a.model}')">${a.model}</span></td>
-            <td>${a.architecture}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    $('#architecture-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
-}
-
 // Populate benchmark table
 function populateBenchmarks(data) {
     const tbody = document.getElementById('benchmark-tbody');
@@ -1771,9 +1789,10 @@ function populateBenchmarks(data) {
         // For CPU, memory columns show N/A since those weren't captured
         const inferMem = b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A';
         const trainMem = b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A';
+        const displayName = getBenchmarkDisplayName(b.Model);
 
         tr.innerHTML = `
-            <td><span class="clickable" onclick="showModel('${b.Model}')">${b.Model}</span></td>
+            <td><span class="clickable" onclick="showModel('${displayName}')">${displayName}</span></td>
             <td>${b.Leads}</td>
             <td>${b.Params_M.toFixed(1)}</td>
             <td>${b.GFLOPs.toFixed(1)}</td>
@@ -1819,7 +1838,6 @@ document.addEventListener('DOMContentLoaded', () => {
     populateModels();
     populate12Lead();
     populateReduced();
-    populateArchitecture();
     populateBenchmarks(BENCHMARKS_A100);
     setupTabs();
     setupFilters();
@@ -1827,5 +1845,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCompare();
     setupModal();
     setupDatasetLinks();
-    console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced,', ARCHITECTURES.length, 'architectures');
+    console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
 });
