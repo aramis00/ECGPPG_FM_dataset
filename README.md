@@ -1,1 +1,180 @@
-# ECGPPG_FM_dataset
+# ECG/PPG Open Foundation Models and Datasets
+
+A comprehensive collection of open-source foundation models and publicly available datasets for electrocardiogram (ECG) and photoplethysmogram (PPG) analysis.
+
+## Overview
+
+This repository provides curated lists of:
+- **16 Foundation Models** for ECG/PPG analysis (12-lead ECG, single-lead ECG, and PPG)
+- **15 Open 12-Lead ECG Datasets** 
+- **23 Open Reduced-Lead ECG and PPG Datasets**
+
+All models include links to code repositories and pretrained weights. All datasets include access links and citations.
+
+## Data Files
+
+For programmatic access, data is available in CSV and JSON formats:
+
+```
+data/
+├── models.csv                    # Foundation models
+├── models.json
+├── ecg_datasets_12lead.csv       # 12-lead ECG datasets
+├── ecg_datasets_12lead.json
+├── ecg_ppg_datasets_reduced.csv  # Reduced-lead ECG & PPG datasets
+└── ecg_ppg_datasets_reduced.json
+```
+
+### Quick Start (Python)
+```python
+import pandas as pd
+
+# Load models
+models = pd.read_csv('data/models.csv')
+
+# Load datasets
+datasets_12lead = pd.read_csv('data/ecg_datasets_12lead.csv')
+datasets_reduced = pd.read_csv('data/ecg_ppg_datasets_reduced.csv')
+
+# Filter by size (using numeric columns)
+large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
+```
+
+---
+
+## Foundation Models
+
+### 12-Lead ECG Foundation Models
+
+| Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
+|-------|------|----------|--------|---------------|-----------|------|---------|
+| [ECG-JEPA](https://doi.org/10.48550/arXiv.2410.08559) | 2024 | Transformer | M/R/G | CSN, Code-15 | 180K | [Code](https://github.com/sehunfromdaegu/ecg_jepa) | [Weights](https://github.com/sehunfromdaegu/ecg_jepa) |
+| [HuBERT-ECG](https://doi.org/10.1101/2024.11.14.24317328) | 2024 | CNN+Transformer | CL+M/R/G | CODE, CPSC, CPSC-Extra, PTB, PTB-XL, ... | 9.1M | [Code](https://github.com/Edoar-do/HuBERT-ECG) | [Weights](https://huggingface.co/Edoardo-BS) |
+| [DeepECG](https://doi.org/10.1101/2025.03.02.25322575) | 2025 | CNN+Transformer | CL+M/R/G | MIMIC-IV-ECG, Code-15, MHI-ds* | 1.9M | [Code](https://github.com/HeartWise-AI/DeepECG_Docker) | [Weights](https://huggingface.co/heartwise/SSL_Pretrained_model/tree/main) |
+| [ECG-FM](https://doi.org/10.1093/jamiaopen/ooaf122) | 2024 | CNN+Transformer | CL+M/R/G | CPSC, CPSC-Extra, PTB-XL, Georgia, CS... | 870K | [Code](https://github.com/bowang-lab/ECG-FM/) | [Weights](https://huggingface.co/wanglab/ecg-fm) |
+| [HeartLang](https://doi.org/10.48550/arXiv.2502.10707) | 2025 | Transformer | CL+M/R/G | MIMIC-IV-ECG | 800K | [Code](https://github.com/PKUDigitalHealth/HeartLang) | [Weights](https://huggingface.co/PKUDigitalHealth/HeartLang/) |
+| [CPC](https://doi.org/10.48550/arXiv.2509.25095) | 2025 | CNN+SSM | CL | HEED | 10.7M | [Code](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) | [Weights](https://figshare.com/articles/dataset/ECG-CPC_Checkpoint_zip/30192604?file=58173919) |
+| [ESI](https://doi.org/10.48550/arXiv.2405.19366) | 2024 | CNN+Text | CL+M/R/G | PTB-XL, CSN, MIMIC-IV-ECG | 660K | [Code](https://github.com/comp-well-org/ESI) | [Weights](https://drive.google.com/drive/folders/1I3ECWBEm-Yxhzl1xgx5JE-tEhDRDtN0o) |
+| [MERL](https://doi.org/10.48550/arXiv.2403.06659) | 2024 | CNN+Text | CL | MIMIC-IV-ECG | 771K | [Code](https://github.com/cheliu-computation/MERL-ICML2024) | [Weights](https://drive.google.com/drive/folders/13wb4DppUciMn-Y_qC2JRWTbZdz3xX0w2) |
+| [MELP](https://doi.org/10.48550/arXiv.2506.21803) | 2025 | CNN+Text | CL+M/R/G | MIMIC-IV-ECG | 760K | [Code](https://github.com/HKU-MedAI/MELP) | [Weights](https://huggingface.co/fuyingw/MELP_Encoder) |
+| [KED](https://doi.org/10.1016/j.xcrm.2024.101875) | 2024 | CNN+Text | CL+M/R/G | MIMIC-IV-ECG | 800K | [Code](https://github.com/control-spiderman/ECGFM-KED/) | [Weights](https://zenodo.org/records/14881564) |
+| [ECGFounder](https://doi.org/10.1056/AIoa2401033) | 2024 | CNN | SL (multilabel) | HEED | 10.7M | [Code](https://github.com/PKUDigitalHealth/ECGFounder) | [Weights](PKUDigitalHealth/ECGFounder) |
+
+### Single-Lead ECG Foundation Models
+
+| Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
+|-------|------|----------|--------|---------------|-----------|------|---------|
+| [ECG-PT](https://doi.org/10.48550/arXiv.2407.20775) | 2024 | Transformer | M/R/G | PhysioNet CinC 2020 | 42M tokens | [Code](https://github.com/harryjdavies/HeartGPT) | [Weights](https://github.com/harryjdavies/HeartGPT/tree/main/Model_files) |
+| [HeartBERT](https://doi.org/10.48550/arXiv.2411.11896) | 2024 | Transformer | M/R/G | MIT-BIH, PTB-XL, European ST-T | 72M tokens | [Code](https://github.com/ecgResearch/HeartBert) | [Weights](https://drive.google.com/drive/folders/10flbRia9rDWeS8-TLScRUT6JBv81iN-4) |
+
+### PPG Foundation Models
+
+| Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
+|-------|------|----------|--------|---------------|-----------|------|---------|
+| [PPG-PT](https://doi.org/10.48550/arXiv.2407.20775) | 2024 | Transformer | M/R/G | Capnobase/BIDMC/Cuffless BP  | 128M tokens | [Code](https://github.com/harryjdavies/HeartGPT) | [Weights](https://github.com/harryjdavies/HeartGPT/tree/main/Model_files) |
+| [PaPaGei-S/-P](https://doi.org/10.48550/arXiv.2410.20542) | 2024 | Transformer | CL | VitalDB, MIMIC-III waveform, MESA sleep | 57K hours | [Code](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) | [Weights](https://zenodo.org/records/13983110) |
+| [PulsePPG](https://doi.org/10.48550/arXiv.2502.01108) | 2025 | CNN | CL | MOODS | 55K hours | [Code](https://github.com/maxxu05/pulseppg) | [Weights](https://zenodo.org/records/17345536) |
+
+---
+
+## Open Datasets
+
+### Access Legend
+- **O** = Open (freely available)
+- **R** = Restricted (requires Data Use Agreement)
+- **C** = Credentialed (requires credentialing process)
+
+### 12-Lead ECG Datasets
+
+| Dataset | Records | Patients | Country | Setting | Access | Link |
+|---------|---------|----------|---------|---------|--------|------|
+| HEED | 11.7 M | 2.1 M | US | hospital diagnostic ECG | C | [Link](https://bdsp.io/content/heedb/4.0/) |
+| CODE | 2.3 M (346 K CODE-15%)  | 1.7 M(234 K CODE-15%) | Brazil | tele-health setting  | R (CODE 15%, O; CODE-test, O) | [Link](https://doi.org/10.17044/scilifelab.15169716) |
+| MIMIC-IV ECG | 800 K | 161 K | US | hospital diagnostic ECG | C | [Link](https://doi.org/10.13026/b95v-ff39) |
+| SNUH LYDUS  167K | 167 K/, 50K | 167 K/ 50K | South Korea | Hospital diagnostic ECG | R (50K, O) | [Link](https://khdp.net/database/data-search-detail/402/LYDUS-SNUH-ECG-160K/1.0.0) |
+| IKEM | 98.1 K | 30.3 K | Czech Republic | hospital diagnostic ECG | O | [Link](https://doi.org/10.5281/zenodo.8393007) |
+| UK Biobank | 91.1 K | 82.7 K | UK | volunteered exams, diagnost... | R | [Link](https://www.ukbiobank.ac.uk/) |
+| CSN | 45.2 K | 45.2 K | China | hospital diagnostic ECG | O | [Link](https://doi.org/10.13026/wgex-er52) |
+| SPH | 25.8 K | 25.7 K | China | hospital diagnostic ECG | O | [Link](https://doi.org/10.6084/m9.figshare.c.5779802.v1) |
+| PTB-XL | 21.8 K | 18.9 K | Germany | diagnostic ECG - NR-Schille... | O | [Link](https://doi.org/10.13026/6sec-a640) |
+| ZZU pECG | 14.2 K | 11.6 K | China | hospital diagnostic ECG, pe... | O | [Link](https://doi.org/10.6084/m9.figshare.27078763) |
+| Georgia* | 10.3 K | 10.2 K | US | hospital diagnostic ECG  | O | [Link](https://physionet.org/content/challenge-2020/1.0.2/training/georgia/#files-panel) |
+| CPSC 2018, CPSC 2018 extra | 10.3 K | 9.5 K | China | hospital diagnostic ECG | O | [Link](https://physionet.org/content/challenge-2020/1.0.2/training/cpsc_2018/#files-panel) |
+| SaMi-Trop | 2.0 K | 1.6 K | Brazil | Chagas cohort | O | [Link](https://doi.org/10.5281/zenodo.4905618) |
+| Pre-/Post-STEMI ECG Database, University of Michigan | 266 | 266 | US | hospital diagnostic ECG, ST... | O | [Link](https://doi.org/10.7302/gk9v-ka27) |
+| EchoNext | 100K | 36.3K | US | hospital diagnostic ECG | O | [Link](https://physionet.org/content/echonext/1.1.0/) |
+
+### Reduced-Lead ECG and PPG Datasets
+
+| Dataset | Records | PPG | ECG | Country | Access | Link |
+|---------|---------|-----|-----|---------|--------|------|
+| MIMIC-III Waveform Database | 67.8K (MIMIC-III match... | ✓ | ✓ | US | O | [Link](https://physionet.org/content/mimic3wdb-matched/1.0/) |
+| WAVES | 550K (ECG); 510K (PPG) | ✓ | ✓ | US | R | [Link](https://stanford.redivis.com/WAVES/datasets) |
+| SCOPE | 4.5K | ✓ | ✓ | South Korea | O | [Link](https://khdp.net/database/data-search-detail/698/icu-cardiac-arrest/1.0) |
+| VitalDB | 6.4K | ✓ | ✓ | South Korea | O | [Link](https://physionet.org/content/vitaldb/1.0.0/) |
+| MOVER | 83.5K | ✓ | ✓ | US | O (currently N/A due to data revision) | [Link](https://doi.org/10.24432/C5VS5G) |
+| MIT-BIH Arrhythmia | 48 | - | ✓ | US | O | [Link](https://doi.org/10.13026/C2F305) |
+| Long-term ST | 86 | - | ✓ | Slovenia, Italy | O | [Link](https://doi.org/10.13026/C2G01T) |
+| European ST-T | 90 | - | ✓ | 8 Europe countries | O | [Link](https://doi.org/10.13026/C2D59Z) |
+| St Petersburg INCART | 75 | - | ✓ | Russia | O | [Link](https://doi.org/10.13026/C2V88N) |
+| MIT-BIH Atrial fibrillation | 25 | - | ✓ | US | O | [Link](https://doi.org/10.13026/C2MW2D) |
+| Long term AF | 84 | - | ✓ | US | O | [Link](https://physionet.org/content/ltafdb/1.0.0/) |
+| IRIDIA-AF | 167 | - | ✓ | Belgium | O | [Link](https://zenodo.org/records/8405941) |
+| CPSC 2021 Paroxysmal Afib | 1.4K | - | ✓ |  | O | [Link](https://physionet.org/content/cpsc2021/1.0.0/) |
+| Icentia11k | 54K | - | ✓ | Canada | O | [Link](https://physionet.org/content/icentia11k-continuous-ecg/1.0/) |
+| CapnoBase | 42 | ✓ | ✓ | Canada | R | [Link](https://doi.org/10.5683/SP2/NLB8IT) |
+| MESA polysomnography | 2K | ✓ | ✓ | US | R | [Link](https://sleepdata.org/datasets/mesa) |
+| SDB | 146 | ✓ | ✓ | Canada | O | [Link](https://doi.org/10.6084/m9.figshare.1209662) |
+| NuMoM2b | 5337 | ✓ | ✓ | US | R | [Link](https://sleepdata.org/datasets/numom2b/) |
+| PPG-BP | 657 | ✓ | - | China | O | [Link](https://doi.org/10.6084/m9.figshare.5459299.v5) |
+| PPG DaLiA | 15 | ✓ | ✓ | Germany | O | [Link](https://doi.org/10.24432/C53890) |
+| WESAD | 15 | ✓ | ✓ | Germany | O | [Link](https://doi.org/10.24432/C57K5T) |
+| TROIKA 115,116 (= IEEEPPG) | 12 | ✓ | ✓ | China | O | [Link](https://zenodo.org/records/3902710) |
+| ECSMP | 89 | ✓ | ✓ | China | O | [Link](https://data.mendeley.com/datasets/vn5nknh3mn/2) |
+
+---
+
+## Abbreviations
+
+### Pretraining Methods
+- **CL** = Contrastive Learning
+- **M/R/G** = Masked/Reconstructive/Generative Learning
+- **SL** = Supervised Learning
+- **SSL** = Self-Supervised Learning
+
+### Technical Terms
+- **ECG** = Electrocardiogram
+- **PPG** = Photoplethysmogram
+- **AUROC** = Area Under the Receiver Operating Characteristic Curve
+- **Dx.** = Diagnosis
+- **Afib** = Atrial Fibrillation
+- **LVEF** = Left Ventricular Ejection Fraction
+
+### Datasets
+- **HEED** = Harvard-Emory ECG Database
+- **CODE** = Clinical Outcomes in Digital Electrocardiography
+- **MIMIC** = Medical Information Mart for Intensive Care
+- **PTB-XL** = Physikalisch-Technische Bundesanstalt ECG Database
+- **CSN** = Chapman-Shaoxing-Ningbo Database
+- **CPSC** = China Physiological Signal Challenge
+
+---
+
+## Citation
+
+If you use this resource, please cite the relevant papers for each model and dataset you use. BibTeX citations are available in the JSON data files.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request to:
+- Add new open-source foundation models
+- Add new publicly available datasets
+- Fix errors or update links
+
+---
+
+## License
+
+This repository contains metadata and links only. Please refer to individual model and dataset licenses for usage terms.

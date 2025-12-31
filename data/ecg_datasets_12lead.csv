@@ -1,0 +1,202 @@
+Dataset,Record,Patient (n),Year,site,Country,Setting ,Sample rate (Hz),Time (sec),No. of leads ,Demographic/ clinical data,ECG label,Data type,Access,dataset_link,citation,related_dataset,records_numeric,patients_numeric
+HEED,11.7 M,2.1 M,1980s ~ ongoing,1,US,hospital diagnostic ECG,"250, 500",10,12,"Age, gender, death, race, ethnicity, marital status, religion, language, veteran status, gender, cause of death, education level, ICD-9/10 Dx. codes","ECG Dx. (Marquette 12SL codes, human-readable 12SL report), measurements (HR, PR, QRSD, QT, QTc, Pax, Rax, Tax)",wfdb,C,https://bdsp.io/content/heedb/4.0/,"{RN66,
+   author = {Koscova, Zuzana and Li, Qiao and Robichaux, Chad and Moura Junior, Valdery and Ghanta, Manohar and Gupta, Aditya and Rosand, Jonathan and Aguirre, Aaron and Hong, Shenda and Albert, David E},
+   title = {The Harvard-Emory ECG Database},
+   journal = {medRxiv},
+   pages = {2024.09. 27.24314503},
+   DOI = {10.1101/2024.09.27.24314503},
+   url = {https://doi.org/10.1101/2024.09.27.24314503},
+   year = {2024},
+   type = {Journal Article}
+}
+",,11700000,2100000
+CODE,2.3 M (346 K CODE-15%) ,1.7 M(234 K CODE-15%),2010-2016,multi,Brazil,tele-health setting ,400,7~10,12,"Age, gender","1dAVb, RBBB, LBBB, sinus bradycardia, AFib, sinus tachycardia, normal_ecg, death, follow up time",hdf5,"R (CODE 15%, O; CODE-test, O)",https://doi.org/10.17044/scilifelab.15169716,"{RN67,
+   author = {Ribeiro, A. H. and Ribeiro, M. H. and Paixao, G. M. M. and Oliveira, D. M. and Gomes, P. R. and Canazart, J. A. and Ferreira, M. P. S. and Andersson, C. R. and Macfarlane, P. W. and Meira, W., Jr. and Schon, T. B. and Ribeiro, A. L. P.},
+   title = {Automatic diagnosis of the 12-lead ECG using a deep neural network},
+   journal = {Nat Commun},
+   volume = {11},
+   number = {1},
+   pages = {1760},
+   keywords = {Adolescent
+Adult
+Aged
+Aged, 80 and over
+Atrial Fibrillation/*diagnosis/physiopathology
+Cardiology/*methods
+*Deep Learning
+*Electrocardiography
+Humans
+Middle Aged
+*Neural Networks, Computer
+Reproducibility of Results
+Sensitivity and Specificity
+Young Adult},
+   ISSN = {2041-1723 (Electronic)
+2041-1723 (Linking)},
+   DOI = {10.1038/s41467-020-15432-4},
+   url = {https://doi.org/10.1038/s41467-020-15432-4},
+   year = {2020},
+   type = {Journal Article}
+}
+",CODE-15%,2300000,1700000
+MIMIC-IV ECG,800 K,161 K,2008-2019,1,US,hospital diagnostic ECG,500,10,12,"Age, gender, race, language, ICD-9/10 Dx. codes, longitudinal laboratory measurements, drugs, procedures, vital signs, death during ED/ ICU admission","machine measurements (machine generated ECG Dx., bandwidth, filtering, p/qrs/t interval and axis)",wfdb,C,https://doi.org/10.13026/b95v-ff39,"{RN70,
+   author = {Gow, Brian and Pollard, Tom and Nathanson, Larry A and Johnson, Alistair and Moody, Benjamin and Fernandes, Chrystinne and Greenbaum, Nathaniel and Waks, Jonathan W and Eslami, Parastou and Carbonati, Tanner},
+   title = {Mimic-iv-ecg: Diagnostic electrocardiogram matched subset},
+   DOI = {10.13026/4nqg-sb35},
+   url = {https://doi.org/10.13026/4nqg-sb35},
+   year = {2023},
+   type = {Dataset}
+}
+","MIMIC-IV-ECG-Ext-ICD(https://physionet.org/content/mimic-iv-ecg-ext-icd-labels/1.0.1/), Diagnostic labels for MIMIC-IV-ECG; MEETI, Multimodal Description of MIMIC-IV-ECG with ECG Signals, Images, Feature Values and Diagnostic Texts; Symile-MIMIC(https://physionet.org/content/symile-mimic/1.0.0/), a multimodal clinical dataset of chest X-rays, electrocardiograms, and blood labs from MIMIC-IV; MIMIC-IV-Ext-MDS-ED (https://physionet.org/content/multimodal-emergency-benchmark/1.0.0/), Multimodal Decision Support in the Emergency Department - a Benchmark Dataset for Diagnoses and Deterioration Prediction in Emergency Medicine, MIMIC-IV-Ext Cardiac Disease (https://physionet.org/content/mimic-iv-ext-cardiac-disease/1.0.0/) - image, lab, culture, electrocardiogram report from cardiac disease patients",800000,161000
+SNUH LYDUS  167K,"167 K/, 50K",167 K/ 50K,2010-2020,1,South Korea,Hospital diagnostic ECG,500 / 100,10,12,"Age, gender, ","ECG Dx (text, machine generated,  expert reviewed), measurement (ventricular rate, atrial rate, qrs duration, pr/qt intervals, p/r/t axes)",npz,"R (50K, O)",https://khdp.net/database/data-search-detail/402/LYDUS-SNUH-ECG-160K/1.0.0,"{RN71,
+   author = {SNUH},
+   title = {SNUH LYDUS ECG 160K},
+   publisher = {Korea Health Data Platform},
+   url = {https://khdp.net/database/data-search-detail/402/LYDUS-SNUH-ECG-160K/1.0.0},
+   year = {2025},
+   type = {Dataset}
+}
+",SNUH LYDUS  50K,167000,167000
+IKEM,98.1 K,30.3 K,,1,Czech Republic,hospital diagnostic ECG,500,10,12,"Age, gender, weight, height","ventricular_rate, atrial_rate",hdf5,O,https://doi.org/10.5281/zenodo.8393007,"{RN73,
+   author = {Seják, Michal and Sido, Jakub and Žahour, David},
+   title = {IKEM dataset v1.0.0},
+   DOI = {10.5281/zenodo.8393007},
+   url = {https://doi.org/10.5281/zenodo.8393007},
+   year = {2023},
+   type = {Dataset}
+}
+",,98100,30300
+UK Biobank,91.1 K,82.7 K,2014~,multi,UK,"volunteered exams, diagnostic ECG ",500,10,12,"Age, gender, indices of deprivation, clinical, imaging, metabolomic, proteomic, genomic data, (can be linked to cancer and death registries, hospital admissions, and primary care records)","Ventricular rate, suspicious flag raised by device, p and qrs duration, automatic Dx. comments",xml,R,https://www.ukbiobank.ac.uk/,"{RN75,
+   author = {Zheng, Jianwei and Guo, Hangyuan and Chu, Huimin},
+   title = {A large scale 12-lead electrocardiogram database for arrhythmia study},
+   month = {2022},
+   DOI = {10.13026/WGEX-ER52},
+   url = {https://doi.org/10.13026/wgex-er52},
+   year = {2022},
+   type = {Dataset}
+}
+",,91100,82700
+CSN,45.2 K,45.2 K,2013-2018,2,China,hospital diagnostic ECG,500,10,12,"Age, gender","ECG Dx. (63 SNOMED CT std. - expert reviewed), ventricular rate, atrial rate, qrs duration and counts, r and t axis",wfdb,O,https://doi.org/10.13026/wgex-er52,"{RN75,
+   author = {Zheng, Jianwei and Guo, Hangyuan and Chu, Huimin},
+   title = {A large scale 12-lead electrocardiogram database for arrhythmia study},
+   month = {2022},
+   DOI = {10.13026/WGEX-ER52},
+   url = {https://doi.org/10.13026/wgex-er52},
+   year = {2022},
+   type = {Dataset}
+}
+",,45200,45200
+SPH,25.8 K,25.7 K,2019-2020,1,China,hospital diagnostic ECG,500,10~60,12,"Age, gender","ECG Dx.(AHA std. - 11 category, 44 statement, expert reviewed)",h5,O,https://doi.org/10.6084/m9.figshare.c.5779802.v1,"{RN76,
+   author = {Liu, Hui and Wang, Yinglong and Chen, Da and Zhang, Xiyu and Li, Huijie and Bian, Lipan and Shu, Minglei and Chen, Dan},
+   title = {A large-scale multi-label 12-lead electrocardiogram database with standardized diagnostic statements},
+   month = {2022/5/25},
+   DOI = {10.6084/M9.FIGSHARE.C.5779802.V1},
+   url = {https://doi.org/10.6084/m9.figshare.c.5779802.v1},
+   year = {2022},
+   type = {Dataset}
+}
+",,25800,25700
+PTB-XL,21.8 K,18.9 K,1989-1996,multi,Germany,diagnostic ECG - NR-Schiller AG device use ,500 or 1000,10-120,12,"Age, gender, weight, height, site, device","ECG Dx. (SCP-ECG std. - 5 class/ 71 statements, expert annotated or machine generated; AHA std.); - PTB-XL+: added algorithm extracted ECG features, median beats, fiducial points, SNOMED-CT std.",wfdb,O,https://doi.org/10.13026/6sec-a640,"{RN77,
+   author = {Wagner, Patrick and Strodthoff, Nils and Bousseljot, Ralf-Dieter and Kreiseler, Dieter and Lunze, Fatima I. and Samek, Wojciech and Schaeffter, Tobias},
+   title = {PTB-XL, a large publicly available electrocardiography dataset},
+   journal = {Sci. Data},
+   volume = {7},
+   number = {1},
+   pages = {154},
+   ISSN = {2052-4463},
+   DOI = {10.1038/s41597-020-0495-6},
+   url = {http://doi.org/10.1038/s41597-020-0495-6},
+   year = {2020},
+   type = {Journal Article}
+}
+","PTB-XL+ - ECG feature dataset (12SL, SNOMED) of PTB-XL",21800,18900
+ZZU pECG,14.2 K,11.6 K,2018-2024,1,China,"hospital diagnostic ECG, pediatrics (0-14 y.o.)",500,5-120,12 or 9,"Age, gender, ICD-10 Dx. codes","ECG Dx.(AHA std., CHN std.; expert reviewed)",wfdb,O,https://doi.org/10.6084/m9.figshare.27078763,"{RN79,
+   author = {Tan, Jian and Fan, Haoyi and Luo, Jiawei and Zhou, Yanjie and Wang, Ning and Wang, Xizheng and Liu, Guizhi and Liu, Chengyu and Wang, Zongmin},
+   title = {A pediatric ECG database with disease diagnosis covering 11643 children},
+   journal = {Scientific Data},
+   volume = {12},
+   number = {1},
+   pages = {867},
+   ISSN = {2052-4463},
+   url = {https://doi.org/10.1038/s41597-025-05225-z},
+   year = {2025},
+   type = {Journal Article}
+}",,14200,11600
+Georgia*,10.3 K,10.2 K,,1,US,hospital diagnostic ECG ,500,10,12,"Age, gender",SNOMED CT std.,wfdb,O,https://physionet.org/content/challenge-2020/1.0.2/training/georgia/#files-panel,"{RN80,
+   author = {Perez Alday, Erick Andres and Gu, Annie and Shah, Amit and Liu, Chengyu and Sharma, Ashish and Seyedi, Salman and Bahrami Rad, Ali and Reyna, Matthew and Clifford, Gari},
+   title = {Classification of 12-lead ECGs: The PhysioNet/Computing in Cardiology Challenge 2020},
+   month = {2022},
+   DOI = {10.13026/DVYD-KD57},
+   url = {https://doi.org/10.13026/dvyd-kd57},
+   year = {2022},
+   type = {Dataset}
+}
+",,10300,10200
+"CPSC 2018, CPSC 2018 extra",10.3 K,9.5 K,,11,China,hospital diagnostic ECG,500,6–60,12,"Age, gender, diagnosis,",SNOMED CT std. ,wfdb,O,https://physionet.org/content/challenge-2020/1.0.2/training/cpsc_2018/#files-panel,"{RN80,
+   author = {Perez Alday, Erick Andres and Gu, Annie and Shah, Amit and Liu, Chengyu and Sharma, Ashish and Seyedi, Salman and Bahrami Rad, Ali and Reyna, Matthew and Clifford, Gari},
+   title = {Classification of 12-lead ECGs: The PhysioNet/Computing in Cardiology Challenge 2020},
+   month = {2022},
+   DOI = {10.13026/DVYD-KD57},
+   url = {https://doi.org/10.13026/dvyd-kd57},
+   year = {2022},
+   type = {Dataset}
+}
+",,10300,9500
+SaMi-Trop,2.0 K,1.6 K,2013-2016,multi,Brazil,Chagas cohort,400,10,12,"Age, gender, death, time to death",ECG Dx. - normal or not ,hdf5,O,https://doi.org/10.5281/zenodo.4905618,"{RN81,
+   author = {Cardoso, C. S. and Sabino, E. C. and Oliveira, C. D. and de Oliveira, L. C. and Ferreira, A. M. and Cunha-Neto, E. and Bierrenbach, A. L. and Ferreira, J. E. and Haikal, D. S. and Reingold, A. L. and Ribeiro, A. L.},
+   title = {Longitudinal study of patients with chronic Chagas cardiomyopathy in Brazil (SaMi-Trop project): a cohort profile},
+   journal = {BMJ Open},
+   volume = {6},
+   number = {5},
+   pages = {e011181},
+   keywords = {Aged
+Biomarkers/blood
+Brazil/epidemiology
+Chagas Cardiomyopathy/blood/drug therapy/*epidemiology/physiopathology
+Chronic Disease/drug therapy/*epidemiology
+Disease Progression
+Female
+Follow-Up Studies
+Heart Failure/*epidemiology/physiopathology/prevention & control
+Humans
+Immunosuppressive Agents/*therapeutic use
+Longitudinal Studies
+Male
+Middle Aged
+Natriuretic Peptide, Brain/*blood
+Nitroimidazoles/*therapeutic use
+Peptide Fragments/*blood
+Population Surveillance
+Predictive Value of Tests
+Prognosis
+Prospective Studies
+Quality of Life
+Socioeconomic Factors
+Biomarkers
+Chemical pathology
+Chagas disease
+Cohort Studies},
+   ISSN = {2044-6055 (Electronic)
+2044-6055 (Linking)},
+   DOI = {10.1136/bmjopen-2016-011181},
+   url = {https://doi.org/10.1136/bmjopen-2016-011181},
+   year = {2016},
+   type = {Journal Article}
+}
+",,2000,1600
+"Pre-/Post-STEMI ECG Database, University of Michigan",266,266,2016-2021,1,US,"hospital diagnostic ECG, STEMI cohort ",500,10,12,"Age, gender, diabetes, hypertension, smoking, cerebrovascular disease, HF onset, death, death time",ECG label - Pre-STEMI or Post-STEMI (within 1week pre- and post- event; time of ECG recorded),csv,O,https://doi.org/10.7302/gk9v-ka27,"{RN83,
+   author = {Asthana, Vishwaratn and Monovoukas, Demetri and Kucharski, Kevin and Chopra, Zoey and Perkins, Sidney and Bugga, Pallavi},
+   title = {Pre-/Post-STEMI ECG Database},
+   month = {2024},
+   DOI = {10.7302/GK9V-KA27},
+   url = {https://doi.org/10.7302/gk9v-ka27},
+   year = {2024},
+   type = {Dataset}
+}",,266,266
+EchoNext,100K,36.3K,2018-2022,1,US,hospital diagnostic ECG,250,10,12,"Age, sex, acquisition_year, setting, race, previous ECG presence","11 Structural heart disease labels derived from matched Echo (AR, MR, TR, PR, RV systolic function, pericardial effusion, aortic stenosis, LVEF, interventricular septum thickness, posterior wall thickness, PASP, TR Max Velocity), ECG labels - ventricular rate, atrial rate, pr/qrs/qt duration and counts, r and t axis",npy,O,https://physionet.org/content/echonext/1.1.0/,"{RN84,
+   author = {Elias, Pierre and Finer, Joshua},
+   title = {Echonext: A dataset for detecting echocardiogram-confirmed structural heart disease from ecgs},
+   publisher = {PhysioNet},
+   year = {2025},
+   type = {Generic}
+}",,100000,36300

@@ -1,0 +1,266 @@
+Dataset,Record (n),Patient (n),Year,site,Country,Setting,PPG,ECG,Sample rate (Hz),Time (sec),No. of ECG leads,Demographic/ clinical data,ECG label,Data type,Access,data_link,citation,derived_dataset,records_numeric,patients_numeric
+MIMIC-III Waveform Database,67.8K (MIMIC-III matched subset: 22.3K),30.0K (MIMIC-III matched subset: 10.3K),2008-2014,1,US,Telemetry/ clinical grade monitoring – ICU (ECG and PPG),1,1,125,variable,2~3,"Matched subset: Age, gender, height, weight, race, language, ICD-9/10 Dx. codes, longitudinal laboratory measurements, drugs, procedures, V/S, death during ED/ ICU admission",No individual beat/ rhythm annotation.,wfdb,O,https://physionet.org/content/mimic3wdb-matched/1.0/,"{RN85,
+   author = {Moody, Benjamin and Moody, George and Villarroel, Mauricio and Clifford, Gari and Silva, Ikaro},
+   title = {MIMIC-III Waveform Database Matched Subset},
+   month = {2020},
+   DOI = {10.13026/C2294B},
+   url = {https://doi.org/10.13026/c2294b},
+   year = {2020},
+   type = {Dataset}
+}
+",MIMIC-BP (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DBM1NF) - Curated dataset for blood pressure estimation; PulseDB (https://github.com/pulselabteam/PulseDB)- cleaned dataset based on MIMIC-III and VitalDB for benchmarking cuff-less blood pressure estimation methods,67800,30000.0
+WAVES,550K (ECG); 510K (PPG),50.4K,2008-2017,1,US,Telemetry/ clinical grade monitoring – pediatric ICU (ECG and PPG),1,1,125,variable (mean 7 hr),,"Age, gender, monitor alarm, length of stay","No individual beat/ rhythm annotation; other waveforms present: ABP, capnography. respiratory, CVP, etc",csv,R,https://stanford.redivis.com/WAVES/datasets,"{RN86,
+   author = {Miller, Daniel and Dhillon, Gurpreet S. and Bambos, N. and Shin, A. and Scheinker, David},
+   title = {WAVES – the Lucile Packard children’s hospital pediatric physiological waveforms dataset},
+   journal = {Sci. Data},
+   volume = {10},
+   ISSN = {2052-4463},
+   DOI = {10.1038/s41597-023-02037-x},
+   url = {http://dx.doi.org/10.1038/s41597-023-02037-x},
+   year = {2023},
+   type = {Journal Article}
+}
+",,550000,50400.0
+SCOPE,4.5K,4.5K,2019-2023,1,South Korea,Telemetry/ clinical grade monitoring – ICU (ECG and PPG),1,1,500 (ECG); 125 (PPG),"24~48 hrs (prior to event: cardiac arrest, discharge, death)",1 (lead II),"Age, gender, APACHE II, ICU type, LOS, post-ICU mortality, pre-ICU arrest, DNR status, outcome event (cardiac arrest, death, discharge)",No individual beat/ rhythm annotation.,vital file,O,https://khdp.net/database/data-search-detail/698/icu-cardiac-arrest/1.0,"{RN88,
+   title = {SCOPE: A survival and cardiac arrest outcome dataset with PPG and ECG waveforms from intensive care units},
+   publisher = {Korea Health Data Platform},
+   url = {https://khdp.net/database/data-search-detail/698/icu-cardiac-arrest/1.0},
+   year = {2025},
+   type = {Dataset}
+}
+",,4500,4500.0
+VitalDB,6.4K,6.1K,2016-2017,1,South Korea,Telemetry/ clinical grade monitoring – intraoperative (ECG and PPG),1,1,500,variable (entire time monitored in OR),2~3,"Age, gender, height, weight, surgery-related info, preoperative laboratory value, intraoperative medication data, anesthesia-related data, perioperative procedure","No individual beat/ rhythm annotation; other waveforms present: ABP, capnography, BIS, etc.",vital file,O,https://physionet.org/content/vitaldb/1.0.0/,"{RN89,
+   author = {Lee, Hyung-Chul and Park, Yoonsang and Yoon, Soo Bin and Yang, Seong Mi and Park, Dongnyeok and Jung, Chul-Woo},
+   title = {VitalDB, a high-fidelity multi-parameter vital signs database in surgical patients},
+   journal = {Sci. Data},
+   volume = {9},
+   number = {1},
+   pages = {279},
+   ISSN = {2052-4463},
+   DOI = {10.1038/s41597-022-01411-5},
+   url = {http://dx.doi.org/10.1038/s41597-022-01411-5},
+   year = {2022},
+   type = {Journal Article}
+}
+","INSPIRE (https://physionet.org/content/inspire/1.3/) -  a publicly available research dataset for perioperative medicine (vitals, ward_vitals, labs, medications- can be linked to vitaldb through caseid),; PulseDB (https://github.com/pulselabteam/PulseDB)- cleaned dataset based on MIMIC-III and VitalDB for benchmarking cuff-less blood pressure estimation methods",6400,6100.0
+MOVER,83.5K,58.8K,2015-2122,1,US,Telemetry/ clinical grade monitoring – intraoperative (ECG and PPG),1,1,180 or 300 (ECG); 100 (PPG),variable,1,"Age, gender, height, weight, surgery-related info, preoperative laboratory value, intraoperative medication data, anesthesia type, in-hospital death","No individual beat/ rhythm annotation; other waveforms present: ABP, capnography, BIS, etc.",xml file,O (currently N/A due to data revision),https://doi.org/10.24432/C5VS5G,"{RN90,
+   author = {Samad, Muntaha and Angel, Mirana and Rinehart, Joseph and Kanomata, Yuzo and Baldi, Pierre and Cannesson, Maxime},
+   title = {Medical Informatics Operating Room Vitals and Events Repository (MOVER): a public-access operating room database},
+   journal = {JAMIA Open},
+   volume = {6},
+   number = {4},
+   pages = {ooad084},
+   keywords = {anesthesiology
+artificial intelligence
+electronic medical record
+physiology
+surgery},
+   ISSN = {2574-2531},
+   DOI = {10.1093/jamiaopen/ooad084},
+   url = {https://doi.org/10.1093/jamiaopen/ooad084},
+   year = {2023},
+   type = {Journal Article}
+}
+",,83500,58800.0
+MIT-BIH Arrhythmia,48,47,1975-1979,1,US,Ambulatory (ECG),0,1,360,30 min,2,"Age, gender, medication","Beat & rhythm annotations (beat-to-beat, expert reviewed); signal quality labels",wfdb,O,https://doi.org/10.13026/C2F305,"{RN92,
+   author = {Moody, George B. and Mark, Roger G.},
+   title = {MIT-BIH Arrhythmia Database},
+   month = {1992},
+   DOI = {10.13026/C2F305},
+   url = {https://doi.org/10.13026/C2F305},
+   year = {1992},
+   type = {Dataset}
+}
+",,48,47.0
+Long-term ST,86,80,,multi,"Slovenia, Italy",Ambulatory – Holter (ECG),0,1,250,21~24 hr,2~3,"Cardiac history, Dx., symptoms, medications, treatment","ST changes (ischemic, axis-related non-ischemic, episodes of slow ST level drift); ECG record description",wfdb,O,https://doi.org/10.13026/C2G01T,"{RN93,
+   author = {Jager, Franc and Taddei, Alessandro and Moody, George B. and Emdin, Michele and Antolic, Gorazd and Dorn, Roman and Smrdel, Ales and Marchesi, Carlo and Mark, Roger G.},
+   title = {The Long-Term ST database},
+   month = {1995},
+   DOI = {10.13026/C2G01T},
+   url = {https://doi.org/10.13026/C2G01T},
+   year = {1995},
+   type = {Dataset}
+}
+",,86,80.0
+European ST-T,90,79,,multi,8 Europe countries,Ambulatory (ECG),0,1,250,2 hr,2,"Age, gender, medication","Beat & rhythm annotations (beat-to-beat, expert annotated); signal quality labels",wfdb,O,https://doi.org/10.13026/C2D59Z,"{RN94,
+   author = {Taddei, A. and Distante, G. and Emdin, M. and Pisani, P. and Moody, G. B. and Zeelenberg, C. and Marchesi, C.},
+   title = {The European ST-T database: standard for evaluating systems for the analysis of ST-T changes in ambulatory electrocardiography},
+   journal = {Eur. Heart J.},
+   volume = {13},
+   number = {9},
+   pages = {1164-1172},
+   ISSN = {0195-668X},
+   DOI = {10.1093/oxfordjournals.eurheartj.a060332},
+   url = {https://doi.org/10.1093/oxfordjournals.eurheartj.a060332},
+   year = {1992},
+   type = {Journal Article}
+}
+",,90,79.0
+St Petersburg INCART,75,32,,1,Russia,Ambulatory – Holter (ECG),0,1,257,30 min,12,"Age, gender, cardiac diagnosis",Beat annotation (human reviewed); ECG record description,wfdb,O,https://doi.org/10.13026/C2V88N,"{RN96,
+   author = {Tihonenko, Viktor and Khaustov, Alexander and Ivanov, Sergey and Rivin, Alexei},
+   title = {St.-Petersburg institute of cardiological technics 12-lead arrhythmia database},
+   month = {2007},
+   DOI = {10.13026/C2V88N},
+   url = {https://doi.org/10.13026/C2V88N},
+   year = {2007},
+   type = {Dataset}
+}
+",,75,32.0
+MIT-BIH Atrial fibrillation,25,,,1,US,Ambulatory – Holter (ECG),0,1,250,10 hr,2,,"Beat & rhythm annotations (beat-to-beat, expert reviewed)",wfdb,O,https://doi.org/10.13026/C2MW2D,"{RN97,
+   author = {Moody, George B. and Mark, Roger G.},
+   title = {MIT-BIH Atrial Fibrillation Database},
+   month = {1992},
+   DOI = {10.13026/C2MW2D},
+   url = {https://doi.org/10.13026/C2MW2D},
+   year = {1992},
+   type = {Dataset}
+}
+",,25,
+Long term AF,84,,,1,US,Ambulatory – Holter (ECG),0,1,128,24~25 hr,2,,"Beat & rhythm annotations (beat-to-beat, expert reviewed)",wfdb,O,https://physionet.org/content/ltafdb/1.0.0/,"{RN98,
+   author = {Petrutiu, Simona and Sahakian, Alan V. and Swiryn, Steven},
+   title = {The long-term AF database},
+   month = {2003},
+   DOI = {10.13026/C2QG6Q},
+   url = {https://doi.org/10.13026/C2QG6Q},
+   year = {2003},
+   type = {Dataset}
+}
+",,84,
+IRIDIA-AF,167,152 (all paroxysmal Afib),2006-2017,1,Belgium,Ambulatory - Holter ,0,1,200,19~95 hr,2 (I and II),"Age, gender, record start/end","Atrial fibrillation start/end annotation, RR interval",hdf5,O,https://zenodo.org/records/8405941,"{RN117,
+   author = {Gilon, Cédric and Grégoire, Jean-Marie and Mathieu, Marianne and Carlier, Stéphane and Bersini, Hugues},
+   title = {IRIDIA-AF, a large paroxysmal atrial fibrillation long-term electrocardiogram monitoring database},
+   journal = {Scientific data},
+   volume = {10},
+   number = {1},
+   pages = {714},
+   ISSN = {2052-4463},
+   year = {2023},
+   type = {Journal Article}
+}
+",,167,152.0
+CPSC 2021 Paroxysmal Afib,1.4K,63,,multi,,Ambulatory or wearable (ECG),0,1,200,variable (mean 20 min),12 (Holter); 3 (wearable),,"Rhythm abnormality Dx. group (non-AF, paroxysmal AF, persistent AF); beat & rhythm annotations",wfdb,O,https://physionet.org/content/cpsc2021/1.0.0/,"{RN99,
+   author = {Wang, Xingyao and Ma, Caiyun and Zhang, Xiangyu and Gao, Hongxiang and Clifford, Gari and Liu, Chengyu},
+   title = {Paroxysmal atrial fibrillation events detection from dynamic ECG recordings: The 4th China Physiological Signal Challenge 2021},
+   month = {2021},
+   DOI = {10.13026/KSYA-QW89},
+   url = {https://doi.org/10.13026/ksya-qw89},
+   year = {2021},
+   type = {Dataset}
+}
+",,1400,63.0
+Icentia11k,54K,11K,2017-2018,multi,Canada,Ambulatory Icentia CardioSTAT (ECG),0,1,250,70 min,1 (ML I),,Beat & rhythm annotation (expert reviewed),wfdb,O,https://physionet.org/content/icentia11k-continuous-ecg/1.0/,"{RN100,
+   author = {Tan, Shawn and Androz, Guillaume and Chamseddine, A. and Fecteau, P. and Courville, Aaron C. and Bengio, Yoshua and Cohen, Joseph Paul},
+   title = {Icentia11K: An unsupervised representation learning dataset for arrhythmia subtype discovery},
+   journal = {arXiv preprint arXiv:1910.09570},
+   volume = {abs/1910.09570},
+   ISSN = {2331-8422},
+   url = {https://doi.org/10.48550/arXiv.1910.09570},
+   year = {2019},
+   type = {Journal Article}
+}
+",,54000,11000.0
+CapnoBase,42,42,,1,Canada,Telemetry/ clinical grade monitoring – intraoperative (ECG and PPG),1,1,100,8 min,1,,ECG R peak; PPG pulse peak label (expert reviewed); other waveforms present: capnography,csv,R,https://doi.org/10.5683/SP2/NLB8IT,"{RN102,
+   author = {Karlen, Walter},
+   title = {CapnoBase IEEE TBME Respiratory Rate Benchmark},
+   publisher = {Borealis},
+   month = {2021},
+   DOI = {10.5683/SP2/NLB8IT},
+   url = {https://doi.org/10.5683/SP2/NLB8IT},
+   year = {2021},
+   type = {Dataset}
+}
+",,42,42.0
+MESA polysomnography,2K,2K,2010-2013,multi,US,Telemetry/ clinical grade monitoring – polysomnography (ECG and PPG),1,1,256,variable (mean 10.6 h),2,"Age, gender, BMI, race, smoking, apnea-hypopnea index, arousal index, sleep scores and quality metrics","Sleep stage & event annotation (respiratory event, desaturation, arousal, limb event, etc); additional waveforms: EEG, EMG",edf; xml,R,https://sleepdata.org/datasets/mesa,"{RN104,
+   author = {National Sleep Research, Resource},
+   title = {Multi-ethnic study of atherosclerosis (MESA)},
+   publisher = {National Sleep Research Resource},
+   month = {2016},
+   DOI = {10.25822/N7HQ-C406},
+   url = {https://doi.org/10.25822/n7hq-c406},
+   year = {2016},
+   type = {Dataset}
+}
+",,2000,2000.0
+SDB,146,"146 (pediatrics: 56 SDB, 90 NonSDB)",,1,Canada,Telemetry/ clinical grade monitoring – pediatrics (suspected sleep apnea) – polysomnography (ECG and PPG),1,1,62.5,>3 hr,1,,Apneas/hypopnea index (AHI); SpO2 (1 Hz),csv,O,https://doi.org/10.6084/m9.figshare.1209662,"{RN113,
+   author = {Garde, Ainara and Dehkordi, Parastoo and Karlen, Walter and Wensley, David and Ansermino, J Mark and Dumont, Guy A},
+   title = {Development of a screening tool for sleep disordered breathing in children using the phone Oximeter™},
+   journal = {PloS one},
+   volume = {9},
+   number = {11},
+   pages = {e112959},
+   ISSN = {1932-6203},
+   url = {https://figshare.com/articles/dataset/Development_of_a_Screening_Tool_for_Sleep_Disordered_Breathing_in_Children_Using_the_Phone_Oximeter/1209662},
+   year = {2014},
+   type = {Journal Article}
+}
+",,146,146.0
+NuMoM2b,5337,3163,2011-2013,multi,US,Telemetry/ clinical grade monitoring – home polysomnography (ECG and PPG),1,1,20 (ECG); 75 (PPG),>2 hr,1,"Age, gender (all female), race, gestational age, height, weight, BMI, visit (early 6–15 wks; late 22–31 wks gestation)","AHI, central apnea index, hypopnea index, obstructive AHI (OAHI), HR, position, activity; additional waveforms: SpO2 (3 Hz), pulse (3 Hz), respiratory channels (nasal pressure, airflow, snore, thorax/abdomen belt)",edf; xml,R,https://sleepdata.org/datasets/numom2b/,"{RN114,
+   author = {Facco, Francesca L and Parker, Corette B and Reddy, Uma M and Silver, Robert M and Louis, Judette M and Basner, Robert C and Chung, Judith H and Schubert, Frank P and Pien, Grace W and Redline, Susan},
+   title = {NuMoM2b Sleep-Disordered Breathing study: objectives and methods},
+   journal = {American journal of obstetrics and gynecology},
+   volume = {212},
+   number = {4},
+   pages = {542. e1-542. e127},
+   ISSN = {0002-9378},
+   year = {2015},
+   type = {Journal Article}
+}
+",,5337,3163.0
+PPG-BP,657,219 (healthy),,1,China,Telemetry/ clinical grade monitoring – 3 min measurement (PPG),1,0,1000,2.1 sec,na,"Age, gender, height, weight, cardiac disease","SBP, DBP, HR measurements matched to PPG segment",txt,O,https://doi.org/10.6084/m9.figshare.5459299.v5,"{RN112,
+   author = {Liang, Yongbo and Liu, Guiyong and Chen, Zhencheng and Elgendi, Mohamed},
+   title = {PPG-BP Database},
+   publisher = {figshare},
+   month = {2022/9/22},
+   DOI = {10.6084/M9.FIGSHARE.5459299.V5},
+   url = {https://doi.org/10.6084/m9.figshare.5459299.v5},
+   year = {2022},
+   type = {Dataset}
+}
+",,657,219.0
+PPG DaLiA,15,15,,1,Germany,Wearable – usual daytime activity (ECG and PPG),1,1,700 (ECG); 64 (PPG),~2.5 hr,1,"Age, gender, height, weight, skin type, fitness","Activity labels (sitting, walking, cycling, driving, table soccer, lunch, office work, stairs); heart rate label; additional waveforms: respiration, ACC, TEMP",pkl,O,https://doi.org/10.24432/C53890,"{RN105,
+   author = {Schmidt, Attila Reiss Ina Indlekofer},
+   title = {PPG-DaLiA},
+   publisher = {UCI Machine Learning Repository},
+   month = {2019},
+   DOI = {10.24432/C53890},
+   url = {https://doi.org/10.24432/C53890},
+   year = {2019},
+   type = {Dataset}
+}
+",,15,15.0
+WESAD,15,15,,1,Germany,Wearable – induced emotion (ECG and PPG),1,1,700 (ECG); 64 (PPG),2 hr,1,Self-reported emotion metrics,"Emotion states; additional waveforms: respiration, ACC, TEMP, EMG",pkl,O,https://doi.org/10.24432/C57K5T,"{RN107,
+   author = {Philip Schmidt, Attila Reiss},
+   title = {WESAD (Wearable Stress and Affect Detection)},
+   publisher = {UCI Machine Learning Repository},
+   month = {2018},
+   DOI = {10.24432/C57K5T},
+   url = {https://doi.org/10.24432/C57K5T},
+   year = {2018},
+   type = {Dataset}
+}
+",,15,15.0
+"TROIKA 115,116 (= IEEEPPG)",12,12 (all male),,1,China,Wearable – treadmill (ECG and PPG),1,1,125,5 min,1,"Age, gender, height, weight, health status","SBP, DBP; additional waveforms: ACC",mat,O,https://zenodo.org/records/3902710,"{RN110,
+   author = {Zhang, Zhilin and Pi, Zhouyue and Liu, Benyuan},
+   title = {TROIKA: a general framework for heart rate monitoring using wrist-type photoplethysmographic signals during intensive physical exercise},
+   journal = {IEEE Trans. Biomed. Eng.},
+   volume = {62},
+   number = {2},
+   pages = {522-531},
+   ISSN = {0018-9294},
+   DOI = {10.1109/TBME.2014.2359372},
+   url = {http://doi.org/10.1109/TBME.2014.2359372},
+   year = {2015},
+   type = {Journal Article}
+}
+",,12,12.0
+ECSMP,89,89 (healthy),,1,China,"Telemetry/ clinical grade monitoring (ECG holter, PPG wearable) – induced emotion + sleep (sleep ECG collected the night before)",1,1,512 (ECG holter); 64 (PPG),,1,"Age, gender; sleep-related (sleep time, sleep efficiency, apnea index, apnea type), questionnaires (emotion, sleep quality, depression), Profile of Mood States (POMS?)","Sleep stage (deep, light, REM); additional waveforms during emotion induction: BT (4 Hz), EDA (4 Hz), ACC (32 Hz), inter-beat-interval (from PPG), HR (1 Hz, from PPG), EEG (250 Hz)",csv,O,https://data.mendeley.com/datasets/vn5nknh3mn/2,"{RN115,
+   author = {Gao, Zhilin and Cui, Xingran and Wan, Wang and Zheng, Wenming and Gu, Zhongze},
+   title = {ECSMP: A dataset on emotion, cognition, sleep, and multi-model physiological signals},
+   journal = {Data in Brief},
+   volume = {39},
+   pages = {107660},
+   ISSN = {2352-3409},
+   year = {2021},
+   type = {Journal Article}
+}
+",,89,89.0

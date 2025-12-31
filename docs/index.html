@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECG/PPG Foundation Models & Datasets</title>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>ECG/PPG Foundation Models & Open Datasets</h1>
+            <p class="subtitle">A comprehensive collection of open-source foundation models and publicly available datasets</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <ul class="nav-tabs">
+                <li class="active" data-tab="models">Foundation Models</li>
+                <li data-tab="datasets-12lead">12-Lead ECG Datasets</li>
+                <li data-tab="datasets-reduced">Reduced-Lead & PPG Datasets</li>
+                <li data-tab="compare">Compare Models</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- Models Section -->
+        <section id="models" class="tab-content active">
+            <div class="section-header">
+                <h2>Foundation Models</h2>
+                <p>Click on any model or dataset name to view details. Use the search box to filter.</p>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All (16)</button>
+                <button class="filter-btn" data-filter="12lead">12-Lead ECG (11)</button>
+                <button class="filter-btn" data-filter="1lead">Single-Lead ECG (2)</button>
+                <button class="filter-btn" data-filter="ppg">PPG (3)</button>
+            </div>
+
+            <table id="models-table" class="display">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Type</th>
+                        <th>Backbone</th>
+                        <th>Method</th>
+                        <th>Pretrain Data</th>
+                        <th>Data Size</th>
+                        <th>Links</th>
+                    </tr>
+                </thead>
+                <tbody id="models-tbody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 12-Lead Datasets Section -->
+        <section id="datasets-12lead" class="tab-content">
+            <div class="section-header">
+                <h2>12-Lead ECG Datasets</h2>
+                <p>Click on a dataset name to see which models were trained on it.</p>
+            </div>
+
+            <div class="access-legend">
+                <span class="legend-item"><span class="badge badge-open">O</span> Open</span>
+                <span class="legend-item"><span class="badge badge-restricted">R</span> Restricted (DUA)</span>
+                <span class="legend-item"><span class="badge badge-credentialed">C</span> Credentialed</span>
+            </div>
+
+            <table id="datasets-12lead-table" class="display">
+                <thead>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Records</th>
+                        <th>Patients</th>
+                        <th>Country</th>
+                        <th>Setting</th>
+                        <th>Access</th>
+                        <th>Used By</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody id="datasets-12lead-tbody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Reduced-Lead Datasets Section -->
+        <section id="datasets-reduced" class="tab-content">
+            <div class="section-header">
+                <h2>Reduced-Lead ECG & PPG Datasets</h2>
+                <p>Datasets containing single/few-lead ECG and/or PPG signals.</p>
+            </div>
+
+            <div class="access-legend">
+                <span class="legend-item"><span class="badge badge-open">O</span> Open</span>
+                <span class="legend-item"><span class="badge badge-restricted">R</span> Restricted (DUA)</span>
+                <span class="legend-item"><span class="badge badge-credentialed">C</span> Credentialed</span>
+            </div>
+
+            <table id="datasets-reduced-table" class="display">
+                <thead>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Records</th>
+                        <th>PPG</th>
+                        <th>ECG</th>
+                        <th>Country</th>
+                        <th>Access</th>
+                        <th>Used By</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody id="datasets-reduced-tbody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Compare Models Section -->
+        <section id="compare" class="tab-content">
+            <div class="section-header">
+                <h2>Compare Models</h2>
+                <p>Select 2-4 models to compare side by side.</p>
+            </div>
+
+            <div class="compare-selector">
+                <div id="model-checkboxes" class="checkbox-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <button id="compare-btn" class="btn-primary" disabled>Compare Selected</button>
+            </div>
+
+            <div id="comparison-table-container" style="display: none;">
+                <table id="comparison-table" class="comparison-table">
+                    <thead id="comparison-thead">
+                        <!-- Populated by JavaScript -->
+                    </thead>
+                    <tbody id="comparison-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Dataset Detail Modal -->
+    <div id="dataset-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Dataset Details</h2>
+            <div id="modal-body">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Detail Modal -->
+    <div id="model-modal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            <h2 id="model-modal-title">Model Details</h2>
+            <div id="model-modal-body">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Data files available:
+                <a href="https://github.com/aramis00/ECGPPG_FM_dataset/tree/main/data">CSV & JSON</a>
+            </p>
+            <p>Contribute on <a href="https://github.com/aramis00/ECGPPG_FM_dataset">GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
