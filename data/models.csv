@@ -1,0 +1,214 @@
+model,title,doi,citation,task,performance,Year,Backbone,Pretrain modality,Pretrain Method,Pretrain Dataset,ECGs (n),Codelink,Weightlink,eval_data,ECGlead,sampling_rate,eval_LP,eval_FT,eval_zeroshot,eval_data_efficiency,eval_reduced_lead,eval_ablation,eval_fairness,eval_privacy,eval_compute,eval_explainability,ecgs_numeric
+ECG-JEPA,Learning general representation of 12-lead electrocardiogram with a joint-embedding predictive architecture,https://doi.org/10.48550/arXiv.2410.08559 ,"{RN1,
+   author = {Kim, Sehun},
+   title = {Learning general representation of 12-lead electrocardiogram with a joint-embedding predictive architecture},
+   journal = {arXiv preprint arXiv:2410.08559},
+   DOI = {https://doi.org/10.48550/arXiv.2410.08559},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Multiclass/ multilabel  classification (5 Dx. class, PTB-XL; 9 ecg Dx., CPSC 2018)
+• ECG feature extraction","• Multilabel classification, AUROC ~0.91(PTB-XL)",2024,Transformer,ecg,M/R/G,"CSN, Code-15",180K,https://github.com/sehunfromdaegu/ecg_jepa,https://github.com/sehunfromdaegu/ecg_jepa,"PTB-XL, CPSC2018",8,250.0,1,1,na,1,1,1,0,0,"Training time, hardware",0,180000.0
+HuBERT-ECG,HuBERT-ECG as a self-supervised foundation model for broad and scalable cardiac applications,https://doi.org/10.1101/2024.11.14.24317328,"{RN2,
+   author = {Coppola, Edoardo and Savardi, Mattia and Massussi, Mauro and Adamo, Marianna and Metra, Marco and Signoroni, Alberto},
+   title = {HuBERT-ECG as a self-supervised foundation model for broad and scalable cardiac applications},
+   journal = {medRxiv},
+   pages = {2024.11. 14.24317328},
+   DOI = {https://doi.org/10.1101/2024.11.14.24317328},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Multilabel classification (164 harmonized Dx.)
+• Prognostic prediction (mortality)",• Multilabel diagnosis: macro AUROC 0.85 for 164 conditions (Combined dataset),2024,CNN+Transformer,ecg,CL+M/R/G,"CODE, CPSC, CPSC-Extra, PTB, PTB-XL, Georgia, CSN, Tianchi, MIMIC-IV, SPH",9.1M,https://github.com/Edoar-do/HuBERT-ECG,https://huggingface.co/Edoardo-BS,"CODE, CPSC, CPSC-Extra, PTB, PTB-XL, Georgia, CSN, Tianchi, SPH, SaMi-Trop",12,100.0,0,1,na,1,0,1,0,0,"Hardware, training time proxy: No. of steps per dataset",saliency map,9100000.0
+DeepECG,Foundation models for generalizable electrocardiogram interpretation: comparison of supervised and self-supervised electrocardiogram foundation models,https://doi.org/10.1101/2025.03.02.25322575 ,"{RN3,
+   author = {Nolin-Lapalme, Alexis and Sowa, Achille and Delfrate, Jacques and Tastet, Olivier and Corbin, Denis and Kulbay, Merve and Ozdemir, Derman and Noël, Marie-Jeanne and Marois-Blanchet, François-Christophe and Harvey, François},
+   title = {Foundation models for generalizable electrocardiogram interpretation: comparison of supervised and self-supervised electrocardiogram foundation models},
+   journal = {medRxiv},
+   DOI = {https://doi.org/10.1101/2025.03.02.25322575 },
+   year = {2025},
+   type = {Journal Article}
+}
+","• Multilabel classification (77 Dx.)
+• Clinical assessment (LVEF category, pericarditis, LQTS subtype)
+• Prognostic prediction (5-Year incident Afib (iAF5)) 	","• Multilabel classification: AUROC 0.98 (external)
+• iAF5 prediction: AUROC 0.74 (MHI-ds)
+• LVEF≤40% prediction: AUROC 0.92 ",2025,CNN+Transformer,ecg,CL+M/R/G,"MIMIC-IV-ECG, Code-15, MHI-ds*",1.9M,https://github.com/HeartWise-AI/DeepECG_Docker,https://huggingface.co/heartwise/SSL_Pretrained_model/tree/main,"MIMIC-IV-test, PTB, CLSA, UKB, UCSF*, MGH*, CSH*, JGH*, UW*, NYP*, CHUM*",12,,0,1,na,1,0,0,1,1,"Hardware, CO2 emission, training time",lime,1900000.0
+ECG-FM,Ecg-fm: An open electrocardiogram foundation model,https://doi.org/10.1093/jamiaopen/ooaf122,"{RN4,
+   author = {McKeen, Kaden and Oliva, Laura and Masood, Sameer and Toma, Augustin and Rubin, Barry and Wang, Bo},
+   title = {Ecg-fm: An open electrocardiogram foundation model},
+   journal = {JAMIA open},
+   volume = {8},
+   number = {5},
+   pages = {ooaf122},
+   ISSN = {2574-2531},
+   DOI = {https://doi.org/10.1093/jamiaopen/ooaf122},
+   year = {2025},
+   type = {Journal Article}
+}
+","• Multilabel classification (17~21 Dx.)
+• Clinical assessment (acute coronary syndrome, LVEF category)","• Multilabel classification: AUROC >0.99 in 12 condition (UHN-ECG)
+• LVEF≤40% prediction: AUROC 0.93 (UHN-ECG)",2024,CNN+Transformer,ecg,CL+M/R/G,"CPSC, CPSC-Extra, PTB-XL, Georgia, CSN, MIMIC-IV-ECG",870K,https://github.com/bowang-lab/ECG-FM/,https://huggingface.co/wanglab/ecg-fm,"UHN-ECG*,UHN-ECG*, MIMIC-IV, MEDIC*(Meng et al.)",12,500.0,1,1,na,1,0,0,0,0,"Hardware,  training time",saliency map,870000.0
+HeartLang,Reading your heart: Learning ecg words and sentences via pre-training ecg language model,"
+https://doi.org/10.48550/arXiv.2502.10707","{RN5,
+   author = {Jin, Jiarui and Wang, Haoyu and Li, Hongyan and Li, Jun and Pan, Jiahui and Hong, Shenda},
+   title = {Reading your heart: Learning ecg words and sentences via pre-training ecg language model},
+   journal = {arXiv preprint arXiv:2502.10707},
+   DOI = {https://doi.org/10.48550/arXiv.2502.10707},
+   year = {2025},
+   type = {Journal Article}
+}
+",• Multiclass classification (5~38 Dx.),"• Multiclass classification: 
+Macro AUROC 0.90 (PTB-XL, Rhythm)",2025,Transformer,ecg,CL+M/R/G,MIMIC-IV-ECG,800K,https://github.com/PKUDigitalHealth/HeartLang,https://huggingface.co/PKUDigitalHealth/HeartLang/,"PTB-XL, CPSC2018, CSN",12,100.0,1,1,na,1,1,1,0,0,Hardware,Textual; ECG vocab visualization,800000.0
+CPC,Benchmarking ECG Foundational Models: A Reality Check Across Clinical Tasks,"
+https://doi.org/10.48550/arXiv.2509.25095","{RN10,
+   author = {Al-Masud, MA and Alcaraz, Juan Miguel Lopez and Strodthoff, Nils},
+   title = {Benchmarking ECG Foundational Models: A Reality Check Across Clinical Tasks},
+   journal = {arXiv preprint arXiv:2509.25095},
+   DOI = {https://doi.org/10.48550/arXiv.2509.25095},
+   year = {2025},
+   type = {Journal Article}
+}
+","• Multilabel classification (adult, pediatric)
+• Prognostic prediction (acute care, cardiac/noncardiac outcome)
+• Clinical assessment (age, gender, biometric, ecg features, lab values, vital signs, echo structure/function)","• Macro AUROC of adult ECG interpretation of finetuned model are outperforms supervised baseline, rank at the top among other FMs
+• Best overall performance compared to othe FM and supervised baseline in echo diagnosis, cardiac and noncardiac prediction. ",2025,CNN+SSM,ecg,CL,HEED,10.7M,https://github.com/AI4HealthUOL/ecg-fm-benchmarking,https://figshare.com/articles/dataset/ECG-CPC_Checkpoint_zip/30192604?file=58173919,"PTB, PTB-XL, Ningbo, CPSC2018, CPSC-Extra, Veorgia, Chapman, SPH, CODE-15%, ZZU, EchoNext, MIMIC",12,240.0,1,1,na,1,0,0,0,0,"Hardware,  training time",0,10700000.0
+ESI,Ecg semantic integrator (esi): A foundation ecg model pretrained with llm-enhanced cardiological text,"
+https://doi.org/10.48550/arXiv.2405.19366","{RN6,
+   author = {Yu, Han and Guo, Peikun and Sano, Akane},
+   title = {Ecg semantic integrator (esi): A foundation ecg model pretrained with llm-enhanced cardiological text},
+   journal = {arXiv preprint arXiv:2405.19366},
+   DOI = {https://doi.org/10.48550/arXiv.2405.19366},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Multiclass classification (Rhythm focused)
+• Zero-shot capability
+• Biometric task (individual identification)","• Arrhythmia detection: AUROC 0.94 (PTB-XL, FT), 0.98 (CPSC2018, FT)",2024,CNN+Text,ecg+text,CL+M/R/G,"PTB-XL, CSN, MIMIC-IV-ECG",660K,https://github.com/comp-well-org/ESI,https://drive.google.com/drive/folders/1I3ECWBEm-Yxhzl1xgx5JE-tEhDRDtN0o,"PTB-XL, CPSC2018",12,500.0,1,1,1,1,0,1,0,0,Hardware,0,660000.0
+MERL,Zero-shot ecg classification with multimodal learning and test-time clinical knowledge enhancement,https://doi.org/10.48550/arXiv.2403.06659,"{RN7,
+   author = {Liu, Che and Wan, Zhongwei and Ouyang, Cheng and Shah, Anand and Bai, Wenjia and Arcucci, Rossella},
+   title = {Zero-shot ecg classification with multimodal learning and test-time clinical knowledge enhancement},
+   journal = {arXiv preprint arXiv:2403.06659},
+   DOI = {https://doi.org/10.48550/arXiv.2403.06659},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Multilabel classification 
+• Zero-shot capability","• Zero-shot classification:
+AUROC 0.75 (average), 0.88 (PTB-XL)",2024,CNN+Text,ecg+text,CL,MIMIC-IV-ECG,771K,https://github.com/cheliu-computation/MERL-ICML2024,https://drive.google.com/drive/folders/13wb4DppUciMn-Y_qC2JRWTbZdz3xX0w2,"PTB-XL, CPSC2018, CSN",12,500.0,1,0,1,1,0,1,0,0,Hardware,0,771000.0
+MELP,From Token to Rhythm: A Multi-Scale Approach for ECG-Language Pretraining,https://doi.org/10.48550/arXiv.2506.21803,"{RN8,
+   author = {Wang, Fuying and Xu, Jiacheng and Yu, Lequan},
+   title = {From Token to Rhythm: A Multi-Scale Approach for ECG-Language Pretraining},
+   journal = {arXiv preprint arXiv:2506.21803},
+   DOI = {https://doi.org/10.48550/arXiv.2506.21803},
+   year = {2025},
+   type = {Journal Article}
+}
+","• Multilabel classification 
+• Zero-shot capability
+• Report generation","• Zero-shot classification:
+AUROC 0.79 (average)",2025,CNN+Text,ecg+text,CL+M/R/G,MIMIC-IV-ECG,760K,https://github.com/HKU-MedAI/MELP,https://huggingface.co/fuyingw/MELP_Encoder,"PTB-XL, CPSC2018, CSN",12,500.0,1,1,1,1,0,1,0,0,Hardware,0,760000.0
+KED,Foundation model of ECG diagnosis: Diagnostics and explanations of any form and rhythm on ECG,https://doi.org/10.1016/j.xcrm.2024.101875,"{RN9,
+   author = {Tian, Yuanyuan and Li, Zhiyuan and Jin, Yanrui and Wang, Mengxiao and Wei, Xiaoyang and Zhao, Liqun and Liu, Yunqing and Liu, Jinlei and Liu, Chengliang},
+   title = {Foundation model of ECG diagnosis: Diagnostics and explanations of any form and rhythm on ECG},
+   journal = {Cell Reports Medicine},
+   volume = {5},
+   number = {12},
+   ISSN = {2666-3791},
+   DOI = {https://doi.org/10.1016/j.xcrm.2024.101875},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Multilabel classification
+• Zero-shot capability","• Zero-shot classification:
+AUROC >0.90 for 6 tasks
+• Zero-shot on 7 common ECG diagnosis comparable to cardiologists ",2024,CNN+Text,ecg+text,CL+M/R/G,MIMIC-IV-ECG,800K,https://github.com/control-spiderman/ECGFM-KED/,https://zenodo.org/records/14881564,"CPSC2018, CSN, Georgia, PTB-XL, SFPH*",12,100.0,0,1,1,1,0,1,0,0,Hardware,0,800000.0
+ECGFounder,An Electrocardiogram Foundation Model Built on over 10 Million Recordings,https://doi.org/10.1056/AIoa2401033,"{RN11,
+   author = {Li, Jun and Aguirre, Aaron D. and Junior, Valdery Moura and Jin, Jiarui and Liu, Che and Zhong, Lanhai and Sun, Chenxi and Clifford, Gari and Brandon Westover, M. and Hong, Shenda},
+   title = {An Electrocardiogram Foundation Model Built on over 10 Million Recordings},
+   journal = {Nejm Ai},
+   volume = {2},
+   number = {7},
+   ISSN = {2836-9386},
+   DOI = {10.1056/AIoa2401033},
+   year = {2025},
+   type = {Journal Article}
+}
+","• Multilabel classification (150 diagnoses)
+• Clinical assessment (age, gender, CKD, CHD, LVEF category, NT-proBNP)
+• Single-lead analysis 
+• Afib detection from PPG","• AUROC ≥ 0.95 in 82 out of 150 diagnostic label (internal test)
+• For single-lead analysis,
+AUROC >0.95 for rhythm abnormalities, >0.80 for others (internal test)",2024,CNN,ecg+text (SL),SL (multilabel),HEED,10.7M,https://github.com/PKUDigitalHealth/ECGFounder,PKUDigitalHealth/ECGFounder,"HEED, CODE-test, PTB-XL, PhysioNet Challenge 2017, MIMIC-IV-ECG",12,500.0,1,1,na,0,1,1,1,0,0,0,10700000.0
+ECG-PT,Interpretable Pre-Trained Transformers for Heart Time-Series Data,"
+https://doi.org/10.48550/arXiv.2407.20775","{RN12,
+   author = {Davies, Harry J and Monsen, James and Mandic, Danilo P},
+   title = {Interpretable pre-trained transformers for heart time-series data},
+   journal = {arXiv preprint arXiv:2407.20775},
+   DOI = {https://doi.org/10.48550/arXiv.2407.20775},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Cardiovascular (Afib classification 
+• Generative model evaluation",• Afib detection: AUROC 0.99 ,2024,Transformer,ecg,M/R/G,PhysioNet CinC 2020,42M tokens,https://github.com/harryjdavies/HeartGPT,https://github.com/harryjdavies/HeartGPT/tree/main/Model_files,"MIMIC PERform, Bed-based ballistocardiography dataset",1,100.0,0,1,na,0,na,0,0,0,"Hardware,  training time, finetuning time",Attention based interpretability,
+PPG-PT,Interpretable Pre-Trained Transformers for Heart Time-Series Data,"
+https://doi.org/10.48550/arXiv.2407.20775","{RN12,
+   author = {Davies, Harry J and Monsen, James and Mandic, Danilo P},
+   title = {Interpretable pre-trained transformers for heart time-series data},
+   journal = {arXiv preprint arXiv:2407.20775},
+   DOI = {https://doi.org/10.48550/arXiv.2407.20775},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Cardiovascular (Afib classification 
+heart beat detection)
+• Generative model evaluation","• Afib detection: AUROC 0.93 
+• PPG beat detection: F1 0.98 ",2024,Transformer,ppg ,M/R/G,Capnobase/BIDMC/Cuffless BP ,128M tokens,https://github.com/harryjdavies/HeartGPT,https://github.com/harryjdavies/HeartGPT/tree/main/Model_files,"MIMIC PERform, Bed-based ballistocardiography dataset",na,50.0,0,1,na,0,na,0,0,0,"Hardware,  training time, finetuning time",Attention based interpretability,
+HeartBERT,HeartBERT: A Self-Supervised ECG Embedding Model for Efficient and Effective Medical Signal Analysis,https://doi.org/10.48550/arXiv.2411.11896,"{RN13,
+   author = {Tahery, Saedeh and Akhlaghi, Fatemeh Hamid and Amirsoleimani, Termeh},
+   title = {HeartBERT: A Self-Supervised ECG Embedding Model for Efficient and Effective Medical Signal Analysis},
+   journal = {arXiv preprint arXiv:2411.11896},
+   DOI = {https://doi.org/10.48550/arXiv.2411.11896},
+   year = {2024},
+   type = {Journal Article}
+}","• Cardiovascular (Heart beat classification)
+• Sleep-related (sleep stage classification)","	• Sleep-stage classification:
+F1 0.75 (3-stage), F1 0.62 (5-stage)
+• Heartbeat classification:
+F1 0.89 (half frozen model)",2024,Transformer,ecg,M/R/G,"MIT-BIH, PTB-XL, European ST-T",72M tokens,https://github.com/ecgResearch/HeartBert,https://drive.google.com/drive/folders/10flbRia9rDWeS8-TLScRUT6JBv81iN-4,"MIT-BIH Polysomnographic Database, Icentia11k ",1,360.0,1,1,na,0,na,0,0,0,Hardware,0,
+PaPaGei-S/-P,PaPaGei: Open Foundation Models for Optical Physiological Signals,"
+https://doi.org/10.48550/arXiv.2410.20542","{RN14,
+   author = {Pillai, Arvind and Spathis, Dimitris and Kawsar, Fahim and Malekzadeh, Mohammad},
+   title = {PaPaGei: Open Foundation Models for Optical Physiological Signals},
+   journal = {arXiv preprint arXiv:2410.20542},
+   pages = {28},
+   keywords = {Computer Science - Learning},
+   DOI = {10.48550/arXiv.2410.20542},
+   url = {http://arxiv.org/pdf/2410.20542v1
+https://arxiv.org/pdf/2410.20542v1.pdf
+http://arxiv.org/abs/2410.20542v1},
+   year = {2024},
+   type = {Journal Article}
+}
+","• Cardiovascular (BP, heart rate estimation, hypertension)
+• Sleep-related (AHI, sleep disturbance)
+• Pregnancy monitoring (gestational age, pregnancy stage)
+• Emotional and activity monitoring
+• Prognostic/ risk prediction (ICU mortality, admission)	","• Classification: average AUROC 0.67 across 9 tasks 
+• Regression: average MAE 10.1 across 9 tasks
+(SBP MAE 13~14, average HR MAE 3.5, HR MAE 11.5)",2024,Transformer,ppg ,CL,"VitalDB, MIMIC-III waveform, MESA sleep",57K hours,https://github.com/Nokia-Bell-Labs/papagei-foundation-model,https://zenodo.org/records/13983110,"nuMom2B, VV, PPH-BP, SDB, ECSMP, WESAD, PPG-DaLiA",na,125.0,1,1,na,1,na,1,1,0,Hardware,0,
+PulsePPG,Pulse-PPG: An Open-Source Field-Trained PPG Foundation Model for Wearable Applications Across Lab and Field Settings,"
+https://doi.org/10.48550/arXiv.2502.01108","{RN15,
+   author = {Saha, Mithun and Xu, Maxwell A and Mao, Wanting and Neupane, Sameer and Rehg, James M and Kumar, Santosh},
+   title = {Pulse-ppg: An open-source field-trained ppg foundation model for wearable applications across lab and field settings},
+   journal = {Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies},
+   volume = {9},
+   number = {3},
+   pages = {1-35},
+   ISSN = {2474-9567},
+   DOI = {https://doi.org/10.48550/arXiv.2502.01108},
+   year = {2025},
+   type = {Journal Article}
+}
+","• Cardiovascular (BP, heart rate, hypertension)
+• Sleep, stress, activity classification 
+• Prognostic/ risk prediction (ICU mortality, admission)	","• Outperform PaPaGei for 10/11 (6/7 classification, 4/4 regression) tasks at linear probing ",2025,CNN,ppg ,CL,MOODS,55K hours,https://github.com/maxxu05/pulseppg,https://zenodo.org/records/17345536,"MIMIC III/IV, UQVS, WESAD, PPG-DaLiA",na,50.0,1,1,na,0,na,1,0,0,"Hardware,  training time",0,
