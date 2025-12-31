@@ -1590,13 +1590,35 @@ function updateCompareBtn() {
 function compareModels() {
     const selected = Array.from(document.querySelectorAll('#model-checkboxes input:checked')).map(cb => cb.value);
     const models = MODELS.filter(m => selected.includes(m.model));
-    
-    const props = ['Year', 'Backbone', 'Pretrain Method', 'Pretrain Dataset', 'ECGs (n)', 'ECGlead', 'task', 'performance'];
-    
+
+    // All properties from model card for comparison
+    const props = [
+        { key: 'title', label: 'Paper Title' },
+        { key: 'Year', label: 'Year' },
+        { key: 'Backbone', label: 'Backbone' },
+        { key: 'Pretrain modality', label: 'Modality' },
+        { key: 'Pretrain Method', label: 'Pretrain Method' },
+        { key: 'Pretrain Dataset', label: 'Pretrain Dataset' },
+        { key: 'ECGs (n)', label: 'Data Size' },
+        { key: 'ECGlead', label: 'ECG Leads' },
+        { key: 'sampling_rate', label: 'Sampling Rate (Hz)' },
+        { key: 'eval_data', label: 'Evaluation Data' },
+        { key: 'task', label: 'Task' },
+        { key: 'performance', label: 'Performance' }
+    ];
+
     document.getElementById('comparison-thead').innerHTML = '<tr><th>Property</th>' + models.map(m => `<th>${m.model}</th>`).join('') + '</tr>';
-    document.getElementById('comparison-tbody').innerHTML = props.map(p => 
-        '<tr><td>' + p + '</td>' + models.map(m => `<td>${m[p] || '-'}</td>`).join('') + '</tr>'
-    ).join('');
+    document.getElementById('comparison-tbody').innerHTML = props.map(p => {
+        const cells = models.map(m => {
+            let val = m[p.key] || '-';
+            // Handle multiline text
+            if (typeof val === 'string' && val.includes('\n')) {
+                val = val.replace(/\n/g, '<br>');
+            }
+            return `<td>${val}</td>`;
+        }).join('');
+        return `<tr><td><strong>${p.label}</strong></td>${cells}</tr>`;
+    }).join('');
     document.getElementById('comparison-table').style.display = 'table';
 }
 
