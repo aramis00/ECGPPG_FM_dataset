@@ -1,4 +1,4 @@
-# ECG/PPG Foundation Models and Open Datasets
+# ECG/PPG Open Foundation Models and Datasets
 
 A comprehensive collection of open-source foundation models and publicly available datasets for electrocardiogram (ECG) and photoplethysmogram (PPG) analysis.
 
