@@ -1373,6 +1373,15 @@ function findModelsUsingDataset(datasetName) {
     }).map(m => m.model);
 }
 
+function createDatasetLinks(pretrainData) {
+    if (!pretrainData) return '-';
+    const datasets = pretrainData.split(/[,;]+/).map(d => d.trim()).filter(d => d);
+    return datasets.map(dataset => {
+        const cleanName = dataset.replace(/\*$/, '').trim();
+        return `<span class="clickable" onclick="showDataset('${cleanName}')">${dataset}</span>`;
+    }).join(', ');
+}
+
 // Populate models table
 function populateModels() {
     const tbody = document.getElementById('models-tbody');
@@ -1387,7 +1396,7 @@ function populateModels() {
             <td>${getTypeBadge(m)}</td>
             <td>${m.Backbone || '-'}</td>
             <td>${m['Pretrain Method'] || '-'}</td>
-            <td>${m['Pretrain Dataset'] || '-'}</td>
+            <td>${createDatasetLinks(m['Pretrain Dataset'])}</td>
             <td data-order="${m.ecgs_numeric || 0}">${m['ECGs (n)'] || '-'}</td>
             <td>${createLinks(m)}</td>
         `;
