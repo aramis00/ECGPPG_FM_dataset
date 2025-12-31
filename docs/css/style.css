@@ -546,3 +546,47 @@ footer p {
 .check-no {
     color: #999;
 }
+
+/* Column Visibility Button */
+.btn-colvis {
+    padding: 8px 16px !important;
+    background: #1a73e8 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    margin-bottom: 15px !important;
+}
+
+.btn-colvis:hover {
+    background: #1557b0 !important;
+}
+
+.dt-buttons {
+    margin-bottom: 15px;
+}
+
+/* DataTables Buttons dropdown */
+.dt-button-collection {
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    padding: 10px !important;
+}
+
+.dt-button-collection .dt-button {
+    padding: 8px 15px !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 4px !important;
+}
+
+.dt-button-collection .dt-button:hover {
+    background: #e8f0fe !important;
+}
+
+.dt-button-collection .dt-button.active {
+    background: #cce5ff !important;
+    font-weight: 600;
+}
