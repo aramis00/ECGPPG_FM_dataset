@@ -46,8 +46,8 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 
 ### 12-Lead ECG Foundation Models
 
-| Model | Year | Backbone | Method | Pretrain Data | Size | Code | Weights |
-|-------|------|----------|--------|---------------|------|------|---------|
+| Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
+|-------|------|----------|--------|---------------|-----------|------|---------|
 | [ECG-JEPA](https://doi.org/10.48550/arXiv.2410.08559) | 2024 | Transformer | M/R/G | CSN, Code-15 | 180K | [Code](https://github.com/sehunfromdaegu/ecg_jepa) | [Weights](https://github.com/sehunfromdaegu/ecg_jepa) |
 | [HuBERT-ECG](https://doi.org/10.1101/2024.11.14.24317328) | 2024 | CNN+Transformer | CL+M/R/G | CODE, CPSC, CPSC-Extra, PTB, PTB-XL, ... | 9.1M | [Code](https://github.com/Edoar-do/HuBERT-ECG) | [Weights](https://huggingface.co/Edoardo-BS) |
 | [DeepECG](https://doi.org/10.1101/2025.03.02.25322575) | 2025 | CNN+Transformer | CL+M/R/G | MIMIC-IV-ECG, Code-15, MHI-ds* | 1.9M | [Code](https://github.com/HeartWise-AI/DeepECG_Docker) | [Weights](https://huggingface.co/heartwise/SSL_Pretrained_model/tree/main) |
@@ -62,15 +62,15 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 
 ### Single-Lead ECG Foundation Models
 
-| Model | Year | Backbone | Method | Pretrain Data | Size | Code | Weights |
-|-------|------|----------|--------|---------------|------|------|---------|
+| Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
+|-------|------|----------|--------|---------------|-----------|------|---------|
 | [ECG-PT](https://doi.org/10.48550/arXiv.2407.20775) | 2024 | Transformer | M/R/G | PhysioNet CinC 2020 | 42M tokens | [Code](https://github.com/harryjdavies/HeartGPT) | [Weights](https://github.com/harryjdavies/HeartGPT/tree/main/Model_files) |
 | [HeartBERT](https://doi.org/10.48550/arXiv.2411.11896) | 2024 | Transformer | M/R/G | MIT-BIH, PTB-XL, European ST-T | 72M tokens | [Code](https://github.com/ecgResearch/HeartBert) | [Weights](https://drive.google.com/drive/folders/10flbRia9rDWeS8-TLScRUT6JBv81iN-4) |
 
 ### PPG Foundation Models
 
-| Model | Year | Backbone | Method | Pretrain Data | Size | Code | Weights |
-|-------|------|----------|--------|---------------|------|------|---------|
+| Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
+|-------|------|----------|--------|---------------|-----------|------|---------|
 | [PPG-PT](https://doi.org/10.48550/arXiv.2407.20775) | 2024 | Transformer | M/R/G | Capnobase/BIDMC/Cuffless BP  | 128M tokens | [Code](https://github.com/harryjdavies/HeartGPT) | [Weights](https://github.com/harryjdavies/HeartGPT/tree/main/Model_files) |
 | [PaPaGei-S/-P](https://doi.org/10.48550/arXiv.2410.20542) | 2024 | Transformer | CL | VitalDB, MIMIC-III waveform, MESA sleep | 57K hours | [Code](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) | [Weights](https://zenodo.org/records/13983110) |
 | [PulsePPG](https://doi.org/10.48550/arXiv.2502.01108) | 2025 | CNN | CL | MOODS | 55K hours | [Code](https://github.com/maxxu05/pulseppg) | [Weights](https://zenodo.org/records/17345536) |
