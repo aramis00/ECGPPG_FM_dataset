@@ -1463,13 +1463,6 @@ function showModel(name) {
     const m = MODELS.find(x => x.model === name);
     if (!m) return;
 
-    // Format eval fields as checkmarks
-    const evalCheck = (val) => {
-        if (val === 1 || val === '1' || val === true) return '✓';
-        if (val === 0 || val === '0' || val === false || val === 'na' || !val) return '-';
-        return val;
-    };
-
     document.getElementById('modal-title').textContent = m.model;
     document.getElementById('modal-body').innerHTML = `
         <div class="info-row"><span class="info-label">Title</span>${m.title || '-'}</div>
@@ -1484,28 +1477,44 @@ function showModel(name) {
         <div class="info-row"><span class="info-label">Evaluation Data</span>${m.eval_data || '-'}</div>
         <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
-        <div class="info-row"><span class="info-label">Linear Probe</span>${evalCheck(m.eval_LP)}</div>
-        <div class="info-row"><span class="info-label">Fine-tuning</span>${evalCheck(m.eval_FT)}</div>
-        <div class="info-row"><span class="info-label">Zero-shot</span>${evalCheck(m.eval_zeroshot)}</div>
-        <div class="info-row"><span class="info-label">Data Efficiency</span>${evalCheck(m.eval_data_efficiency)}</div>
-        <div class="info-row"><span class="info-label">Reduced Lead</span>${evalCheck(m.eval_reduced_lead)}</div>
-        <div class="info-row"><span class="info-label">Ablation Study</span>${evalCheck(m.eval_ablation)}</div>
-        <div class="info-row"><span class="info-label">Fairness Eval</span>${evalCheck(m.eval_fairness)}</div>
-        <div class="info-row"><span class="info-label">Privacy Eval</span>${evalCheck(m.eval_privacy)}</div>
-        <div class="info-row"><span class="info-label">Compute Info</span>${m.eval_compute || '-'}</div>
-        <div class="info-row"><span class="info-label">Explainability</span>${m.eval_explainability || '-'}</div>
         <div class="info-row">${createLinks(m)}</div>
     `;
     document.getElementById('modal').style.display = 'block';
 }
 
+// Find dataset by name with fuzzy matching
+function findDataset(name) {
+    const searchName = name.toLowerCase().replace(/[-_*]/g, '').trim();
+
+    // Try exact match first
+    let d = DATASETS_12LEAD.find(x => x.Dataset === name) || DATASETS_REDUCED.find(x => x.Dataset === name);
+    if (d) return d;
+
+    // Try fuzzy match
+    const allDatasets = [...DATASETS_12LEAD, ...DATASETS_REDUCED];
+    d = allDatasets.find(x => {
+        const dsName = x.Dataset.toLowerCase().replace(/[-_*]/g, '');
+        return dsName.includes(searchName) || searchName.includes(dsName.split(' ')[0]);
+    });
+
+    return d;
+}
+
 // Show dataset modal with ALL details
 function showDataset(name) {
-    let d = DATASETS_12LEAD.find(x => x.Dataset === name) || DATASETS_REDUCED.find(x => x.Dataset === name);
-    if (!d) return;
-    const usedBy = findModelsUsingDataset(name);
+    let d = findDataset(name);
+    if (!d) {
+        // Show a simple message if dataset not found in our tables
+        document.getElementById('modal-title').textContent = name;
+        document.getElementById('modal-body').innerHTML = `
+            <div class="info-row"><span class="info-label">Note</span>This dataset is referenced in model pretraining but detailed information is not available in our database.</div>
+        `;
+        document.getElementById('modal').style.display = 'block';
+        return;
+    }
+    const usedBy = findModelsUsingDataset(d.Dataset);
     const link = d.dataset_link || d.data_link;
-    const is12Lead = DATASETS_12LEAD.some(x => x.Dataset === name);
+    const is12Lead = DATASETS_12LEAD.some(x => x.Dataset === d.Dataset);
 
     document.getElementById('modal-title').textContent = d.Dataset;
     document.getElementById('modal-body').innerHTML = `
