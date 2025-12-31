@@ -68,6 +68,7 @@
     <nav>
         <ul class="nav-tabs">
             <li class="active" data-tab="models">Foundation Models</li>
+            <li data-tab="benchmarks">Architecture & Benchmarks</li>
             <li data-tab="datasets-12lead">12-Lead ECG Datasets</li>
             <li data-tab="datasets-reduced">Reduced-Lead & PPG Datasets</li>
             <li data-tab="compare">Compare Models</li>
@@ -95,6 +96,41 @@
             <table id="models-table" class="display">
                 <thead><tr><th>Model</th><th>Year</th><th>Type</th><th>Backbone</th><th>Method</th><th>Pretrain Data</th><th>Data Size</th><th>Links</th></tr></thead>
                 <tbody id="models-tbody"></tbody>
+            </table>
+        </section>
+
+        <!-- Architecture & Benchmarks Section -->
+        <section id="benchmarks" class="tab-content">
+            <div class="section-header">
+                <h2>Architecture & Computational Benchmarks</h2>
+                <p>Model architecture details and computational requirements across different hardware.</p>
+            </div>
+
+            <h3>Model Architectures</h3>
+            <table id="architecture-table" class="display">
+                <thead><tr><th>Model</th><th>Architecture Description</th></tr></thead>
+                <tbody id="architecture-tbody"></tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Computational Benchmarks</h3>
+            <div class="legend">
+                <strong>Hardware:</strong>
+                <button class="filter-btn benchmark-filter active" data-hw="a100">NVIDIA A100</button>
+                <button class="filter-btn benchmark-filter" data-hw="t4">NVIDIA T4</button>
+                <button class="filter-btn benchmark-filter" data-hw="cpu">CPU Only</button>
+            </div>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+                Benchmarks: Batch size 32 (GPU) / 8 (CPU), 2500-sample ECG input (250 Hz × 10 sec).
+                Finetune hours estimated for 100 epochs on 10K samples.
+            </p>
+            <table id="benchmark-table" class="display">
+                <thead><tr>
+                    <th>Model</th><th>Leads</th><th>Params (M)</th><th>GFLOPs</th>
+                    <th>Infer (ms)</th><th>Throughput (/s)</th>
+                    <th>Train (ms/sample)</th><th>Finetune (hrs)</th>
+                    <th>Infer Mem (GB)</th><th>Train Mem (GB)</th>
+                </tr></thead>
+                <tbody id="benchmark-tbody"></tbody>
             </table>
         </section>
 
