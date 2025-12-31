@@ -1353,6 +1353,7 @@ function findModelsUsingDataset(datasetName) {
 
     modelsData.forEach(model => {
         const pretrainData = (model['Pretrain Dataset'] || '').toLowerCase();
+        // Check for various name patterns
         if (pretrainData.includes(normalized) ||
             pretrainData.includes(datasetName.toLowerCase()) ||
             normalizeDatasetName(pretrainData).includes(normalized)) {
@@ -1382,15 +1383,22 @@ function getModelType(model) {
     const lead = String(model.ECGlead || '').trim();
     const modality = String(model['Pretrain modality'] || '').toLowerCase().trim();
 
-    if (modality.includes('ppg')) return 'ppg';
-    else if (lead === '1') return '1lead';
-    else return '12lead';
+    if (modality.includes('ppg')) {
+        return 'ppg';
+    } else if (lead === '1') {
+        return '1lead';
+    } else {
+        return '12lead';
+    }
 }
 
 // Create clickable dataset links
 function createDatasetLinks(pretrainData) {
     if (!pretrainData) return '-';
+
+    // Split by common separators
     const datasets = pretrainData.split(/[,;]+/).map(d => d.trim()).filter(d => d);
+
     return datasets.map(dataset => {
         const cleanName = dataset.replace(/\*$/, '').trim();
         return `<span class="dataset-link" onclick="showDatasetModal('${cleanName}')">${cleanName}</span>`;
@@ -1401,236 +1409,150 @@ function createDatasetLinks(pretrainData) {
 function getAccessBadge(access) {
     if (!access) return '-';
     const accessStr = String(access).trim();
-    if (accessStr.startsWith('O')) return `<span class="badge badge-open">${accessStr}</span>`;
-    else if (accessStr.startsWith('R')) return `<span class="badge badge-restricted">${accessStr}</span>`;
-    else if (accessStr.startsWith('C')) return `<span class="badge badge-credentialed">${accessStr}</span>`;
+
+    if (accessStr.startsWith('O')) {
+        return `<span class="badge badge-open">${accessStr}</span>`;
+    } else if (accessStr.startsWith('R')) {
+        return `<span class="badge badge-restricted">${accessStr}</span>`;
+    } else if (accessStr.startsWith('C')) {
+        return `<span class="badge badge-credentialed">${accessStr}</span>`;
+    }
     return accessStr;
 }
 
 // Create model links
 function createModelLinks(model) {
     let links = '';
-    if (model.doi) links += `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>`;
-    if (model.Codelink) links += `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>`;
+
+    if (model.doi) {
+        links += `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>`;
+    }
+    if (model.Codelink) {
+        links += `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>`;
+    }
     if (model.Weightlink && !model.Weightlink.includes('PKUDigitalHealth/ECGFounder')) {
         links += `<a href="${model.Weightlink}" target="_blank" class="link-btn secondary">Weights</a>`;
     }
+
     return links || '-';
 }
 
-// Format evaluation checkmarks
-function formatEval(val) {
-    if (val === 1 || val === '1' || val === true) return '<span class="check-yes">✓</span>';
-    if (val === 0 || val === '0' || val === false || val === 'na' || !val) return '<span class="check-no">-</span>';
-    return val;
-}
-
-// Populate models table with ALL columns
+// Populate models table
 function populateModelsTable() {
     const tbody = document.getElementById('models-tbody');
     tbody.innerHTML = '';
 
-    // Define all columns for models
-    const columns = [
-        { data: 'model', title: 'Model', visible: true },
-        { data: 'Year', title: 'Year', visible: true },
-        { data: 'type', title: 'Type', visible: true },
-        { data: 'Backbone', title: 'Backbone', visible: true },
-        { data: 'Pretrain modality', title: 'Modality', visible: false },
-        { data: 'Pretrain Method', title: 'Method', visible: true },
-        { data: 'Pretrain Dataset', title: 'Pretrain Data', visible: true },
-        { data: 'ECGs (n)', title: 'Data Size', visible: true },
-        { data: 'ECGlead', title: 'Leads', visible: false },
-        { data: 'sampling_rate', title: 'Sample Rate', visible: false },
-        { data: 'eval_data', title: 'Eval Data', visible: false },
-        { data: 'task', title: 'Tasks', visible: false },
-        { data: 'performance', title: 'Performance', visible: false },
-        { data: 'eval_LP', title: 'Linear Probe', visible: false },
-        { data: 'eval_FT', title: 'Fine-tune', visible: false },
-        { data: 'eval_zeroshot', title: 'Zero-shot', visible: false },
-        { data: 'eval_data_efficiency', title: 'Data Efficiency', visible: false },
-        { data: 'eval_reduced_lead', title: 'Reduced Lead', visible: false },
-        { data: 'eval_ablation', title: 'Ablation', visible: false },
-        { data: 'eval_fairness', title: 'Fairness', visible: false },
-        { data: 'eval_privacy', title: 'Privacy', visible: false },
-        { data: 'eval_compute', title: 'Compute', visible: false },
-        { data: 'eval_explainability', title: 'Explainability', visible: false },
-        { data: 'links', title: 'Links', visible: true }
-    ];
+    modelsData.forEach(model => {
+        const row = document.createElement('tr');
+        row.setAttribute('data-type', getModelType(model));
 
-    // Update table header
-    const thead = document.querySelector('#models-table thead tr');
-    thead.innerHTML = columns.map(col => `<th>${col.title}</th>`).join('');
+        // Use ecgs_numeric for proper sorting of Data Size column
+        const dataSizeNumeric = model.ecgs_numeric || 0;
 
-    // Prepare data
-    const tableData = modelsData.map(model => {
-        const row = {
-            model: `<span class="clickable" onclick="showModelModal('${model.model}')">${model.model}</span>`,
-            type: getModelTypeBadge(model),
-            'Pretrain Dataset': createDatasetLinks(model['Pretrain Dataset']),
-            links: createModelLinks(model),
-            _type: getModelType(model)
-        };
-        
-        // Copy all other fields
-        columns.forEach(col => {
-            if (!row[col.data]) {
-                let val = model[col.data];
-                if (col.data.startsWith('eval_')) {
-                    row[col.data] = formatEval(val);
-                } else {
-                    row[col.data] = val || '-';
-                }
-            }
-        });
-        
-        return row;
+        row.innerHTML = `
+            <td><span class="clickable" onclick="showModelModal('${model.model}')">${model.model}</span></td>
+            <td>${model.Year || '-'}</td>
+            <td>${getModelTypeBadge(model)}</td>
+            <td>${model.Backbone || '-'}</td>
+            <td>${model['Pretrain Method'] || '-'}</td>
+            <td>${createDatasetLinks(model['Pretrain Dataset'])}</td>
+            <td data-order="${dataSizeNumeric}">${model['ECGs (n)'] || '-'}</td>
+            <td>${createModelLinks(model)}</td>
+        `;
+        tbody.appendChild(row);
     });
 
-    // Initialize DataTable with column visibility
-    if ($.fn.DataTable.isDataTable('#models-table')) {
-        $('#models-table').DataTable().destroy();
+    // Initialize DataTable
+    if (modelsTable) {
+        modelsTable.destroy();
     }
-
     modelsTable = $('#models-table').DataTable({
-        data: tableData,
-        columns: columns.map(col => ({
-            data: col.data,
-            title: col.title,
-            visible: col.visible,
-            defaultContent: '-'
-        })),
         pageLength: 25,
         order: [[1, 'desc']],
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'colvis',
-                text: 'Column Visibility',
-                className: 'btn-colvis'
-            }
-        ],
         language: {
-            search: "Search:"
-        },
-        createdRow: function(row, data, dataIndex) {
-            $(row).attr('data-type', tableData[dataIndex]._type);
+            search: "Search models:"
         }
     });
 }
 
-// Populate 12-lead datasets table with ALL columns
+// Populate 12-lead datasets table
 function populate12LeadDatasetsTable() {
-    const columns = [
-        { data: 'Dataset', title: 'Dataset', visible: true },
-        { data: 'Record', title: 'Records', visible: true },
-        { data: 'Patient (n)', title: 'Patients', visible: true },
-        { data: 'Year', title: 'Year', visible: false },
-        { data: 'Country', title: 'Country', visible: true },
-        { data: 'site', title: 'Sites', visible: false },
-        { data: 'Setting ', title: 'Setting', visible: true },
-        { data: 'Sample rate (Hz)', title: 'Sample Rate', visible: false },
-        { data: 'Time (sec)', title: 'Duration', visible: false },
-        { data: 'No. of leads ', title: 'Leads', visible: false },
-        { data: 'Demographic/ clinical data', title: 'Demographics', visible: false },
-        { data: 'ECG label', title: 'Labels', visible: false },
-        { data: 'Data type', title: 'Format', visible: false },
-        { data: 'Access', title: 'Access', visible: true },
-        { data: 'usedBy', title: 'Used By', visible: true },
-        { data: 'link', title: 'Link', visible: true }
-    ];
+    const tbody = document.getElementById('datasets-12lead-tbody');
+    tbody.innerHTML = '';
 
-    // Update table header
-    const thead = document.querySelector('#datasets-12lead-table thead tr');
-    thead.innerHTML = columns.map(col => `<th>${col.title}</th>`).join('');
-
-    const tableData = datasets12leadData.map(dataset => {
+    datasets12leadData.forEach(dataset => {
         const usedBy = findModelsUsingDataset(dataset.Dataset);
-        return {
-            ...dataset,
-            Dataset: `<span class="clickable" onclick="showDatasetModal('${dataset.Dataset}')">${dataset.Dataset}</span>`,
-            Access: getAccessBadge(dataset.Access),
-            usedBy: usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '<span style="color:#999">-</span>',
-            link: dataset.dataset_link ? `<a href="${dataset.dataset_link}" target="_blank" class="link-btn">Access</a>` : '-'
-        };
+        const usedByHtml = usedBy.length > 0
+            ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ')
+            : '<span style="color:#999">-</span>';
+
+        // Use numeric columns for proper sorting
+        const recordsNumeric = dataset.records_numeric || 0;
+        const patientsNumeric = dataset.patients_numeric || 0;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><span class="clickable" onclick="showDatasetModal('${dataset.Dataset}')">${dataset.Dataset}</span></td>
+            <td data-order="${recordsNumeric}">${dataset.Record || '-'}</td>
+            <td data-order="${patientsNumeric}">${dataset['Patient (n)'] || '-'}</td>
+            <td>${dataset.Country || '-'}</td>
+            <td>${(dataset['Setting '] || '').substring(0, 30)}${(dataset['Setting '] || '').length > 30 ? '...' : ''}</td>
+            <td>${getAccessBadge(dataset.Access)}</td>
+            <td>${usedByHtml}</td>
+            <td>${dataset.dataset_link ? `<a href="${dataset.dataset_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
+        `;
+        tbody.appendChild(row);
     });
 
-    if ($.fn.DataTable.isDataTable('#datasets-12lead-table')) {
-        $('#datasets-12lead-table').DataTable().destroy();
+    if (datasets12leadTable) {
+        datasets12leadTable.destroy();
     }
-
     datasets12leadTable = $('#datasets-12lead-table').DataTable({
-        data: tableData,
-        columns: columns.map(col => ({
-            data: col.data,
-            title: col.title,
-            visible: col.visible,
-            defaultContent: '-'
-        })),
         pageLength: 25,
         order: [[0, 'asc']],
-        dom: 'Bfrtip',
-        buttons: [{ extend: 'colvis', text: 'Column Visibility', className: 'btn-colvis' }],
-        language: { search: "Search:" }
+        language: {
+            search: "Search datasets:"
+        }
     });
 }
 
-// Populate reduced-lead datasets table with ALL columns
+// Populate reduced-lead datasets table
 function populateReducedDatasetsTable() {
-    const columns = [
-        { data: 'Dataset', title: 'Dataset', visible: true },
-        { data: 'Record (n)', title: 'Records', visible: true },
-        { data: 'Patient (n)', title: 'Patients', visible: false },
-        { data: 'PPG', title: 'PPG', visible: true },
-        { data: 'ECG', title: 'ECG', visible: true },
-        { data: 'Year', title: 'Year', visible: false },
-        { data: 'Country', title: 'Country', visible: true },
-        { data: 'site', title: 'Sites', visible: false },
-        { data: 'Setting', title: 'Setting', visible: false },
-        { data: 'Sample rate (Hz)', title: 'Sample Rate', visible: false },
-        { data: 'Time (sec)', title: 'Duration', visible: false },
-        { data: 'No. of ECG leads', title: 'ECG Leads', visible: false },
-        { data: 'Demographic/ clinical data', title: 'Demographics', visible: false },
-        { data: 'ECG label', title: 'Labels', visible: false },
-        { data: 'Data type', title: 'Format', visible: false },
-        { data: 'Access', title: 'Access', visible: true },
-        { data: 'usedBy', title: 'Used By', visible: true },
-        { data: 'link', title: 'Link', visible: true }
-    ];
+    const tbody = document.getElementById('datasets-reduced-tbody');
+    tbody.innerHTML = '';
 
-    const thead = document.querySelector('#datasets-reduced-table thead tr');
-    thead.innerHTML = columns.map(col => `<th>${col.title}</th>`).join('');
-
-    const tableData = datasetsReducedData.map(dataset => {
+    datasetsReducedData.forEach(dataset => {
         const usedBy = findModelsUsingDataset(dataset.Dataset);
-        return {
-            ...dataset,
-            Dataset: `<span class="clickable" onclick="showDatasetModal('${dataset.Dataset}')">${dataset.Dataset}</span>`,
-            PPG: dataset.PPG === 1 ? '<span class="check-yes">✓</span>' : '<span class="check-no">-</span>',
-            ECG: dataset.ECG === 1 ? '<span class="check-yes">✓</span>' : '<span class="check-no">-</span>',
-            Access: getAccessBadge(dataset.Access),
-            usedBy: usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '<span style="color:#999">-</span>',
-            link: dataset.data_link ? `<a href="${dataset.data_link}" target="_blank" class="link-btn">Access</a>` : '-'
-        };
+        const usedByHtml = usedBy.length > 0
+            ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ')
+            : '<span style="color:#999">-</span>';
+
+        // Use numeric column for proper sorting
+        const recordsNumeric = dataset.records_numeric || 0;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><span class="clickable" onclick="showDatasetModal('${dataset.Dataset}')">${dataset.Dataset}</span></td>
+            <td data-order="${recordsNumeric}">${(dataset['Record (n)'] || '-').toString().substring(0, 25)}</td>
+            <td>${dataset.PPG === 1 ? '<span class="check-yes">✓</span>' : '<span class="check-no">-</span>'}</td>
+            <td>${dataset.ECG === 1 ? '<span class="check-yes">✓</span>' : '<span class="check-no">-</span>'}</td>
+            <td>${dataset.Country || '-'}</td>
+            <td>${getAccessBadge(dataset.Access)}</td>
+            <td>${usedByHtml}</td>
+            <td>${dataset.data_link ? `<a href="${dataset.data_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
+        `;
+        tbody.appendChild(row);
     });
 
-    if ($.fn.DataTable.isDataTable('#datasets-reduced-table')) {
-        $('#datasets-reduced-table').DataTable().destroy();
+    if (datasetsReducedTable) {
+        datasetsReducedTable.destroy();
     }
-
     datasetsReducedTable = $('#datasets-reduced-table').DataTable({
-        data: tableData,
-        columns: columns.map(col => ({
-            data: col.data,
-            title: col.title,
-            visible: col.visible,
-            defaultContent: '-'
-        })),
         pageLength: 25,
         order: [[0, 'asc']],
-        dom: 'Bfrtip',
-        buttons: [{ extend: 'colvis', text: 'Column Visibility', className: 'btn-colvis' }],
-        language: { search: "Search:" }
+        language: {
+            search: "Search datasets:"
+        }
     });
 }
 
@@ -1659,63 +1581,59 @@ function updateCompareButton() {
     btn.textContent = `Compare Selected (${checked.length})`;
 }
 
-// All properties available for comparison
-const ALL_COMPARE_PROPERTIES = [
-    { key: 'title', label: 'Paper Title' },
-    { key: 'Year', label: 'Year' },
-    { key: 'Backbone', label: 'Backbone' },
-    { key: 'Pretrain modality', label: 'Modality' },
-    { key: 'Pretrain Method', label: 'Method' },
-    { key: 'Pretrain Dataset', label: 'Pretrain Data' },
-    { key: 'ECGs (n)', label: 'Data Size' },
-    { key: 'ECGlead', label: 'ECG Leads' },
-    { key: 'sampling_rate', label: 'Sample Rate (Hz)' },
-    { key: 'eval_data', label: 'Evaluation Data' },
-    { key: 'task', label: 'Tasks' },
-    { key: 'performance', label: 'Performance' },
-    { key: 'eval_LP', label: 'Linear Probe Eval' },
-    { key: 'eval_FT', label: 'Fine-tune Eval' },
-    { key: 'eval_zeroshot', label: 'Zero-shot Eval' },
-    { key: 'eval_data_efficiency', label: 'Data Efficiency' },
-    { key: 'eval_reduced_lead', label: 'Reduced Lead' },
-    { key: 'eval_ablation', label: 'Ablation Study' },
-    { key: 'eval_fairness', label: 'Fairness Eval' },
-    { key: 'eval_privacy', label: 'Privacy Eval' },
-    { key: 'eval_compute', label: 'Compute Info' },
-    { key: 'eval_explainability', label: 'Explainability' }
-];
-
-// Compare models with ALL properties
+// Compare models
 function compareModels() {
     const checked = document.querySelectorAll('#model-checkboxes input:checked');
     const selectedModels = Array.from(checked).map(cb => cb.value);
+
     const models = modelsData.filter(m => selectedModels.includes(m.model));
 
     const thead = document.getElementById('comparison-thead');
     const tbody = document.getElementById('comparison-tbody');
 
-    thead.innerHTML = `<tr><th>Property</th>${models.map(m => `<th>${m.model}</th>`).join('')}</tr>`;
+    // Create header
+    thead.innerHTML = `
+        <tr>
+            <th>Property</th>
+            ${models.map(m => `<th>${m.model}</th>`).join('')}
+        </tr>
+    `;
 
-    tbody.innerHTML = ALL_COMPARE_PROPERTIES.map(prop => {
-        const cells = models.map(m => {
-            let val = m[prop.key];
-            if (prop.key.startsWith('eval_')) {
-                if (val === 1 || val === '1') val = '✓';
-                else if (val === 0 || val === '0' || val === 'na') val = '-';
-            }
-            return `<td>${val || '-'}</td>`;
-        }).join('');
-        return `<tr><td>${prop.label}</td>${cells}</tr>`;
-    }).join('');
+    // Properties to compare
+    const properties = [
+        { key: 'Year', label: 'Year' },
+        { key: 'Backbone', label: 'Backbone' },
+        { key: 'Pretrain modality', label: 'Modality' },
+        { key: 'Pretrain Method', label: 'Method' },
+        { key: 'Pretrain Dataset', label: 'Pretrain Data' },
+        { key: 'ECGs (n)', label: 'Data Size' },
+        { key: 'ECGlead', label: 'ECG Leads' },
+        { key: 'sampling_rate', label: 'Sample Rate' },
+        { key: 'task', label: 'Tasks' },
+        { key: 'performance', label: 'Performance' }
+    ];
+
+    tbody.innerHTML = properties.map(prop => `
+        <tr>
+            <td>${prop.label}</td>
+            ${models.map(m => `<td>${m[prop.key] || '-'}</td>`).join('')}
+        </tr>
+    `).join('');
 
     // Add links row
-    tbody.innerHTML += `<tr><td>Links</td>${models.map(m => `<td>${createModelLinks(m)}</td>`).join('')}</tr>`;
+    tbody.innerHTML += `
+        <tr>
+            <td>Links</td>
+            ${models.map(m => `<td>${createModelLinks(m)}</td>`).join('')}
+        </tr>
+    `;
 
     document.getElementById('comparison-table-container').style.display = 'block';
 }
 
 // Show dataset modal
 function showDatasetModal(datasetName) {
+    // Search in both dataset arrays
     let dataset = datasets12leadData.find(d =>
         normalizeDatasetName(d.Dataset).includes(normalizeDatasetName(datasetName)) ||
         normalizeDatasetName(datasetName).includes(normalizeDatasetName(d.Dataset))
@@ -1736,29 +1654,60 @@ function showDatasetModal(datasetName) {
 
     if (dataset) {
         const usedBy = findModelsUsingDataset(datasetName);
-        const link = dataset.dataset_link || dataset.data_link;
 
         body.innerHTML = `
-            <div class="modal-info"><label>Records</label><span>${dataset.Record || dataset['Record (n)'] || '-'}</span></div>
-            <div class="modal-info"><label>Patients</label><span>${dataset['Patient (n)'] || '-'}</span></div>
-            <div class="modal-info"><label>Year</label><span>${dataset.Year || '-'}</span></div>
-            <div class="modal-info"><label>Country</label><span>${dataset.Country || '-'}</span></div>
-            <div class="modal-info"><label>Setting</label><span>${dataset['Setting '] || dataset.Setting || '-'}</span></div>
-            <div class="modal-info"><label>Sample Rate</label><span>${dataset['Sample rate (Hz)'] || '-'}</span></div>
-            <div class="modal-info"><label>Duration</label><span>${dataset['Time (sec)'] || '-'}</span></div>
-            <div class="modal-info"><label>Format</label><span>${dataset['Data type'] || '-'}</span></div>
-            <div class="modal-info"><label>Access</label>${getAccessBadge(dataset.Access)}</div>
-            ${dataset.PPG !== undefined ? `<div class="modal-info"><label>Signals</label><span>${dataset.PPG === 1 ? '<span class="badge badge-ppg">PPG</span>' : ''} ${dataset.ECG === 1 ? '<span class="badge badge-12lead">ECG</span>' : ''}</span></div>` : ''}
-            <div class="modal-info"><label>Labels</label><p>${dataset['ECG label'] || '-'}</p></div>
-            <div class="modal-info"><label>Demographics</label><p>${dataset['Demographic/ clinical data'] || '-'}</p></div>
-            <div class="modal-info"><label>Used by Models</label><div class="used-by-list">${usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join('') : '<span style="color:#999">Not used by any indexed model</span>'}</div></div>
-            <div class="modal-info"><label>Access Link</label>${link ? `<a href="${link}" target="_blank" class="link-btn">Access Dataset</a>` : '<span>-</span>'}</div>
+            <div class="modal-info">
+                <label>Records</label>
+                <span>${dataset.Record || dataset['Record (n)'] || '-'}</span>
+            </div>
+            <div class="modal-info">
+                <label>Patients</label>
+                <span>${dataset['Patient (n)'] || '-'}</span>
+            </div>
+            <div class="modal-info">
+                <label>Country</label>
+                <span>${dataset.Country || '-'}</span>
+            </div>
+            <div class="modal-info">
+                <label>Setting</label>
+                <span>${dataset['Setting '] || dataset.Setting || '-'}</span>
+            </div>
+            <div class="modal-info">
+                <label>Access</label>
+                ${getAccessBadge(dataset.Access)}
+            </div>
+            ${dataset.PPG !== undefined ? `
+            <div class="modal-info">
+                <label>Signals</label>
+                <span>
+                    ${dataset.PPG === 1 ? '<span class="badge badge-ppg">PPG</span>' : ''}
+                    ${dataset.ECG === 1 ? '<span class="badge badge-12lead">ECG</span>' : ''}
+                </span>
+            </div>
+            ` : ''}
+            <div class="modal-info">
+                <label>Used by Models</label>
+                <div class="used-by-list">
+                    ${usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join('') : '<span style="color:#999">Not used by any indexed model</span>'}
+                </div>
+            </div>
+            <div class="modal-info">
+                <label>Access Link</label>
+                ${dataset.dataset_link || dataset.data_link
+                    ? `<a href="${dataset.dataset_link || dataset.data_link}" target="_blank" class="link-btn">Access Dataset</a>`
+                    : '<span>-</span>'}
+            </div>
         `;
     } else {
         const usedBy = findModelsUsingDataset(datasetName);
         body.innerHTML = `
             <p>This dataset is referenced in model pretraining but may not be in our indexed dataset list.</p>
-            <div class="modal-info"><label>Used by Models</label><div class="used-by-list">${usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join('') : '-'}</div></div>
+            <div class="modal-info">
+                <label>Used by Models</label>
+                <div class="used-by-list">
+                    ${usedBy.length > 0 ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join('') : '-'}
+                </div>
+            </div>
         `;
     }
 
@@ -1777,42 +1726,58 @@ function showModelModal(modelName) {
     title.textContent = model.model;
 
     body.innerHTML = `
-        <div class="modal-info"><label>Paper Title</label><p>${model.title || '-'}</p></div>
-        <div class="modal-info"><label>Year</label><span>${model.Year || '-'}</span></div>
-        <div class="modal-info"><label>Type</label>${getModelTypeBadge(model)}</div>
-        <div class="modal-info"><label>Backbone</label><span>${model.Backbone || '-'}</span></div>
-        <div class="modal-info"><label>Modality</label><span>${model['Pretrain modality'] || '-'}</span></div>
-        <div class="modal-info"><label>Pretraining Method</label><span>${model['Pretrain Method'] || '-'}</span></div>
-        <div class="modal-info"><label>Pretraining Data</label><div style="margin-top:5px">${createDatasetLinks(model['Pretrain Dataset'])}</div></div>
-        <div class="modal-info"><label>Data Size</label><span>${model['ECGs (n)'] || '-'}</span></div>
-        <div class="modal-info"><label>ECG Leads</label><span>${model.ECGlead || '-'}</span></div>
-        <div class="modal-info"><label>Sample Rate</label><span>${model.sampling_rate ? model.sampling_rate + ' Hz' : '-'}</span></div>
-        <div class="modal-info"><label>Evaluation Data</label><p>${model.eval_data || '-'}</p></div>
-        <div class="modal-info"><label>Tasks</label><p>${model.task || '-'}</p></div>
-        <div class="modal-info"><label>Performance</label><p>${model.performance || '-'}</p></div>
-        <div class="modal-info"><label>Evaluations</label>
-            <p>
-                Linear Probe: ${formatEval(model.eval_LP)} | 
-                Fine-tune: ${formatEval(model.eval_FT)} | 
-                Zero-shot: ${formatEval(model.eval_zeroshot)} |
-                Data Efficiency: ${formatEval(model.eval_data_efficiency)} |
-                Reduced Lead: ${formatEval(model.eval_reduced_lead)} |
-                Ablation: ${formatEval(model.eval_ablation)}
-            </p>
+        <div class="modal-info">
+            <label>Paper Title</label>
+            <p>${model.title || '-'}</p>
         </div>
-        <div class="modal-info"><label>Other</label>
-            <p>
-                Fairness: ${formatEval(model.eval_fairness)} |
-                Privacy: ${formatEval(model.eval_privacy)} |
-                Compute: ${model.eval_compute || '-'} |
-                Explainability: ${model.eval_explainability || '-'}
-            </p>
+        <div class="modal-info">
+            <label>Year</label>
+            <span>${model.Year || '-'}</span>
         </div>
-        <div class="modal-info"><label>Links</label><div style="margin-top:5px">
-            ${model.doi ? `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>` : ''}
-            ${model.Codelink ? `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>` : ''}
-            ${model.Weightlink ? `<a href="${model.Weightlink}" target="_blank" class="link-btn secondary">Weights</a>` : ''}
-        </div></div>
+        <div class="modal-info">
+            <label>Type</label>
+            ${getModelTypeBadge(model)}
+        </div>
+        <div class="modal-info">
+            <label>Backbone</label>
+            <span>${model.Backbone || '-'}</span>
+        </div>
+        <div class="modal-info">
+            <label>Pretraining Method</label>
+            <span>${model['Pretrain Method'] || '-'}</span>
+        </div>
+        <div class="modal-info">
+            <label>Pretraining Data</label>
+            <div style="margin-top:5px">${createDatasetLinks(model['Pretrain Dataset'])}</div>
+        </div>
+        <div class="modal-info">
+            <label>Data Size</label>
+            <span>${model['ECGs (n)'] || '-'}</span>
+        </div>
+        <div class="modal-info">
+            <label>ECG Leads</label>
+            <span>${model.ECGlead || '-'}</span>
+        </div>
+        <div class="modal-info">
+            <label>Sample Rate</label>
+            <span>${model.sampling_rate ? model.sampling_rate + ' Hz' : '-'}</span>
+        </div>
+        <div class="modal-info">
+            <label>Tasks</label>
+            <p>${model.task || '-'}</p>
+        </div>
+        <div class="modal-info">
+            <label>Performance</label>
+            <p>${model.performance || '-'}</p>
+        </div>
+        <div class="modal-info">
+            <label>Links</label>
+            <div style="margin-top:5px">
+                ${model.doi ? `<a href="${model.doi}" target="_blank" class="link-btn">Paper</a>` : ''}
+                ${model.Codelink ? `<a href="${model.Codelink}" target="_blank" class="link-btn secondary">Code</a>` : ''}
+                ${model.Weightlink ? `<a href="${model.Weightlink}" target="_blank" class="link-btn secondary">Weights</a>` : ''}
+            </div>
+        </div>
     `;
 
     modal.style.display = 'block';
@@ -1822,10 +1787,15 @@ function showModelModal(modelName) {
 function setupTabs() {
     document.querySelectorAll('.nav-tabs li').forEach(tab => {
         tab.addEventListener('click', () => {
+            // Update active tab
             document.querySelectorAll('.nav-tabs li').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
+
+            // Show corresponding content
             const tabId = tab.getAttribute('data-tab');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
             document.getElementById(tabId).classList.add('active');
         });
     });
@@ -1835,20 +1805,27 @@ function setupTabs() {
 function setupFilters() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            // Update active button
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+
             const filter = btn.getAttribute('data-filter');
 
+            // Filter table rows
             if (modelsTable) {
-                $.fn.dataTable.ext.search.length = 0; // Clear filters
-                if (filter !== 'all') {
+                if (filter === 'all') {
+                    modelsTable.search('').columns().search('').draw();
+                } else {
+                    // Custom filtering
+                    $.fn.dataTable.ext.search.pop(); // Remove previous filter
                     $.fn.dataTable.ext.search.push((settings, data, dataIndex) => {
                         if (settings.nTable.id !== 'models-table') return true;
                         const row = modelsTable.row(dataIndex).node();
-                        return $(row).attr('data-type') === filter;
+                        return row.getAttribute('data-type') === filter;
                     });
+                    modelsTable.draw();
+                    $.fn.dataTable.ext.search.pop(); // Clean up
                 }
-                modelsTable.draw();
             }
         });
     });
@@ -1857,10 +1834,15 @@ function setupFilters() {
 // Modal close handlers
 function setupModals() {
     document.querySelectorAll('.modal .close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', () => closeBtn.closest('.modal').style.display = 'none');
+        closeBtn.addEventListener('click', () => {
+            closeBtn.closest('.modal').style.display = 'none';
+        });
     });
+
     window.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+        if (e.target.classList.contains('modal')) {
+            e.target.style.display = 'none';
+        }
     });
 }
 
@@ -1869,32 +1851,44 @@ function setupCompare() {
     document.getElementById('compare-btn').addEventListener('click', compareModels);
 }
 
-// Data storage
-let modelsData = [];
-let datasets12leadData = [];
-let datasetsReducedData = [];
-let modelsTable, datasets12leadTable, datasetsReducedTable;
+// Load data and initialize
+async function init() {
+    try {
+        // Use embedded data (works without a server)
+        modelsData = EMBEDDED_MODELS;
+        datasets12leadData = EMBEDDED_DATASETS_12LEAD;
+        datasetsReducedData = EMBEDDED_DATASETS_REDUCED;
 
-// Initialize
-function init() {
-    // Use embedded data
-    modelsData = EMBEDDED_MODELS;
-    datasets12leadData = EMBEDDED_DATASETS_12LEAD;
-    datasetsReducedData = EMBEDDED_DATASETS_REDUCED;
 
-    // Populate tables
-    populateModelsTable();
-    populate12LeadDatasetsTable();
-    populateReducedDatasetsTable();
-    populateCompareCheckboxes();
+        // Populate tables
+        populateModelsTable();
+        populate12LeadDatasetsTable();
+        populateReducedDatasetsTable();
+        populateCompareCheckboxes();
 
-    // Setup interactions
-    setupTabs();
-    setupFilters();
-    setupModals();
-    setupCompare();
+        // Setup interactions
+        setupTabs();
+        setupFilters();
+        setupModals();
+        setupCompare();
 
-    console.log('Loaded:', { models: modelsData.length, datasets12lead: datasets12leadData.length, datasetsReduced: datasetsReducedData.length });
+        console.log('Data loaded successfully:', {
+            models: modelsData.length,
+            datasets12lead: datasets12leadData.length,
+            datasetsReduced: datasetsReducedData.length
+        });
+
+    } catch (error) {
+        console.error('Error loading data:', error);
+        document.querySelector('main').innerHTML = `
+            <div style="text-align:center;padding:50px;">
+                <h2>Error Loading Data</h2>
+                <p>Please make sure the JSON data files are available.</p>
+                <p style="color:#999">${error.message}</p>
+            </div>
+        `;
+    }
 }
 
+// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', init);
