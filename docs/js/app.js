@@ -510,10 +510,8 @@ function setupCompare() {
 // Load data and initialize
 async function init() {
     try {
-        // Determine base path (works for both local and GitHub Pages)
-        const basePath = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? '../data/'
-            : 'https://raw.githubusercontent.com/aramis00/ECGPPG_FM_dataset/main/data/';
+        // Load from local docs folder (JSON files are copied here)
+        const basePath = '';
 
         // Load all data
         const [modelsRes, datasets12Res, datasetsRedRes] = await Promise.all([
