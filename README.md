@@ -2,12 +2,15 @@
 
 A comprehensive collection of open-source foundation models and publicly available datasets for electrocardiogram (ECG) and photoplethysmogram (PPG) analysis.
 
+🌐 **Interactive Version**: [https://aramis00.github.io/ECGPPG_FM_dataset/](https://aramis00.github.io/ECGPPG_FM_dataset/)
+
 ## Overview
 
 This repository provides curated lists of:
 - **16 Foundation Models** for ECG/PPG analysis (12-lead ECG, single-lead ECG, and PPG)
 - **15 Open 12-Lead ECG Datasets** 
 - **23 Open Reduced-Lead ECG and PPG Datasets**
+- **Computational Benchmarks** comparing model inference/training performance across hardware
 
 All models include links to code repositories and pretrained weights. All datasets include access links and citations.
 
@@ -131,6 +134,30 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 | WESAD | 15 | ✓ | ✓ | Germany | O | [Link](https://doi.org/10.24432/C57K5T) |
 | TROIKA 115,116 (= IEEEPPG) | 12 | ✓ | ✓ | China | O | [Link](https://zenodo.org/records/3902710) |
 | ECSMP | 89 | ✓ | ✓ | China | O | [Link](https://data.mendeley.com/datasets/vn5nknh3mn/2) |
+
+---
+
+## Computational Benchmarks
+
+We provide comprehensive computational benchmarks comparing foundation models on parameters, FLOPs, inference speed, training throughput, and memory usage across different hardware (A100, T4, CPU).
+
+```
+script/FM_computation/
+├── FM_computation.py              # Benchmark script
+├── FM_computation.md              # Documentation & results
+└── results/
+    ├── ecg_benchmark_A100_*.json  # A100 GPU results
+    ├── ecg_benchmark_T4_*.json    # T4 GPU results
+    └── ecg_benchmark_cpu_*.json   # CPU results
+```
+
+Key findings:
+- **Training time is dominated by sequence length and FLOPs**, not parameter count
+- **HuBERT-ECG** (92.8M params) trains ~50× faster than **ECG-FM** (90.4M params) due to aggressive downsampling
+- **MERL (ResNet18)** achieves fastest inference at 9,616 samples/sec on A100
+- Large Wav2Vec2 models (ECG-FM, DeepECG) require significant GPU memory (40+ GB for training)
+
+See [`script/FM_computation/FM_computation.md`](script/FM_computation/FM_computation.md) for detailed benchmark results and methodology.
 
 ---
 
