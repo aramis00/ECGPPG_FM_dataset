@@ -16,7 +16,7 @@
     "ECG label": "No individual beat/ rhythm annotation.",
     "Data type": "wfdb",
     "Access": "O",
-    "data_link": "MIMIC-III Waveform Database",
+    "data_link": "https://physionet.org/content/mimic3wdb-matched/1.0/",
     "citation": "{RN85,\n   author = {Moody, Benjamin and Moody, George and Villarroel, Mauricio and Clifford, Gari and Silva, Ikaro},\n   title = {MIMIC-III Waveform Database Matched Subset},\n   month = {2020},\n   DOI = {10.13026/C2294B},\n   url = {https://doi.org/10.13026/c2294b},\n   year = {2020},\n   type = {Dataset}\n}\n",
     "derived_dataset": "MIMIC-BP (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DBM1NF) - Curated dataset for blood pressure estimation; PulseDB (https://github.com/pulselabteam/PulseDB)- cleaned dataset based on MIMIC-III and VitalDB for benchmarking cuff-less blood pressure estimation methods",
     "records_numeric": 67800,

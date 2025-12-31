@@ -108,7 +108,7 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 
 | Dataset | Records | PPG | ECG | Country | Access | Link |
 |---------|---------|-----|-----|---------|--------|------|
-| MIMIC-III Waveform Database | 67.8K (MIMIC-III match... | ✓ | ✓ | US | O | - |
+| MIMIC-III Waveform Database | 67.8K (MIMIC-III match... | ✓ | ✓ | US | O | [Link](https://physionet.org/content/mimic3wdb-matched/1.0/) |
 | WAVES | 550K (ECG); 510K (PPG) | ✓ | ✓ | US | R | [Link](https://stanford.redivis.com/WAVES/datasets) |
 | SCOPE | 4.5K | ✓ | ✓ | South Korea | O | [Link](https://khdp.net/database/data-search-detail/698/icu-cardiac-arrest/1.0) |
 | VitalDB | 6.4K | ✓ | ✓ | South Korea | O | [Link](https://physionet.org/content/vitaldb/1.0.0/) |

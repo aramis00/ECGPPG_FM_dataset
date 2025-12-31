@@ -1,5 +1,5 @@
 Dataset,Record (n),Patient (n),Year,site,Country,Setting,PPG,ECG,Sample rate (Hz),Time (sec),No. of ECG leads,Demographic/ clinical data,ECG label,Data type,Access,data_link,citation,derived_dataset,records_numeric,patients_numeric
-MIMIC-III Waveform Database,67.8K (MIMIC-III matched subset: 22.3K),30.0K (MIMIC-III matched subset: 10.3K),2008-2014,1,US,Telemetry/ clinical grade monitoring – ICU (ECG and PPG),1,1,125,variable,2~3,"Matched subset: Age, gender, height, weight, race, language, ICD-9/10 Dx. codes, longitudinal laboratory measurements, drugs, procedures, V/S, death during ED/ ICU admission",No individual beat/ rhythm annotation.,wfdb,O,MIMIC-III Waveform Database,"{RN85,
+MIMIC-III Waveform Database,67.8K (MIMIC-III matched subset: 22.3K),30.0K (MIMIC-III matched subset: 10.3K),2008-2014,1,US,Telemetry/ clinical grade monitoring – ICU (ECG and PPG),1,1,125,variable,2~3,"Matched subset: Age, gender, height, weight, race, language, ICD-9/10 Dx. codes, longitudinal laboratory measurements, drugs, procedures, V/S, death during ED/ ICU admission",No individual beat/ rhythm annotation.,wfdb,O,https://physionet.org/content/mimic3wdb-matched/1.0/,"{RN85,
    author = {Moody, Benjamin and Moody, George and Villarroel, Mauricio and Clifford, Gari and Silva, Ikaro},
    title = {MIMIC-III Waveform Database Matched Subset},
    month = {2020},
