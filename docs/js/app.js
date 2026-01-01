@@ -679,7 +679,7 @@ const DATASETS_12LEAD = [
     "Year": "2018-2024",
     "site": 1,
     "Country": "China",
-    "Setting ": "hospital diagnostic ECG, pediatrics (0-14 y.o.)",
+    "Setting ": "pediatric hospital diagnostic ECG (0-14 y.o.)",
     "Sample rate (Hz)": 500,
     "Time (sec)": "5-120",
     "No. of leads ": "12 or 9",
@@ -784,7 +784,7 @@ const DATASETS_12LEAD = [
     "Year": "2018-2022",
     "site": 1,
     "Country": "US",
-    "Setting ": "hospital diagnostic ECG",
+    "Setting ": "hospital diagnostic ECG paired with Echo",
     "Sample rate (Hz)": 250,
     "Time (sec)": 10,
     "No. of leads ": 12,
@@ -1558,8 +1558,8 @@ function populate12Lead() {
 
     DATASETS_12LEAD.forEach(d => {
         const usage = findModelsUsingDataset(d.Dataset);
-        const pretrainHtml = usage.pretrain.length ? usage.pretrain.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
-        const evalHtml = usage.eval.length ? usage.eval.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+        const pretrainHtml = usage.pretrain.length ? usage.pretrain.map(m => `<span class="model-tag clickable" data-model="${m}">${m}</span>`).join(' ') : '-';
+        const evalHtml = usage.eval.length ? usage.eval.map(m => `<span class="model-tag clickable" data-model="${m}">${m}</span>`).join(' ') : '-';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -1567,7 +1567,7 @@ function populate12Lead() {
             <td data-order="${d.records_numeric || 0}">${d.Record || '-'}</td>
             <td data-order="${d.patients_numeric || 0}">${d['Patient (n)'] || '-'}</td>
             <td>${d.Country || '-'}</td>
-            <td>${(d['Setting '] || '-').substring(0, 30)}</td>
+            <td>${(d['Setting '] || '-').substring(0, 40)}</td>
             <td>${getAccessBadge(d.Access)}</td>
             <td>${pretrainHtml}</td>
             <td>${evalHtml}</td>
@@ -1586,8 +1586,8 @@ function populateReduced() {
 
     DATASETS_REDUCED.forEach(d => {
         const usage = findModelsUsingDataset(d.Dataset);
-        const pretrainHtml = usage.pretrain.length ? usage.pretrain.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
-        const evalHtml = usage.eval.length ? usage.eval.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+        const pretrainHtml = usage.pretrain.length ? usage.pretrain.map(m => `<span class="model-tag clickable" data-model="${m}">${m}</span>`).join(' ') : '-';
+        const evalHtml = usage.eval.length ? usage.eval.map(m => `<span class="model-tag clickable" data-model="${m}">${m}</span>`).join(' ') : '-';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -1799,6 +1799,13 @@ function setupDatasetLinks() {
             const datasetName = e.target.getAttribute('data-dataset');
             if (datasetName) {
                 showDataset(datasetName);
+            }
+        }
+        // Handle model-tag clicks in dataset tables
+        if (e.target.classList.contains('model-tag') && e.target.hasAttribute('data-model')) {
+            const modelName = e.target.getAttribute('data-model');
+            if (modelName) {
+                showModel(modelName);
             }
         }
     });
