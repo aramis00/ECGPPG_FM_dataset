@@ -222,8 +222,8 @@
                 <button class="filter-btn benchmark-filter" data-hw="cpu">CPU</button>
             </div>
             <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
-                Benchmarks: Batch size 32 (GPU) / 8 (CPU), 2500-sample ECG input (250 Hz × 10 sec).
-                Finetune hours estimated for 100 epochs on 10K samples.<br>
+                Benchmarks: Batch size 32 (GPU) / 8 (CPU). Each model uses its native input specification (leads, sample rate, duration).
+                Finetune hours estimated for 100K samples × 10 epochs.<br>
                 <sup>*</sup> HeartLang uses 12 leads but is pre-tokenized to (B, 256, 96) via QRS-Tokenizer.<br>
                 <sup>†</sup> GFLOPs: thop does NOT correctly count matrix multiplications inside nn.MultiheadAttention (specifically q @ k and attn @ v operations). Transformer models may be undercounted.
             </p>
