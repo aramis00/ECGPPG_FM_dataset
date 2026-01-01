@@ -679,7 +679,7 @@ const DATASETS_12LEAD = [
     "Year": "2018-2024",
     "site": 1,
     "Country": "China",
-    "Setting ": "pediatric hospital ECG",
+    "Setting ": "hospital diagnostic ECG, pediatrics",
     "Sample rate (Hz)": 500,
     "Time (sec)": "5-120",
     "No. of leads ": "12 or 9",
@@ -1950,6 +1950,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setupModal();
         setupDatasetLinks();
         setupCountryFilter('filter-12lead-country', DATASETS_12LEAD, 'datasets-12lead-table', 3);
+        setupCountryFilter('filter-reduced-country', DATASETS_REDUCED, 'datasets-reduced-table', 4);
         console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
     } catch (e) {
         console.error('Initialization error:', e);
