@@ -1851,12 +1851,15 @@ function populateBenchmarks(data) {
 
     data.forEach(b => {
         const tr = document.createElement('tr');
-        // Helper to format values, handling OOM strings
+        // Helper to format values, handling OOM strings - use large number for sorting OOM to end
         const fmt = (v, decimals = 1) => v === "OOM" ? '<span style="color:#c00;">OOM</span>' : (typeof v === 'number' ? v.toFixed(decimals) : v);
         const fmtInt = (v) => v === "OOM" ? '<span style="color:#c00;">OOM</span>' : (typeof v === 'number' ? v.toLocaleString() : v);
+        const sortVal = (v) => v === "OOM" ? 999999 : (typeof v === 'number' ? v : 0);
         // For CPU, memory columns show N/A since those weren't captured
         const inferMem = b.Infer_Mem_GB === "OOM" ? '<span style="color:#c00;">OOM</span>' : (b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A');
         const trainMem = b.Train_Mem_GB === "OOM" ? '<span style="color:#c00;">OOM</span>' : (b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A');
+        const inferMemSort = b.Infer_Mem_GB === "OOM" ? 999999 : (b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB : 0);
+        const trainMemSort = b.Train_Mem_GB === "OOM" ? 999999 : (b.Train_Mem_GB > 0 ? b.Train_Mem_GB : 0);
         const displayName = getBenchmarkDisplayName(b.Model);
         // HeartLang uses 12 leads but pre-tokenizes to 256 tokens
         const leadsDisplay = b.Model === 'heartlang' ? b.Leads + '*' : b.Leads;
@@ -1864,14 +1867,14 @@ function populateBenchmarks(data) {
         tr.innerHTML = `
             <td><span class="clickable" onclick="showModel('${displayName}')">${displayName}</span></td>
             <td>${leadsDisplay}</td>
-            <td>${b.Params_M.toFixed(1)}</td>
-            <td>${b.GFLOPs.toFixed(1)}</td>
-            <td>${fmt(b.Infer_ms)}</td>
-            <td>${fmtInt(b.Throughput)}</td>
-            <td>${fmt(b.Train_ms_per_sample)}</td>
-            <td>${fmt(b.Finetune_Hours)}</td>
-            <td>${inferMem}</td>
-            <td>${trainMem}</td>
+            <td data-order="${b.Params_M}">${b.Params_M.toFixed(1)}</td>
+            <td data-order="${b.GFLOPs}">${b.GFLOPs.toFixed(1)}</td>
+            <td data-order="${sortVal(b.Infer_ms)}">${fmt(b.Infer_ms)}</td>
+            <td data-order="${sortVal(b.Throughput)}">${fmtInt(b.Throughput)}</td>
+            <td data-order="${sortVal(b.Train_ms_per_sample)}">${fmt(b.Train_ms_per_sample)}</td>
+            <td data-order="${sortVal(b.Finetune_Hours)}">${fmt(b.Finetune_Hours)}</td>
+            <td data-order="${inferMemSort}">${inferMem}</td>
+            <td data-order="${trainMemSort}">${trainMem}</td>
         `;
         tbody.appendChild(tr);
     });
