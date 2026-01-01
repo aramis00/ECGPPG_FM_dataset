@@ -1456,6 +1456,28 @@ function getBenchmarkDisplayName(rawName) {
 const ARCHITECTURE_MAP = {};
 ARCHITECTURES.forEach(a => { ARCHITECTURE_MAP[a.model] = a.architecture; });
 
+// Model input/output specifications from FM_computation benchmarks
+const MODEL_IO_MAP = {
+    'ECG-JEPA': { input: '8 leads × 2500 @ 250Hz', output_dim: 768 },
+    'HeartLang': { input: '256 tokens × 96 (pre-tokenized via QRS-Tokenizer)', output_dim: 768 },
+    'CPC': { input: '12 leads × 2400 @ 240Hz', output_dim: 512 },
+    'S4': { input: '12 leads × 250 @ 100Hz', output_dim: 512 },
+    'HuBERT-ECG': { input: '12 leads × 2500 @ 500Hz (5x decimation)', output_dim: 768 },
+    'ECG-FM': { input: '12 leads × 5000 @ 500Hz', output_dim: 768 },
+    'DeepECG': { input: '12 leads × 2500 @ 250Hz', output_dim: 768 },
+    'ESI': { input: '12 leads × 5000 @ 500Hz', output_dim: 1024 },
+    'MELP': { input: '12 leads × 5000 @ 500Hz', output_dim: 768 },
+    'MERL': { input: '12 leads × 5000 @ 500Hz', output_dim: '512 (ResNet18) / 192 (ViT-Tiny)' },
+    'KED': { input: '12 leads × 1000 @ 100Hz', output_dim: 768 },
+    'ECGFounder': { input: '12 leads × 5000 @ 500Hz (or 1 lead)', output_dim: 1024 },
+    'ST-MEM': { input: '12 leads × 2500 @ 250Hz', output_dim: 768 },
+    'ECG-PT': { input: '1 lead × 500 @ 100Hz', output_dim: 64 },
+    'HeartBERT': { input: '1 lead × 512 (tokenized)', output_dim: 768 },
+    'PPG-PT': { input: '1 lead × 500 @ 100Hz', output_dim: 64 },
+    'PaPaGei': { input: '1 lead × 1250 @ 125Hz', output_dim: 512 },
+    'PulsePPG': { input: '1 lead × 1000 @ 50Hz', output_dim: 512 }
+};
+
 // Helper functions
 function getModelType(model) {
     const modality = (model['Pretrain modality'] || '').toLowerCase();
@@ -1621,6 +1643,7 @@ function showModel(name) {
     if (!m) return;
 
     const architecture = ARCHITECTURE_MAP[m.model] || '-';
+    const ioSpec = MODEL_IO_MAP[m.model] || {};
 
     document.getElementById('modal-title').textContent = m.model;
     document.getElementById('modal-body').innerHTML = `
@@ -1631,8 +1654,8 @@ function showModel(name) {
         <div class="info-row"><span class="info-label">Pretrain Method</span>${m['Pretrain Method'] || '-'}</div>
         <div class="info-row"><span class="info-label">Pretrain Dataset</span>${m['Pretrain Dataset'] || '-'}</div>
         <div class="info-row"><span class="info-label">Data Size</span>${m['ECGs (n)'] || '-'}</div>
-        <div class="info-row"><span class="info-label">ECG Leads</span>${m.ECGlead || '-'}</div>
-        <div class="info-row"><span class="info-label">Sampling Rate (Hz)</span>${m.sampling_rate || '-'}</div>
+        <div class="info-row"><span class="info-label">Input Specification</span>${ioSpec.input || '-'}</div>
+        <div class="info-row"><span class="info-label">Output Dimension</span>${ioSpec.output_dim || '-'}</div>
         <div class="info-row"><span class="info-label">Evaluation Data</span>${m.eval_data || '-'}</div>
         <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
