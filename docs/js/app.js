@@ -1403,6 +1403,8 @@ const BENCHMARKS_T4 = [
 // Benchmark data - CPU
 const BENCHMARKS_CPU = [
   { Model: "hubert_ecg", Leads: 12, Params_M: 92.8, GFLOPs: 18.0, Infer_ms: 863.3, Throughput: 9, Train_ms_per_sample: 474.7, Finetune_Hours: 131.8, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 646.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
+  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 2554.9, Throughput: 3, Train_ms_per_sample: 982.9, Finetune_Hours: 273.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 4047.9, Throughput: 2, Train_ms_per_sample: 2432.5, Finetune_Hours: 675.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 1981.6, Throughput: 4, Train_ms_per_sample: 1159.1, Finetune_Hours: 322.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
@@ -1455,6 +1457,28 @@ function getBenchmarkDisplayName(rawName) {
 // Architecture lookup by model name
 const ARCHITECTURE_MAP = {};
 ARCHITECTURES.forEach(a => { ARCHITECTURE_MAP[a.model] = a.architecture; });
+
+// Model input/output specifications from FM_computation benchmarks
+const MODEL_IO_MAP = {
+    'ECG-JEPA': { input: '8 leads × 2500 @ 250Hz', output_dim: 768 },
+    'HeartLang': { input: '256 tokens × 96 (pre-tokenized via QRS-Tokenizer)', output_dim: 768 },
+    'CPC': { input: '12 leads × 2400 @ 240Hz', output_dim: 512 },
+    'S4': { input: '12 leads × 250 @ 100Hz', output_dim: 512 },
+    'HuBERT-ECG': { input: '12 leads × 2500 @ 500Hz (5x decimation)', output_dim: 768 },
+    'ECG-FM': { input: '12 leads × 5000 @ 500Hz', output_dim: 768 },
+    'DeepECG': { input: '12 leads × 2500 @ 250Hz', output_dim: 768 },
+    'ESI': { input: '12 leads × 5000 @ 500Hz', output_dim: 1024 },
+    'MELP': { input: '12 leads × 5000 @ 500Hz', output_dim: 768 },
+    'MERL': { input: '12 leads × 5000 @ 500Hz', output_dim: '512 (ResNet18) / 192 (ViT-Tiny)' },
+    'KED': { input: '12 leads × 1000 @ 100Hz', output_dim: 768 },
+    'ECGFounder': { input: '12 leads × 5000 @ 500Hz (or 1 lead)', output_dim: 1024 },
+    'ST-MEM': { input: '12 leads × 2500 @ 250Hz', output_dim: 768 },
+    'ECG-PT': { input: '1 lead × 500 @ 100Hz', output_dim: 64 },
+    'HeartBERT': { input: '1 lead × 512 (tokenized)', output_dim: 768 },
+    'PPG-PT': { input: '1 lead × 500 @ 100Hz', output_dim: 64 },
+    'PaPaGei': { input: '1 lead × 1250 @ 125Hz', output_dim: 512 },
+    'PulsePPG': { input: '1 lead × 1000 @ 50Hz', output_dim: 512 }
+};
 
 // Helper functions
 function getModelType(model) {
@@ -1621,6 +1645,7 @@ function showModel(name) {
     if (!m) return;
 
     const architecture = ARCHITECTURE_MAP[m.model] || '-';
+    const ioSpec = MODEL_IO_MAP[m.model] || {};
 
     document.getElementById('modal-title').textContent = m.model;
     document.getElementById('modal-body').innerHTML = `
@@ -1631,8 +1656,8 @@ function showModel(name) {
         <div class="info-row"><span class="info-label">Pretrain Method</span>${m['Pretrain Method'] || '-'}</div>
         <div class="info-row"><span class="info-label">Pretrain Dataset</span>${m['Pretrain Dataset'] || '-'}</div>
         <div class="info-row"><span class="info-label">Data Size</span>${m['ECGs (n)'] || '-'}</div>
-        <div class="info-row"><span class="info-label">ECG Leads</span>${m.ECGlead || '-'}</div>
-        <div class="info-row"><span class="info-label">Sampling Rate (Hz)</span>${m.sampling_rate || '-'}</div>
+        <div class="info-row"><span class="info-label">Input Specification</span>${ioSpec.input || '-'}</div>
+        <div class="info-row"><span class="info-label">Output Dimension</span>${ioSpec.output_dim || '-'}</div>
         <div class="info-row"><span class="info-label">Evaluation Data</span>${m.eval_data || '-'}</div>
         <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
@@ -1826,9 +1851,12 @@ function populateBenchmarks(data) {
 
     data.forEach(b => {
         const tr = document.createElement('tr');
+        // Helper to format values, handling OOM strings
+        const fmt = (v, decimals = 1) => v === "OOM" ? '<span style="color:#c00;">OOM</span>' : (typeof v === 'number' ? v.toFixed(decimals) : v);
+        const fmtInt = (v) => v === "OOM" ? '<span style="color:#c00;">OOM</span>' : (typeof v === 'number' ? v.toLocaleString() : v);
         // For CPU, memory columns show N/A since those weren't captured
-        const inferMem = b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A';
-        const trainMem = b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A';
+        const inferMem = b.Infer_Mem_GB === "OOM" ? '<span style="color:#c00;">OOM</span>' : (b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A');
+        const trainMem = b.Train_Mem_GB === "OOM" ? '<span style="color:#c00;">OOM</span>' : (b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A');
         const displayName = getBenchmarkDisplayName(b.Model);
         // HeartLang uses 12 leads but pre-tokenizes to 256 tokens
         const leadsDisplay = b.Model === 'heartlang' ? b.Leads + '*' : b.Leads;
@@ -1838,10 +1866,10 @@ function populateBenchmarks(data) {
             <td>${leadsDisplay}</td>
             <td>${b.Params_M.toFixed(1)}</td>
             <td>${b.GFLOPs.toFixed(1)}</td>
-            <td>${b.Infer_ms.toFixed(1)}</td>
-            <td>${b.Throughput.toLocaleString()}</td>
-            <td>${b.Train_ms_per_sample.toFixed(1)}</td>
-            <td>${b.Finetune_Hours.toFixed(1)}</td>
+            <td>${fmt(b.Infer_ms)}</td>
+            <td>${fmtInt(b.Throughput)}</td>
+            <td>${fmt(b.Train_ms_per_sample)}</td>
+            <td>${fmt(b.Finetune_Hours)}</td>
             <td>${inferMem}</td>
             <td>${trainMem}</td>
         `;
