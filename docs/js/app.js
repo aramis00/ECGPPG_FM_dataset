@@ -1403,6 +1403,8 @@ const BENCHMARKS_T4 = [
 // Benchmark data - CPU
 const BENCHMARKS_CPU = [
   { Model: "hubert_ecg", Leads: 12, Params_M: 92.8, GFLOPs: 18.0, Infer_ms: 863.3, Throughput: 9, Train_ms_per_sample: 474.7, Finetune_Hours: 131.8, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 646.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
+  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 2554.9, Throughput: 3, Train_ms_per_sample: 982.9, Finetune_Hours: 273.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 4047.9, Throughput: 2, Train_ms_per_sample: 2432.5, Finetune_Hours: 675.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 1981.6, Throughput: 4, Train_ms_per_sample: 1159.1, Finetune_Hours: 322.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
@@ -1849,9 +1851,12 @@ function populateBenchmarks(data) {
 
     data.forEach(b => {
         const tr = document.createElement('tr');
+        // Helper to format values, handling OOM strings
+        const fmt = (v, decimals = 1) => v === "OOM" ? '<span style="color:#c00;">OOM</span>' : (typeof v === 'number' ? v.toFixed(decimals) : v);
+        const fmtInt = (v) => v === "OOM" ? '<span style="color:#c00;">OOM</span>' : (typeof v === 'number' ? v.toLocaleString() : v);
         // For CPU, memory columns show N/A since those weren't captured
-        const inferMem = b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A';
-        const trainMem = b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A';
+        const inferMem = b.Infer_Mem_GB === "OOM" ? '<span style="color:#c00;">OOM</span>' : (b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A');
+        const trainMem = b.Train_Mem_GB === "OOM" ? '<span style="color:#c00;">OOM</span>' : (b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A');
         const displayName = getBenchmarkDisplayName(b.Model);
         // HeartLang uses 12 leads but pre-tokenizes to 256 tokens
         const leadsDisplay = b.Model === 'heartlang' ? b.Leads + '*' : b.Leads;
@@ -1861,10 +1866,10 @@ function populateBenchmarks(data) {
             <td>${leadsDisplay}</td>
             <td>${b.Params_M.toFixed(1)}</td>
             <td>${b.GFLOPs.toFixed(1)}</td>
-            <td>${b.Infer_ms.toFixed(1)}</td>
-            <td>${b.Throughput.toLocaleString()}</td>
-            <td>${b.Train_ms_per_sample.toFixed(1)}</td>
-            <td>${b.Finetune_Hours.toFixed(1)}</td>
+            <td>${fmt(b.Infer_ms)}</td>
+            <td>${fmtInt(b.Throughput)}</td>
+            <td>${fmt(b.Train_ms_per_sample)}</td>
+            <td>${fmt(b.Finetune_Hours)}</td>
             <td>${inferMem}</td>
             <td>${trainMem}</td>
         `;
