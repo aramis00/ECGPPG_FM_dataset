@@ -5,25 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECG/PPG Foundation Models & Datasets</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background: #f5f7fa; }
-        header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 40px 20px; text-align: center; }
-        header h1 { margin: 0 0 10px 0; }
-        header p { margin: 0; opacity: 0.9; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background: #f5f7fa; color: #333; line-height: 1.6; }
+
+        /* Hero Section */
+        .hero { background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%); color: white; padding: 60px 20px 50px; }
+        .hero-content { max-width: 1200px; margin: 0 auto; }
+        .hero h1 { margin: 0 0 15px 0; font-size: 2.5em; font-weight: 700; }
+        .hero .tagline { font-size: 1.2em; opacity: 0.95; margin-bottom: 30px; max-width: 700px; }
+
+        /* Stats Bar */
+        .stats-bar { display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 30px; }
+        .stat-item { background: rgba(255,255,255,0.15); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px); }
+        .stat-number { font-size: 1.8em; font-weight: 700; display: block; }
+        .stat-label { font-size: 0.9em; opacity: 0.9; }
+
+        /* Action Buttons */
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
+        .hero-btn { padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.95em; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .hero-btn.primary { background: white; color: #1a73e8; }
+        .hero-btn.primary:hover { background: #f0f0f0; transform: translateY(-1px); }
+        .hero-btn.secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .hero-btn.secondary:hover { background: rgba(255,255,255,0.25); }
+
+        /* Citation Box */
+        .citation-box { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 20px; margin-top: 30px; }
+        .citation-box h4 { margin: 0 0 10px 0; font-size: 0.95em; opacity: 0.9; }
+        .citation-text { font-size: 0.9em; line-height: 1.5; margin-bottom: 12px; }
+        .citation-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .cite-btn { padding: 8px 16px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85em; display: inline-flex; align-items: center; gap: 6px; }
+        .cite-btn:hover { background: rgba(255,255,255,0.3); }
+        .cite-btn.copied { background: #28a745; }
+
+        /* Navigation */
         nav { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .nav-tabs { list-style: none; margin: 0; padding: 0; display: flex; max-width: 1200px; margin: 0 auto; }
-        .nav-tabs li { padding: 15px 25px; cursor: pointer; border-bottom: 3px solid transparent; }
+        .nav-tabs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+        .nav-tabs li { padding: 15px 20px; cursor: pointer; border-bottom: 3px solid transparent; font-size: 0.95em; white-space: nowrap; }
         .nav-tabs li:hover { background: #f5f7fa; }
         .nav-tabs li.active { border-bottom-color: #1a73e8; color: #1a73e8; font-weight: 600; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .tab-content { display: none; background: white; border-radius: 12px; padding: 30px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        /* Main Content */
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .tab-content { display: none; background: white; border-radius: 12px; padding: 30px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .tab-content.active { display: block; }
-        .section-header { margin-bottom: 20px; }
-        .section-header h2 { margin: 0 0 10px 0; color: #1a73e8; }
+        .section-header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .section-header h2 { margin: 0 0 8px 0; color: #1a73e8; font-size: 1.5em; }
+        .section-header p { margin: 0; color: #666; }
+
+        /* Legends & Filters */
         .legend { margin-bottom: 20px; padding: 12px 16px; background: #f8f9fa; border-radius: 8px; font-size: 0.9em; }
         .legend strong { margin-right: 15px; }
         .legend span { margin-right: 15px; }
+
+        /* Column Filters */
+        .column-filters { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 0.8em; font-weight: 600; color: #666; }
+        .filter-group select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9em; min-width: 150px; background: white; }
+
+        /* Badges */
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 600; }
         .badge-open { background: #d4edda; color: #155724; }
         .badge-restricted { background: #fff3cd; color: #856404; }
@@ -31,39 +73,104 @@
         .badge-12lead { background: #cce5ff; color: #004085; }
         .badge-1lead { background: #d4edda; color: #155724; }
         .badge-ppg { background: #f5c6cb; color: #721c24; }
+
+        /* Links & Buttons */
         .link-btn { display: inline-block; padding: 4px 10px; background: #1a73e8; color: white; text-decoration: none; border-radius: 4px; font-size: 0.85em; margin: 2px; }
         .link-btn:hover { background: #1557b0; }
         .link-btn.secondary { background: #6c757d; }
         .filter-buttons { margin-bottom: 15px; }
-        .filter-btn { padding: 8px 16px; margin-right: 8px; border: 2px solid #1a73e8; background: white; color: #1a73e8; border-radius: 20px; cursor: pointer; }
+        .filter-btn { padding: 8px 16px; margin-right: 8px; margin-bottom: 8px; border: 2px solid #1a73e8; background: white; color: #1a73e8; border-radius: 20px; cursor: pointer; font-size: 0.9em; }
         .filter-btn.active { background: #1a73e8; color: white; }
-        table.dataTable { width: 100% !important; }
+
+        /* Tables */
+        table.dataTable { width: 100% !important; font-size: 0.9em; }
+        table.dataTable thead th { background: #f8f9fa; position: sticky; top: 0; }
         .clickable { color: #1a73e8; cursor: pointer; }
         .clickable:hover { text-decoration: underline; }
         .check-yes { color: #28a745; font-weight: bold; }
         .check-no { color: #999; }
         .model-tag { display: inline-block; background: #e8f0fe; color: #1a73e8; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin: 2px; }
+
+        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .modal-content { background: white; max-width: 700px; margin: 50px auto; border-radius: 12px; max-height: 80vh; overflow-y: auto; }
-        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { margin: 0; }
-        .modal-body { padding: 20px; }
+        .modal-content { background: white; max-width: 750px; margin: 40px auto; border-radius: 12px; max-height: 85vh; overflow-y: auto; }
+        .modal-header { padding: 20px 25px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; border-radius: 12px 12px 0 0; }
+        .modal-header h3 { margin: 0; color: #1a73e8; }
+        .modal-body { padding: 25px; }
         .close { font-size: 28px; cursor: pointer; color: #999; }
         .close:hover { color: #333; }
-        .info-row { padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-        .info-label { font-weight: 600; color: #666; display: block; margin-bottom: 5px; }
+        .info-row { padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .info-label { font-weight: 600; color: #555; display: block; margin-bottom: 5px; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Compare Section */
         #model-checkboxes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
-        #model-checkboxes label { padding: 8px 12px; background: #f8f9fa; border-radius: 6px; cursor: pointer; }
+        #model-checkboxes label { padding: 8px 12px; background: #f8f9fa; border-radius: 6px; cursor: pointer; font-size: 0.9em; }
         #model-checkboxes input:checked + span { color: #1a73e8; font-weight: 600; }
         #compare-btn { padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 6px; cursor: pointer; }
         #compare-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Footer */
+        footer { background: #2d3748; color: #a0aec0; padding: 40px 20px; margin-top: 40px; text-align: center; }
+        footer a { color: #90cdf4; }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap; }
+        .footer-links a { color: #e2e8f0; text-decoration: none; }
+        .footer-links a:hover { color: white; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8em; }
+            .stats-bar { gap: 15px; }
+            .stat-item { padding: 12px 18px; flex: 1; min-width: 120px; }
+            .nav-tabs li { padding: 12px 15px; font-size: 0.85em; }
+            .column-filters { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>ECG/PPG Foundation Models & Open Datasets</h1>
-        <p>A comprehensive collection of open-source foundation models and publicly available datasets</p>
-    </header>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>ECG/PPG Foundation Models & Open Datasets</h1>
+            <p class="tagline">A curated, comprehensive index of open-source foundation models and publicly available datasets for electrocardiogram (ECG) and photoplethysmography (PPG) research.</p>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-models">16</span>
+                    <span class="stat-label">Foundation Models</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-12lead">30+</span>
+                    <span class="stat-label">12-Lead Datasets</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-reduced">25+</span>
+                    <span class="stat-label">Reduced-Lead & PPG</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2025</span>
+                    <span class="stat-label">Last Updated</span>
+                </div>
+            </div>
+
+            <div class="citation-box">
+                <h4>How to Cite</h4>
+                <p class="citation-text" id="citation-apa">
+                    [Author Name]. (2025). ECG/PPG Foundation Models and Open Datasets: A Comprehensive Survey. <em>arXiv preprint</em>.
+                </p>
+                <div class="citation-buttons">
+                    <button class="cite-btn" onclick="copyBibtex()">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                        Copy BibTeX
+                    </button>
+                    <a href="https://github.com/aramis00/ECGPPG_FM_dataset/issues" target="_blank" class="cite-btn">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                        Contribute / Report Issue
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <nav>
         <ul class="nav-tabs">
@@ -130,6 +237,22 @@
         <section id="datasets-12lead" class="tab-content">
             <div class="section-header">
                 <h2>12-Lead ECG Datasets</h2>
+                <p>Publicly available 12-lead ECG datasets used in foundation model research.</p>
+            </div>
+            <div class="column-filters">
+                <div class="filter-group">
+                    <label>Access Type</label>
+                    <select id="filter-12lead-access" onchange="filterTable('datasets-12lead-table', 5, this.value)">
+                        <option value="">All</option>
+                        <option value="O">Open</option>
+                        <option value="R">Restricted</option>
+                        <option value="C">Credentialed</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Country</label>
+                    <select id="filter-12lead-country"></select>
+                </div>
             </div>
             <div class="legend">
                 <strong>Access:</strong>
@@ -146,6 +269,27 @@
         <section id="datasets-reduced" class="tab-content">
             <div class="section-header">
                 <h2>Reduced-Lead ECG & PPG Datasets</h2>
+                <p>Datasets with single-lead ECG, reduced leads, or PPG signals.</p>
+            </div>
+            <div class="column-filters">
+                <div class="filter-group">
+                    <label>Modality</label>
+                    <select id="filter-reduced-modality" onchange="filterReducedModality(this.value)">
+                        <option value="">All</option>
+                        <option value="ppg">PPG Only</option>
+                        <option value="ecg">ECG Only</option>
+                        <option value="both">Both PPG & ECG</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Access Type</label>
+                    <select id="filter-reduced-access" onchange="filterTable('datasets-reduced-table', 5, this.value)">
+                        <option value="">All</option>
+                        <option value="O">Open</option>
+                        <option value="R">Restricted</option>
+                        <option value="C">Credentialed</option>
+                    </select>
+                </div>
             </div>
             <div class="legend">
                 <strong>Access:</strong>
@@ -185,8 +329,108 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/aramis00/ECGPPG_FM_dataset" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/aramis00/ECGPPG_FM_dataset/issues" target="_blank">Report Issue</a>
+                <a href="https://github.com/aramis00/ECGPPG_FM_dataset/pulls" target="_blank">Contribute</a>
+            </div>
+            <p>This resource is maintained by the research community. Contributions and corrections are welcome.</p>
+            <p style="font-size: 0.85em; margin-top: 15px;">
+                Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>
+            </p>
+        </div>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        // BibTeX citation (without record number prefix)
+        const BIBTEX_CITATION = `@article{ecgppg_fm_datasets_2025,
+  author = {[Author Name]},
+  title = {ECG/PPG Foundation Models and Open Datasets: A Comprehensive Survey},
+  journal = {arXiv preprint},
+  year = {2025},
+  url = {https://github.com/aramis00/ECGPPG_FM_dataset}
+}`;
+
+        function copyBibtex() {
+            navigator.clipboard.writeText(BIBTEX_CITATION).then(() => {
+                const btn = event.target.closest('.cite-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg> Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Update stats dynamically when data loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof MODELS !== 'undefined') {
+                    document.getElementById('stat-models').textContent = MODELS.length;
+                }
+                if (typeof DATASETS_12LEAD !== 'undefined') {
+                    document.getElementById('stat-12lead').textContent = DATASETS_12LEAD.length;
+                    populateCountryFilter('filter-12lead-country', DATASETS_12LEAD, 'datasets-12lead-table', 3);
+                }
+                if (typeof DATASETS_REDUCED !== 'undefined') {
+                    document.getElementById('stat-reduced').textContent = DATASETS_REDUCED.length;
+                }
+            }, 100);
+        });
+
+        // Populate country filter dropdown
+        function populateCountryFilter(selectId, data, tableId, colIndex) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            const countries = [...new Set(data.map(d => d.Country).filter(c => c))].sort();
+            select.innerHTML = '<option value="">All Countries</option>';
+            countries.forEach(c => {
+                select.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+            select.onchange = function() { filterTable(tableId, colIndex, this.value); };
+        }
+
+        // Filter DataTable by column
+        function filterTable(tableId, colIndex, value) {
+            const table = $('#' + tableId).DataTable();
+            table.column(colIndex).search(value).draw();
+        }
+
+        // Filter reduced datasets by modality (PPG/ECG)
+        function filterReducedModality(value) {
+            const table = $('#datasets-reduced-table').DataTable();
+
+            // Clear previous search
+            table.columns([2, 3]).search('');
+
+            if (value === 'ppg') {
+                // PPG column (2) should have checkmark
+                table.column(2).search('✓').draw();
+            } else if (value === 'ecg') {
+                // ECG column (3) should have checkmark
+                table.column(3).search('✓').draw();
+            } else if (value === 'both') {
+                // Both columns should have checkmarks - use regex
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    if (settings.nTable.id !== 'datasets-reduced-table') return true;
+                    return data[2].includes('✓') && data[3].includes('✓');
+                });
+                table.draw();
+                $.fn.dataTable.ext.search.pop();
+            } else {
+                table.draw();
+            }
+        }
+    </script>
 </body>
 </html>
