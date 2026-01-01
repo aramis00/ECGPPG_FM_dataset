@@ -1361,7 +1361,7 @@ const BENCHMARKS_A100 = [
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 172.6, Throughput: 185, Train_ms_per_sample: 15.3, Finetune_Hours: 4.3, Infer_Mem_GB: 1.66, Train_Mem_GB: 10.44 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 88.8, Throughput: 361, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 1.28, Train_Mem_GB: 6.80 },
   { Model: "melp", Leads: 12, Params_M: 62.0, GFLOPs: 27.3, Infer_ms: 82.0, Throughput: 390, Train_ms_per_sample: 7.7, Finetune_Hours: 2.1, Infer_Mem_GB: 0.92, Train_Mem_GB: 6.09 },
-  { Model: "heartlang", Leads: 256, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 54.7, Throughput: 586, Train_ms_per_sample: 6.1, Finetune_Hours: 1.7, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.90 },
+  { Model: "heartlang", Leads: 12, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 54.7, Throughput: 586, Train_ms_per_sample: 6.1, Finetune_Hours: 1.7, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.90 },
   { Model: "ecgfounder_12lead", Leads: 12, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 14.2, Throughput: 2256, Train_ms_per_sample: 1.6, Finetune_Hours: 0.4, Infer_Mem_GB: 0.64, Train_Mem_GB: 2.46 },
   { Model: "ecgfounder_1lead", Leads: 1, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 14.3, Throughput: 2238, Train_ms_per_sample: 1.5, Finetune_Hours: 0.4, Infer_Mem_GB: 0.63, Train_Mem_GB: 2.44 },
   { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 4.7, Infer_ms: 5.2, Throughput: 6124, Train_ms_per_sample: 0.7, Finetune_Hours: 0.2, Infer_Mem_GB: 0.58, Train_Mem_GB: 1.15 },
@@ -1385,7 +1385,7 @@ const BENCHMARKS_T4 = [
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 708.0, Throughput: 45, Train_ms_per_sample: 71.9, Finetune_Hours: 20.0, Infer_Mem_GB: 1.66, Train_Mem_GB: 10.39 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 501.6, Throughput: 64, Train_ms_per_sample: 49.6, Finetune_Hours: 13.8, Infer_Mem_GB: 1.28, Train_Mem_GB: 6.72 },
   { Model: "melp", Leads: 12, Params_M: 62.0, GFLOPs: 27.3, Infer_ms: 419.4, Throughput: 76, Train_ms_per_sample: 44.3, Finetune_Hours: 12.3, Infer_Mem_GB: 0.93, Train_Mem_GB: 6.04 },
-  { Model: "heartlang", Leads: 256, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 269.0, Throughput: 119, Train_ms_per_sample: 32.7, Finetune_Hours: 9.1, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.87 },
+  { Model: "heartlang", Leads: 12, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 269.0, Throughput: 119, Train_ms_per_sample: 32.7, Finetune_Hours: 9.1, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.87 },
   { Model: "ecgfounder_12lead", Leads: 12, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 115.5, Throughput: 277, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 0.61, Train_Mem_GB: 2.60 },
   { Model: "ecgfounder_1lead", Leads: 1, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 115.5, Throughput: 277, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 0.60, Train_Mem_GB: 2.57 },
   { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 4.7, Infer_ms: 40.9, Throughput: 783, Train_ms_per_sample: 5.2, Finetune_Hours: 1.4, Infer_Mem_GB: 0.63, Train_Mem_GB: 1.19 },
@@ -1407,7 +1407,7 @@ const BENCHMARKS_CPU = [
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 4047.9, Throughput: 2, Train_ms_per_sample: 2432.5, Finetune_Hours: 675.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 1981.6, Throughput: 4, Train_ms_per_sample: 1159.1, Finetune_Hours: 322.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "melp", Leads: 12, Params_M: 62.0, GFLOPs: 27.3, Infer_ms: 2093.2, Throughput: 4, Train_ms_per_sample: 739.1, Finetune_Hours: 205.3, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "heartlang", Leads: 256, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 1163.2, Throughput: 7, Train_ms_per_sample: 707.5, Finetune_Hours: 196.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "heartlang", Leads: 12, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 1163.2, Throughput: 7, Train_ms_per_sample: 707.5, Finetune_Hours: 196.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecgfounder_12lead", Leads: 12, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 242.4, Throughput: 33, Train_ms_per_sample: 99.1, Finetune_Hours: 27.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecgfounder_1lead", Leads: 1, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 206.2, Throughput: 39, Train_ms_per_sample: 103.2, Finetune_Hours: 28.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 4.7, Infer_ms: 269.8, Throughput: 30, Train_ms_per_sample: 117.2, Finetune_Hours: 32.6, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
@@ -1488,13 +1488,39 @@ function createLinks(model) {
     return html || '-';
 }
 
+// Find models using dataset - returns { pretrain: [], eval: [] }
 function findModelsUsingDataset(datasetName) {
-    const name = datasetName.toLowerCase();
-    return MODELS.filter(m => {
-        const pd = (m['Pretrain Dataset'] || '').toLowerCase();
-        const ed = (m['eval_data'] || '').toLowerCase();
-        return pd.includes(name) || ed.includes(name);
-    }).map(m => m.model);
+    const name = datasetName.toLowerCase().replace(/[-_]/g, '');
+    const result = { pretrain: [], eval: [] };
+
+    MODELS.forEach(m => {
+        const pd = (m['Pretrain Dataset'] || '').toLowerCase().replace(/[-_]/g, '');
+        const ed = (m['eval_data'] || '').toLowerCase().replace(/[-_]/g, '');
+
+        // Check for dataset name match (handle variations like MIMIC-IV, MIMIC IV, etc.)
+        const namePatterns = [name];
+        // Add common variations
+        if (name.includes('mimic')) namePatterns.push('mimic');
+        if (name.includes('ptbxl') || name.includes('ptb-xl')) namePatterns.push('ptbxl', 'ptb xl');
+        if (name.includes('cpsc')) namePatterns.push('cpsc');
+        if (name.includes('code')) namePatterns.push('code');
+        if (name.includes('georgia')) namePatterns.push('georgia');
+        if (name.includes('csn') || name.includes('chapman')) namePatterns.push('csn', 'chapman');
+
+        const matchesPretrain = namePatterns.some(p => pd.includes(p));
+        const matchesEval = namePatterns.some(p => ed.includes(p));
+
+        if (matchesPretrain) result.pretrain.push(m.model);
+        if (matchesEval) result.eval.push(m.model);
+    });
+
+    return result;
+}
+
+// Legacy function for backward compatibility
+function findModelsUsingDatasetLegacy(datasetName) {
+    const usage = findModelsUsingDataset(datasetName);
+    return [...new Set([...usage.pretrain, ...usage.eval])];
 }
 
 function createDatasetLinks(pretrainData) {
@@ -1535,11 +1561,12 @@ function populateModels() {
 function populate12Lead() {
     const tbody = document.getElementById('datasets-12lead-tbody');
     tbody.innerHTML = '';
-    
+
     DATASETS_12LEAD.forEach(d => {
-        const usedBy = findModelsUsingDataset(d.Dataset);
-        const usedHtml = usedBy.length ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
-        
+        const usage = findModelsUsingDataset(d.Dataset);
+        const pretrainHtml = usage.pretrain.length ? usage.pretrain.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+        const evalHtml = usage.eval.length ? usage.eval.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span class="clickable" onclick="showDataset('${d.Dataset}')">${d.Dataset}</span></td>
@@ -1548,12 +1575,13 @@ function populate12Lead() {
             <td>${d.Country || '-'}</td>
             <td>${(d['Setting '] || '-').substring(0, 30)}</td>
             <td>${getAccessBadge(d.Access)}</td>
-            <td>${usedHtml}</td>
+            <td>${pretrainHtml}</td>
+            <td>${evalHtml}</td>
             <td>${d.dataset_link ? `<a href="${d.dataset_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
         `;
         tbody.appendChild(tr);
     });
-    
+
     $('#datasets-12lead-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
 }
 
@@ -1561,11 +1589,12 @@ function populate12Lead() {
 function populateReduced() {
     const tbody = document.getElementById('datasets-reduced-tbody');
     tbody.innerHTML = '';
-    
+
     DATASETS_REDUCED.forEach(d => {
-        const usedBy = findModelsUsingDataset(d.Dataset);
-        const usedHtml = usedBy.length ? usedBy.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
-        
+        const usage = findModelsUsingDataset(d.Dataset);
+        const pretrainHtml = usage.pretrain.length ? usage.pretrain.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+        const evalHtml = usage.eval.length ? usage.eval.map(m => `<span class="model-tag">${m}</span>`).join(' ') : '-';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span class="clickable" onclick="showDataset('${d.Dataset}')">${d.Dataset}</span></td>
@@ -1574,13 +1603,21 @@ function populateReduced() {
             <td>${d.ECG === 1 ? '<span class="check-yes">✓</span>' : '-'}</td>
             <td>${d.Country || '-'}</td>
             <td>${getAccessBadge(d.Access)}</td>
-            <td>${usedHtml}</td>
+            <td>${pretrainHtml}</td>
+            <td>${evalHtml}</td>
             <td>${d.data_link ? `<a href="${d.data_link}" target="_blank" class="link-btn">Access</a>` : '-'}</td>
         `;
         tbody.appendChild(tr);
     });
-    
+
     $('#datasets-reduced-table').DataTable({ pageLength: 25, order: [[0, 'asc']] });
+}
+
+// Clean citation by removing RN# prefix from citation manager
+function cleanCitation(citation) {
+    if (!citation) return '-';
+    // Remove {RN#, pattern at the beginning (e.g., {RN10, -> {)
+    return citation.replace(/\{RN\d+,\s*/g, '{');
 }
 
 // Show model modal with ALL details (excluding eval_* columns)
@@ -1605,7 +1642,7 @@ function showModel(name) {
         <div class="info-row"><span class="info-label">Task</span>${(m.task || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Performance</span>${(m.performance || '-').replace(/\n/g, '<br>')}</div>
         <div class="info-row"><span class="info-label">Architecture</span><span style="font-size: 0.9em;">${architecture}</span></div>
-        <div class="info-row"><span class="info-label">Citation</span><pre style="font-size: 0.8em; white-space: pre-wrap; margin: 0;">${m.citation || '-'}</pre></div>
+        <div class="info-row"><span class="info-label">Citation</span><pre style="font-size: 0.8em; white-space: pre-wrap; margin: 0;">${cleanCitation(m.citation)}</pre></div>
         <div class="info-row">${createLinks(m)}</div>
     `;
     document.getElementById('modal').style.display = 'block';
@@ -1641,7 +1678,7 @@ function showDataset(name) {
         document.getElementById('modal').style.display = 'block';
         return;
     }
-    const usedBy = findModelsUsingDataset(d.Dataset);
+    const usage = findModelsUsingDataset(d.Dataset);
     const link = d.dataset_link || d.data_link;
     const is12Lead = DATASETS_12LEAD.some(x => x.Dataset === d.Dataset);
 
@@ -1663,7 +1700,8 @@ function showDataset(name) {
         <div class="info-row"><span class="info-label">Data Type</span>${d['Data type'] || '-'}</div>
         <div class="info-row"><span class="info-label">Access</span>${getAccessBadge(d.Access)}</div>
         <div class="info-row"><span class="info-label">Related Dataset</span>${d.related_dataset || d.derived_dataset || '-'}</div>
-        <div class="info-row"><span class="info-label">Used By Models</span>${usedBy.length ? usedBy.join(', ') : 'None'}</div>
+        <div class="info-row"><span class="info-label">Used for Pretraining</span>${usage.pretrain.length ? usage.pretrain.join(', ') : 'None'}</div>
+        <div class="info-row"><span class="info-label">Used for Evaluation</span>${usage.eval.length ? usage.eval.join(', ') : 'None'}</div>
         <div class="info-row">${link ? `<a href="${link}" target="_blank" class="link-btn">Access Dataset</a>` : '-'}</div>
     `;
     document.getElementById('modal').style.display = 'block';
@@ -1790,10 +1828,12 @@ function populateBenchmarks(data) {
         const inferMem = b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB.toFixed(2) : 'N/A';
         const trainMem = b.Train_Mem_GB > 0 ? b.Train_Mem_GB.toFixed(2) : 'N/A';
         const displayName = getBenchmarkDisplayName(b.Model);
+        // HeartLang uses 12 leads but pre-tokenizes to 256 tokens
+        const leadsDisplay = b.Model === 'heartlang' ? b.Leads + '*' : b.Leads;
 
         tr.innerHTML = `
             <td><span class="clickable" onclick="showModel('${displayName}')">${displayName}</span></td>
-            <td>${b.Leads}</td>
+            <td>${leadsDisplay}</td>
             <td>${b.Params_M.toFixed(1)}</td>
             <td>${b.GFLOPs.toFixed(1)}</td>
             <td>${b.Infer_ms.toFixed(1)}</td>
