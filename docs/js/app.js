@@ -1490,28 +1490,22 @@ function createLinks(model) {
 
 // Find models using dataset - returns { pretrain: [], eval: [] }
 function findModelsUsingDataset(datasetName) {
-    const name = datasetName.toLowerCase().replace(/[-_]/g, '');
+    if (!datasetName) return { pretrain: [], eval: [] };
+
+    const name = datasetName.toLowerCase().replace(/[-_\s]/g, '');
     const result = { pretrain: [], eval: [] };
 
     MODELS.forEach(m => {
-        const pd = (m['Pretrain Dataset'] || '').toLowerCase().replace(/[-_]/g, '');
-        const ed = (m['eval_data'] || '').toLowerCase().replace(/[-_]/g, '');
+        const pd = (m['Pretrain Dataset'] || '').toLowerCase().replace(/[-_\s]/g, '');
+        const ed = (m['eval_data'] || '').toLowerCase().replace(/[-_\s]/g, '');
 
-        // Check for dataset name match (handle variations like MIMIC-IV, MIMIC IV, etc.)
-        const namePatterns = [name];
-        // Add common variations
-        if (name.includes('mimic')) namePatterns.push('mimic');
-        if (name.includes('ptbxl') || name.includes('ptb-xl')) namePatterns.push('ptbxl', 'ptb xl');
-        if (name.includes('cpsc')) namePatterns.push('cpsc');
-        if (name.includes('code')) namePatterns.push('code');
-        if (name.includes('georgia')) namePatterns.push('georgia');
-        if (name.includes('csn') || name.includes('chapman')) namePatterns.push('csn', 'chapman');
-
-        const matchesPretrain = namePatterns.some(p => pd.includes(p));
-        const matchesEval = namePatterns.some(p => ed.includes(p));
-
-        if (matchesPretrain) result.pretrain.push(m.model);
-        if (matchesEval) result.eval.push(m.model);
+        // Simple substring match
+        if (pd.includes(name) || name.includes(pd.split(',')[0])) {
+            result.pretrain.push(m.model);
+        }
+        if (ed.includes(name) || name.includes(ed.split(',')[0])) {
+            result.eval.push(m.model);
+        }
     });
 
     return result;
@@ -1875,15 +1869,19 @@ function setupBenchmarkFilters() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    populateModels();
-    populate12Lead();
-    populateReduced();
-    populateBenchmarks(BENCHMARKS_A100);
-    setupTabs();
-    setupFilters();
-    setupBenchmarkFilters();
-    setupCompare();
-    setupModal();
-    setupDatasetLinks();
-    console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
+    try {
+        populateModels();
+        populate12Lead();
+        populateReduced();
+        populateBenchmarks(BENCHMARKS_A100);
+        setupTabs();
+        setupFilters();
+        setupBenchmarkFilters();
+        setupCompare();
+        setupModal();
+        setupDatasetLinks();
+        console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
+    } catch (e) {
+        console.error('Initialization error:', e);
+    }
 });
