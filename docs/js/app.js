@@ -679,7 +679,7 @@ const DATASETS_12LEAD = [
     "Year": "2018-2024",
     "site": 1,
     "Country": "China",
-    "Setting ": "pediatric hospital diagnostic ECG (0-14 y.o.)",
+    "Setting ": "pediatric hospital ECG",
     "Sample rate (Hz)": 500,
     "Time (sec)": "5-120",
     "No. of leads ": "12 or 9",
@@ -1875,6 +1875,67 @@ function setupBenchmarkFilters() {
     });
 }
 
+// Continent groupings for country filter
+const CONTINENT_MAP = {
+    'US': 'North America',
+    'Canada': 'North America',
+    'Brazil': 'South America',
+    'UK': 'Europe',
+    'Germany': 'Europe',
+    'Czech Republic': 'Europe',
+    'Slovenia, Italy': 'Europe',
+    '8 Europe countries': 'Europe',
+    'Russia': 'Europe',
+    'Belgium': 'Europe',
+    'China': 'Asia',
+    'South Korea': 'Asia'
+};
+
+// Populate country filter dropdown grouped by continent
+function setupCountryFilter(selectId, data, tableId, colIndex) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    const countries = [...new Set(data.map(d => d.Country).filter(c => c))];
+
+    // Group by continent
+    const byContinent = {};
+    countries.forEach(c => {
+        const continent = CONTINENT_MAP[c] || 'Other';
+        if (!byContinent[continent]) byContinent[continent] = [];
+        byContinent[continent].push(c);
+    });
+
+    const continentOrder = ['North America', 'South America', 'Europe', 'Asia', 'Other'];
+
+    select.innerHTML = '<option value="">All Countries</option>';
+
+    continentOrder.forEach(continent => {
+        if (byContinent[continent] && byContinent[continent].length > 0) {
+            select.innerHTML += `<option value="CONTINENT:${continent}" style="font-weight:bold;">── ${continent} ──</option>`;
+            byContinent[continent].sort().forEach(c => {
+                select.innerHTML += `<option value="${c}">&nbsp;&nbsp;&nbsp;${c}</option>`;
+            });
+        }
+    });
+
+    select.onchange = function() {
+        const table = $('#' + tableId).DataTable();
+        const value = this.value;
+
+        if (value === '') {
+            table.column(colIndex).search('').draw();
+        } else if (value.startsWith('CONTINENT:')) {
+            const continent = value.replace('CONTINENT:', '');
+            const countriesInContinent = Object.keys(CONTINENT_MAP).filter(c => CONTINENT_MAP[c] === continent);
+            const regex = countriesInContinent.map(c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+            table.column(colIndex).search(regex, true, false).draw();
+        } else {
+            table.column(colIndex).search('^' + value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', true, false).draw();
+        }
+    };
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     try {
@@ -1888,6 +1949,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setupCompare();
         setupModal();
         setupDatasetLinks();
+        setupCountryFilter('filter-12lead-country', DATASETS_12LEAD, 'datasets-12lead-table', 3);
         console.log('Loaded:', MODELS.length, 'models,', DATASETS_12LEAD.length, '12-lead,', DATASETS_REDUCED.length, 'reduced');
     } catch (e) {
         console.error('Initialization error:', e);
