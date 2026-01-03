@@ -11,22 +11,26 @@ if torch.cuda.is_available():
 !cat /proc/cpuinfo | grep "cpu cores" | head -1
 !free -h
 
+# %pip install -q torch transformers safetensors thop numpy pandas einops
+
 # =============================================================================
 # 1) IMPORTS & GLOBAL CONFIG
 # =============================================================================
 
-import time, gc
+import time, gc, json
+from datetime import datetime
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from dataclasses import dataclass
 from typing import Callable, Optional
+from einops import rearrange
+from einops.layers.torch import Rearrange
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 BATCH_SIZE = 32 if torch.cuda.is_available() else 8
 NUM_RUNS = 50 
-
 
 # =============================================================================
 # 2) UTILS & Benchmarking functions
@@ -144,7 +148,7 @@ def get_mem(): return torch.cuda.max_memory_allocated()/1e9 if torch.cuda.is_ava
 # 3) MODELS
 # =============================================================================
 
-# Multilead, ECG-only, patch-based ViT  - ecg-jepa, heartlang
+# Multilead, ECG-only, patch-based ViT  - ecg-jepa, heartlang, ST-MEM
 
 # ecg_jepa — ViT with structured cross-lead attention
 
@@ -231,6 +235,162 @@ class HeartLangViT(nn.Module):
         x = self.norm(self.transformer(x))
         return x
 
+# st-mem — Spatiotemporal ViT for ECG (Base variant)
+
+class ST_MEM_Attention(nn.Module):
+    """Multi-head attention with einops (matches original ST-MEM)"""
+    def __init__(self, dim, heads=12, dim_head=64, qkv_bias=True, dropout=0.):
+        super().__init__()
+        inner_dim = dim_head * heads
+        self.heads = heads
+        self.scale = dim_head ** -0.5
+        
+        self.to_qkv = nn.Linear(dim, inner_dim * 3, bias=qkv_bias)
+        self.attend = nn.Softmax(dim=-1)
+        self.attn_dropout = nn.Dropout(dropout)
+        self.to_out = nn.Sequential(nn.Linear(inner_dim, dim), nn.Dropout(dropout))
+        
+    def forward(self, x):
+        qkv = self.to_qkv(x).chunk(3, dim=-1)
+        q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h=self.heads), qkv)
+        
+        dots = torch.matmul(q, k.transpose(-1, -2)) * self.scale
+        attn = self.attend(dots)
+        attn = self.attn_dropout(attn)
+        out = torch.matmul(attn, v)
+        
+        out = rearrange(out, 'b h n d -> b n (h d)')
+        return self.to_out(out)
+
+
+class ST_MEM_FeedForward(nn.Module):
+    """MLP with GELU activation (matches original ST-MEM)"""
+    def __init__(self, dim, hidden_dim, dropout=0.):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(dim, hidden_dim),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, dim),
+            nn.Dropout(dropout)
+        )
+        
+    def forward(self, x):
+        return self.net(x)
+
+
+class ST_MEM_TransformerBlock(nn.Module):
+    """Transformer block with PreNorm pattern (matches original ST-MEM)"""
+    def __init__(self, dim, heads, dim_head, mlp_dim, dropout=0.):
+        super().__init__()
+        self.norm1 = nn.LayerNorm(dim)
+        self.attn = ST_MEM_Attention(dim, heads, dim_head, dropout=dropout)
+        self.norm2 = nn.LayerNorm(dim)
+        self.ff = ST_MEM_FeedForward(dim, mlp_dim, dropout=dropout)
+        
+    def forward(self, x):
+        x = self.attn(self.norm1(x)) + x
+        x = self.ff(self.norm2(x)) + x
+        return x
+
+
+class ST_MEM(nn.Module):
+    """ST-MEM Base: Spatiotemporal Masked Encoding Model for ECG
+    Exact architecture from: https://github.com/bakqui/ST-MEM
+    
+    Key features:
+    - Lead-aware encoding: Each lead processed separately with lead embeddings
+    - SEP tokens: Left and right separator tokens per lead for segmentation
+    - Patch embedding: Keeps leads separate, then flattens for transformer
+    - Mean pooling: Over patches and leads after removing SEP tokens
+    
+    Base config: width=768, depth=12, heads=12, mlp_dim=3072
+    Input: (B, 12, 2250) at 250Hz → 9 seconds
+    """
+    def __init__(self, width=768, depth=12, heads=12, dim_head=64,
+                 num_leads=12, seq_len=2250, patch_size=75, dropout=0.):
+        super().__init__()
+        assert seq_len % patch_size == 0, 'Sequence length must be divisible by patch size'
+        
+        self.width = width
+        self.depth = depth
+        self.num_leads = num_leads
+        num_patches = seq_len // patch_size  # 30 patches
+        
+        # Patch embedding: (B, C, L) → (B, C, N, width)
+        # Keeps leads separate unlike Conv1d approach
+        self.to_patch_embedding = nn.Sequential(
+            Rearrange('b c (n p) -> b c n p', p=patch_size),  # (B, 12, 30, 75)
+            nn.LayerNorm(patch_size),                          # Norm over patch_size
+            nn.Linear(patch_size, width),                      # Project to width
+            nn.LayerNorm(width)                                # Norm over width
+        )
+        
+        # Positional embeddings: +2 for left and right SEP tokens
+        self.pos_embedding = nn.Parameter(torch.randn(1, num_patches + 2, width))
+        
+        # SEP embedding: shared separator token
+        self.sep_embedding = nn.Parameter(torch.randn(width))
+        
+        # Lead embeddings: unique embedding per lead
+        self.lead_embeddings = nn.ParameterList([
+            nn.Parameter(torch.randn(width)) for _ in range(num_leads)
+        ])
+        
+        # Transformer blocks
+        mlp_dim = width * 4  # 3072 for base
+        self.blocks = nn.ModuleList([
+            ST_MEM_TransformerBlock(width, heads, dim_head, mlp_dim, dropout)
+            for _ in range(depth)
+        ])
+        self.dropout = nn.Dropout(dropout)
+        self.norm = nn.LayerNorm(width)
+        
+    def forward(self, x):
+        # x: (B, 12, 2250)
+        b = x.shape[0]
+        num_leads = x.shape[1]
+        
+        # Patch embedding: (B, 12, 2250) → (B, 12, 30, 768)
+        x = self.to_patch_embedding(x)
+        n = x.shape[2]  # num_patches = 30
+        
+        # Add positional embeddings (excluding first and last for patches)
+        x = x + self.pos_embedding[:, 1:n+1, :].unsqueeze(1)
+        
+        # Create SEP tokens with positional embeddings
+        sep = self.sep_embedding[None, None, None, :]  # (1, 1, 1, width)
+        left_sep = sep.expand(b, num_leads, -1, -1) + self.pos_embedding[:, :1, :].unsqueeze(1)
+        right_sep = sep.expand(b, num_leads, -1, -1) + self.pos_embedding[:, -1:, :].unsqueeze(1)
+        
+        # Concatenate: [LEFT_SEP, patches, RIGHT_SEP] per lead
+        x = torch.cat([left_sep, x, right_sep], dim=2)  # (B, 12, 32, 768)
+        
+        # Add lead embeddings
+        lead_emb = torch.stack([e for e in self.lead_embeddings])  # (12, 768)
+        lead_emb = lead_emb[None, :, None, :].expand(b, -1, n + 2, -1)  # (B, 12, 32, 768)
+        x = x + lead_emb
+        
+        # Flatten leads into sequence: (B, 12, 32, 768) → (B, 384, 768)
+        x = rearrange(x, 'b c n d -> b (c n) d')
+        
+        # Transformer
+        x = self.dropout(x)
+        for block in self.blocks:
+            x = block(x)
+        
+        # Reshape back to (B, 12, 32, 768)
+        x = rearrange(x, 'b (c n) d -> b c n d', c=num_leads)
+        
+        # Remove SEP tokens: keep only patches
+        x = x[:, :, 1:-1, :]  # (B, 12, 30, 768)
+        
+        # Mean pooling over leads and patches
+        x = x.mean(dim=(1, 2))  # (B, 768)
+        
+        return self.norm(x)
+
+
 # Multilead, ECG-only, State Space Model - ecg_cpc (SSL: conv encoder + S4), S4_supervised (SL: S4)
 
 # ecg_cpc — Conv encoder + S4 model for ECG SSL
@@ -308,6 +468,7 @@ class ECGCPCModel(nn.Module):
         x = s.encoder(x)      # (B, 12, 2400) → (B, 512, 1200)
         x = s.s4_layer(x)     # (B, 512, 1200)
         return x.mean(dim=2)  # (B, 512)
+
     
 # S4_supervised — Single S4 layer for ECG SL
 
@@ -324,6 +485,7 @@ class S4Model(nn.Module):
         for layer in s.layers:
             x = layer(x)
         return x.mean(dim=2)  # Mean pooling -> (B, d_model)
+
 
 
 # Multilead, ECG-only, Speech model (Wav2Vec2/HuBERT) adapted - hubert_ecg, ecgfm, deepecg 
@@ -435,6 +597,9 @@ def create_heartwise_ssl():
             return self.model(x).last_hidden_state
 
     return HeartWiseSSLWrapper()
+
+
+# Multilead, ECG + TEXT - ESI, MELP, MERL, KED
 
 # esi 
 
@@ -666,7 +831,7 @@ def create_melp():
     return MELPEncoder()
 
 
-# ecgfm_ked — Wav2Vec2-CMSC + text (from DeepECG)
+# ecgfm_ked — Wav2Vec2-CMSC + text 
 
 class ConvBnAct(nn.Sequential):
     """Conv1d + BatchNorm1d + ReLU"""
@@ -1347,6 +1512,11 @@ MODEL_SPECS = [
         name="heartlang",
         factory=lambda: HeartLangViT(),
         leads=256, seq_len=96, fdim=768, hz=100, duration_s=10.0, input_kind="tokenized"
+    ),
+    ModelSpec(
+        name="st_mem",
+        factory=lambda: ST_MEM(width=768, depth=12, heads=12, dim_head=64, num_leads=12, seq_len=2250, patch_size=75),
+        leads=12, seq_len=2250, fdim=768, hz=250, duration_s=9.0, input_kind="raw"
     ),
     ModelSpec(
         name="ecg_cpc",
