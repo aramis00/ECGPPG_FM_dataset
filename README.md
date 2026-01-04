@@ -76,7 +76,7 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 | Model | Year | Backbone | Method | Pretrain Data | Data Size | Code | Weights |
 |-------|------|----------|--------|---------------|-----------|------|---------|
 | [PPG-PT](https://doi.org/10.48550/arXiv.2407.20775) | 2024 | Transformer | M/R/G | Capnobase/BIDMC/Cuffless BP  | 128M tokens | [Code](https://github.com/harryjdavies/HeartGPT) | [Weights](https://github.com/harryjdavies/HeartGPT/tree/main/Model_files) |
-| [PaPaGei-S/-P](https://doi.org/10.48550/arXiv.2410.20542) | 2024 | Transformer | CL | VitalDB, MIMIC-III waveform, MESA sleep | 57K hours | [Code](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) | [Weights](https://zenodo.org/records/13983110) |
+| [PaPaGei-S/-P](https://doi.org/10.48550/arXiv.2410.20542) | 2024 | CNN | CL | VitalDB, MIMIC-III waveform, MESA sleep | 57K hours | [Code](https://github.com/Nokia-Bell-Labs/papagei-foundation-model) | [Weights](https://zenodo.org/records/13983110) |
 | [PulsePPG](https://doi.org/10.48550/arXiv.2502.01108) | 2025 | CNN | CL+M/R/G | MOODS | 55K hours | [Code](https://github.com/maxxu05/pulseppg) | [Weights](https://zenodo.org/records/17345536) |
 
 ---
