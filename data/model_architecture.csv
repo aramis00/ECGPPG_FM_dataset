@@ -5,13 +5,14 @@ DeepECG,[CNN + Transformer (WCR)] + masked lead modeling + dual contrastive lear
 ECG-FM,[CNN + Transformer (WCR)] + masked lead modeling + dual contrastive learning (SimCLR-style local + CMSC-style global) + random lead masking
 HeartLang,[ST-ECGFormer Transformer] + heartbeat tokenization (QRS-based) + discrete ECG vocabulary (EMA-vector quantization) + masked token prediction (MLM)
 CPC,[4-layer CNN encoder + 4-layer S4 (Structured State Space Model)] + Contrastive Predictive Coding (CPC) predicting future latent representations (14 steps ahead via InfoNCE loss)
-ESI,[1D ConvNext v2 + Clinical Text Encoder] + RAG based LLM-generated expert prompts + dual contrastive loss
+ESI,[1D ConvNext v2 + Clinical Text Encoder (BioLinkBERT)] + RAG based LLM-generated expert prompts + dual contrastive loss
 MERL,[1D-ResNet18+ Clinical Text Encoder (Med-CPT)] + Multi-modal contrastive pretraining + clinical knowledge enhanced prompting at test time
-MELP,[Wav2Vec 2.0 + Transformer Encoder + GPT-style Text Decoder] + Multi-scale cross-modal supervision (Token + Beat + Rhythm levels) + Cardiology-specific language model pretraining
+MELP,[Wav2Vec 2.0 + Transformer Encoder (Med-CPT) + GPT-style Text Decoder] + Multi-scale cross-modal supervision (Token + Beat + Rhythm levels) + Cardiology-specific language model pretraining
 KED,"[1D CNN signal encoder + Transformer label query network + BioClinicalBERT] + signal–text–label contrastive learning (AugCL, CLIP/UniCL-inspired) → knowledge-augmented, query-based multi-label ECG diagnosis"
 ECGFounder,[1D RegNet-based CNN (Net1D) + Bottleneck blocks + Channel-wise attention + Skip Connections] + Supervised pretraining on 10M ECGs (150 labels)
 ECG-PT,"[Decoder-only Transformer (GPT-style)] + Next-token prediction (cross-entropy loss) on tokenized ECG/PPG (integer-scaled windows: 5s 100 Hz, ECG; 10s 50 Hz PPG)"
 PPG-PT,"[Decoder-only Transformer (GPT-style)] + Next-token prediction (cross-entropy loss) on tokenized ECG/PPG (integer-scaled windows: 5s 100 Hz, ECG; 10s 50 Hz PPG)"
 HeartBERT,"[RoBERTa-based Transformer Encoder] + Lloyd–Max quantization (100-level, 360 Hz resampled ECG → ASCII “synthetic language”) + SentencePiece BPE tokenizer → MLM on discretized ECG text"
-PaPaGei-S/-P,[Conv front-end + BERT-style Transformer encoder] + Spectrogram patch masking + subject-level & morphology-aware contrastive SSL (MoE heads for IPA/SQI prediction)
+PaPaGei-S/-P,"[ResNet-style 1D CNN (18 conv blocks, 32→256 filters) + FC projection head (512-d) (+ 2 MoE regression heads for PaPaGei-S)] + Subject-aware contrastive SSL (PaPaGei-P) / Morphology-aware SSL: sVRI-based contrastive & IPA/SQI regression (PaPaGei-S)"
 PulsePPG,[1D ResNet-26 Encoder + Dilated CNN Cross-Attention Distance Function + PPG Motif-based Relative Ranking] + Two-Phase Self-Supervised Pretraining (Masked Reconstruction + Relative Contrastive Learning)
+ST-MEM,"[ViT-B, lead-wise decoder] + masked reconstruction (spatio-temporal patchifying)"

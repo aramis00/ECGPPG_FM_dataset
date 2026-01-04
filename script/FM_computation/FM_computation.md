@@ -34,6 +34,7 @@ This script provides a unified framework to:
 | **MERL (ViT-Tiny)** | ViT-Tiny 1D | 12 leads × 5000 @ 500Hz | 192 | 12 layers, 3 heads, patch size 50 |
 | **KED** | xResNet1D-101 | 12 leads × 1000 @ 100Hz | 768 | 101-layer ResNet with knowledge enhancement |
 | **ECGFounder (12-lead)** | Net1D (RegNet-style) | 12 leads × 5000 @ 500Hz | 1024 | 7-stage CNN with SE blocks |
+| **ST-MEM** | Spatiotemporal ViT | 12 leads × 2250 @ 250Hz | 768 | Lead-wise patching with masked reconstruction |
 
 ### Single-Lead ECG Models
 
@@ -47,9 +48,9 @@ This script provides a unified framework to:
 
 | Model | Architecture | Input | Output Dim | Description |
 |-------|--------------|-------|------------|-------------|
-| **PPG-PT** | Causal GPT | 1 lead × 500 @ 100Hz | 64 | Same as ECG-PT, vocab=102 |
+| **PPG-PT** | Causal GPT | 1 lead × 500 @ 50Hz | 64 | Same as ECG-PT, vocab=101 |
 | **PaPaGei** | ResNet1D-MoE | 1 lead × 1250 @ 125Hz | 512 | 18 blocks, base_filters=32 |
-| **PulsePPG** | ResNet1D | 1 lead × 1000 @ 50Hz | 512 | 12 blocks, base_filters=128, kernel=11 |
+| **PulsePPG** | ResNet1D | 1 lead × 12000 @ 50Hz | 512 | 12 blocks, base_filters=128, kernel=11 |
 
 ---
 
@@ -104,10 +105,10 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | DeepECG | 90.4M | 323.0 | 790.4 | 40 | 32 | 76.9 | 13 | 21.4 | 3.0 GB | 44.3 GB |
 | ESI | 85.6M | 46.8 | 117.4 | 273 | 32 | 11.8 | 85 | 3.3 | 1.0 GB | 15.9 GB |
 | ECG-JEPA | 85.4M | 45.4 | 172.6 | 185 | 32 | 15.3 | 65 | 4.3 | 1.7 GB | 10.4 GB |
+| ST-MEM | 85.2M | 65.5 | 142.7 | 224 | 32 | 14.1 | 71 | 3.9 | 1.1 GB | 11.4 GB |
 | MELP | 62.0M | 27.3 | 82.0 | 390 | 32 | 7.7 | 129 | 2.1 | 0.9 GB | 6.1 GB |
 | HeartLang | 47.7M | 9.9 | 54.7 | 586 | 32 | 6.1 | 165 | 1.7 | 0.8 GB | 4.9 GB |
 | ECGFounder (12-lead) | 30.8M | 2.3 | 14.2 | 2256 | 32 | 1.6 | 628 | 0.4 | 0.6 GB | 2.5 GB |
-| ST-MEM | 21.5M | 1.5 | 6.6 | 4876 | 32 | 1.1 | 930 | 0.3 | 0.5 GB | 1.3 GB |
 | KED | 7.9M | 1.2 | 13.4 | 2388 | 32 | 1.7 | 584 | 0.5 | 0.5 GB | 1.1 GB |
 | MERL (ViT-Tiny) | 5.5M | 0.7 | 6.8 | 4678 | 32 | 0.9 | 1097 | 0.3 | 0.4 GB | 1.0 GB |
 | MERL (ResNet18) | 3.8M | 3.5 | 3.3 | 9616 | 32 | 0.5 | 1938 | 0.1 | 0.5 GB | 1.3 GB |
@@ -118,12 +119,12 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 
 | Model | Params | GFLOPs | Infer (ms) | Infer/s | Train Batch | ms/sample | Train/s | FT Time (h) | Inf Mem | Train Mem |
 |-------|--------|--------|------------|---------|-------------|-----------|---------|-------------|---------|-----------|
-| HeartBERT | 83.5M | 43.5 | 88.8 | 361 | 32 | 8.9 | 112 | 2.5 | 1.3 GB | 6.8 GB |
+| HeartBERT | 83.5M | 43.5 | 89.0 | 360 | 32 | 8.9 | 112 | 2.5 | 1.2 GB | 6.8 GB |
 | ECGFounder (1-lead) | 30.8M | 2.3 | 14.3 | 2238 | 32 | 1.5 | 659 | 0.4 | 0.6 GB | 2.4 GB |
-| PulsePPG | 29.4M | 4.7 | 5.2 | 6124 | 32 | 0.7 | 1367 | 0.2 | 0.6 GB | 1.2 GB |
-| PaPaGei | 5.3M | 0.2 | 7.2 | 4430 | 32 | 1.0 | 1047 | 0.3 | 0.4 GB | 0.6 GB |
-| ECG-PT | 0.4M | 0.3 | 19.3 | 1658 | 32 | 0.9 | 1153 | 0.2 | 1.0 GB | 1.0 GB |
-| PPG-PT | 0.4M | 0.3 | 19.2 | 1666 | 32 | 0.8 | 1186 | 0.2 | 1.0 GB | 1.0 GB |
+| PulsePPG | 29.4M | 55.5 | 27.1 | 1180 | 32 | 2.9 | 347 | 0.8 | 1.3 GB | 4.7 GB |
+| PaPaGei | 3.2M | 0.2 | 6.8 | 4712 | 32 | 1.2 | 800 | 0.3 | 0.4 GB | 0.5 GB |
+| ECG-PT | 0.4M | 0.3 | 20.0 | 1602 | 32 | 0.9 | 1153 | 0.2 | 1.0 GB | 1.0 GB |
+| PPG-PT | 0.4M | 0.3 | 19.6 | 1629 | 32 | 0.9 | 1160 | 0.2 | 1.0 GB | 1.0 GB |
 
 ---
 
@@ -138,10 +139,10 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | DeepECG | 90.4M | 323.0 | 5055.7 | 6 | 8 | 517.7 | 2 | 143.8 |
 | ESI | 85.6M | 46.8 | 620.6 | 52 | 16 | 58.1 | 17 | 16.1 |
 | ECG-JEPA | 85.4M | 45.4 | 708.0 | 45 | 32 | 71.9 | 14 | 20.0 |
+| ST-MEM | 85.2M | 65.5 | 616.7 | 52 | 32 | 58.6 | 17 | 16.3 |
 | MELP | 62.0M | 27.3 | 419.4 | 76 | 32 | 44.3 | 23 | 12.3 |
 | HeartLang | 47.7M | 9.9 | 269.0 | 119 | 32 | 32.7 | 31 | 9.1 |
 | ECGFounder (12-lead) | 30.8M | 2.3 | 115.5 | 277 | 32 | 8.9 | 112 | 2.5 |
-| ST-MEM | 21.5M | 1.5 | 24.9 | 1285 | 32 | 2.7 | 367 | 0.8 |
 | KED | 7.9M | 1.2 | 20.4 | 1571 | 32 | 2.4 | 417 | 0.7 |
 | MERL (ViT-Tiny) | 5.5M | 0.7 | 18.5 | 1727 | 32 | 2.0 | 512 | 0.5 |
 | MERL (ResNet18) | 3.8M | 3.5 | 37.1 | 863 | 32 | 4.3 | 232 | 1.2 |
@@ -152,12 +153,12 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 
 | Model | Params | GFLOPs | Infer (ms) | Infer/s | Train Batch | ms/sample | Train/s | FT Time (h) |
 |-------|--------|--------|------------|---------|-------------|-----------|---------|-------------|
-| HeartBERT | 83.5M | 43.5 | 501.6 | 64 | 32 | 49.6 | 20 | 13.8 |
+| HeartBERT | 83.5M | 43.5 | 427.9 | 75 | 32 | 46.2 | 22 | 12.8 |
 | ECGFounder (1-lead) | 30.8M | 2.3 | 115.5 | 277 | 32 | 8.9 | 112 | 2.5 |
-| PulsePPG | 29.4M | 4.7 | 40.9 | 783 | 32 | 5.2 | 192 | 1.4 |
-| PaPaGei | 5.3M | 0.2 | 6.3 | 5069 | 32 | 0.8 | 1252 | 0.2 |
-| ECG-PT | 0.4M | 0.3 | 82.8 | 387 | 32 | 4.0 | 251 | 1.1 |
-| PPG-PT | 0.4M | 0.3 | 82.9 | 386 | 32 | 4.0 | 252 | 1.1 |
+| PulsePPG | 29.4M | 55.5 | 312.6 | 102 | 32 | 43.0 | 23 | 11.9 |
+| PaPaGei | 3.2M | 0.2 | 5.5 | 5860 | 32 | 0.9 | 1085 | 0.3 |
+| ECG-PT | 0.4M | 0.3 | 78.3 | 409 | 32 | 4.3 | 233 | 1.2 |
+| PPG-PT | 0.4M | 0.3 | 78.6 | 407 | 32 | 3.7 | 267 | 1.0 |
 
 ---
 
@@ -170,26 +171,28 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | HuBERT-ECG | 92.8M | 18.0 | 863.3 | 9.3 | 474.7 | 2.1 | 131.8 |
 | ESI | 85.6M | 46.8 | 2554.9 | 3.1 | 982.9 | 1.0 | 273.0 |
 | ECG-JEPA | 85.4M | 45.4 | 4047.9 | 2.0 | 2432.5 | 0.4 | 675.7 |
+| ST-MEM | 85.2M | 65.5 | 2832.0 | 2.8 | 1008.3 | 1.0 | 280.1 |
 | MELP | 62.0M | 27.3 | 2093.2 | 3.8 | 739.1 | 1.4 | 205.3 |
 | HeartLang | 47.7M | 9.9 | 1163.2 | 6.9 | 707.5 | 1.4 | 196.5 |
 | ECGFounder (12-lead) | 30.8M | 2.3 | 242.4 | 33.0 | 99.1 | 10.1 | 27.5 |
-| ST-MEM | 21.5M | 1.5 | 101.7 | 78.7 | 75.9 | 13.2 | 21.1 |
 | KED | 7.9M | 1.2 | 122.0 | 65.6 | 48.9 | 20.4 | 13.6 |
 | MERL (ViT-Tiny) | 5.5M | 0.7 | 97.5 | 82.1 | 63.3 | 15.8 | 17.6 |
 | MERL (ResNet18) | 3.8M | 3.5 | 159.9 | 50.0 | 74.9 | 13.4 | 20.8 |
 | S4 (supervised) | 2.2M | 1.1 | 151.9 | 52.7 | 100.1 | 10.0 | 27.8 |
 | CPC | 1.4M | 3.2 | 257.6 | 31.1 | 177.8 | 5.6 | 49.4 |
 
+> **Note**: ECG-FM and DeepECG crash on CPU (OOM even with batch size reduced to 1)
+
 #### Single-Lead ECG & PPG Models
 
 | Model | Params | GFLOPs | Infer (ms) | Infer/s | ms/sample | Train/s | FT Time (h) |
 |-------|--------|--------|------------|---------|-----------|---------|-------------|
-| HeartBERT | 83.5M | 43.5 | 1981.6 | 4.0 | 1159.1 | 0.9 | 322.0 |
+| HeartBERT | 83.5M | 43.5 | 1910.7 | 4.2 | 1080.2 | 0.9 | 300.0 |
 | ECGFounder (1-lead) | 30.8M | 2.3 | 206.2 | 38.8 | 103.2 | 9.7 | 28.7 |
-| PulsePPG | 29.4M | 4.7 | 269.8 | 29.7 | 117.2 | 8.5 | 32.6 |
-| PaPaGei | 5.3M | 0.2 | 32.1 | 249.6 | 20.8 | 48.0 | 5.8 |
-| ECG-PT | 0.4M | 0.3 | 386.4 | 20.7 | 345.4 | 2.9 | 96.0 |
-| PPG-PT | 0.4M | 0.3 | 383.6 | 20.9 | 344.0 | 2.9 | 95.5 |
+| PulsePPG | 29.4M | 55.5 | 2134.8 | 3.7 | 801.2 | 1.2 | 222.5 |
+| PaPaGei | 3.2M | 0.2 | 23.0 | 348 | 6.8 | 148 | 1.9 |
+| ECG-PT | 0.4M | 0.3 | 505.0 | 15.8 | 372.3 | 2.7 | 103.4 |
+| PPG-PT | 0.4M | 0.3 | 320.2 | 25.0 | 355.2 | 2.8 | 98.7 |
 
 ---
 
@@ -201,13 +204,13 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 |-------|--------|--------------|-----------------|------------------|----------------|--------------|------------|
 | ECG-FM | 90.4M | Wav2Vec2 | OOM | 16 | 3 | — | — |
 | DeepECG | 90.4M | Wav2Vec2 | OOM | 40 | 6 | — | — |
-| HuBERT-ECG | 92.8M | Wav2Vec2 | 9.3 | 786 | 143 | 85× | 15× |
+| HuBERT-ECG | 92.8M | HuBERT | 9.3 | 786 | 143 | 85× | 15× |
 | ESI | 85.6M | ConvNeXtV2 | 3.1 | 273 | 52 | 88× | 17× |
 | ECG-JEPA | 85.4M | ViT | 2.0 | 185 | 45 | 93× | 23× |
-| MELP | 62.0M | Transformer | 3.8 | 390 | 76 | 103× | 20× |
+| ST-MEM | 85.2M | ViT (ST-MEM) | 2.8 | 224 | 52 | 80× | 19× |
+| MELP | 62.0M | Wav2Vec2 | 3.8 | 390 | 76 | 103× | 20× |
 | HeartLang | 47.7M | ViT | 6.9 | 586 | 119 | 85× | 17× |
 | ECGFounder (12-lead) | 30.8M | CNN (RegNet) | 33.0 | 2256 | 277 | 68× | 8× |
-| ST-MEM | 21.5M | ST-MEM | 78.7 | 4876 | 1285 | 62× | 16× |
 | KED | 7.9M | xResNet101 | 65.6 | 2388 | 1571 | 36× | 24× |
 | MERL (ViT-Tiny) | 5.5M | ViT-Tiny | 82.1 | 4678 | 1727 | 57× | 21× |
 | MERL (ResNet18) | 3.8M | ResNet18 | 50.0 | 9616 | 863 | 192× | 17× |
@@ -218,12 +221,12 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 
 | Model | Params | Architecture | CPU (samples/s) | A100 (samples/s) | T4 (samples/s) | A100 Speedup | T4 Speedup |
 |-------|--------|--------------|-----------------|------------------|----------------|--------------|------------|
-| HeartBERT | 83.5M | RoBERTa | 4.0 | 361 | 64 | 90× | 16× |
+| HeartBERT | 83.5M | RoBERTa | 4.2 | 360 | 75 | 86× | 18× |
 | ECGFounder (1-lead) | 30.8M | CNN (RegNet) | 38.8 | 2238 | 277 | 58× | 7× |
-| PulsePPG | 29.4M | ResNet1D | 29.7 | 6124 | 783 | 206× | 26× |
-| PaPaGei | 5.3M | ResNet1D | 249.6 | 4430 | 5069 | 18× | 20× |
-| ECG-PT | 0.4M | GPT | 20.7 | 1658 | 387 | 80× | 19× |
-| PPG-PT | 0.4M | GPT | 20.9 | 1666 | 386 | 80× | 18× |
+| PulsePPG | 29.4M | ResNet1D | 3.7 | 1180 | 102 | 319× | 28× |
+| PaPaGei | 3.2M | ResNet1D | 348 | 4712 | 5860 | 14× | 17× |
+| ECG-PT | 0.4M | GPT | 15.8 | 1602 | 409 | 101× | 26× |
+| PPG-PT | 0.4M | GPT | 25.0 | 1629 | 407 | 65× | 16× |
 
 ---
 
@@ -240,13 +243,22 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 
 3. **Efficient architectures for deployment**
    - **Fastest inference (A100)**: MERL (ResNet18) (9,616/s), S4 (supervised) (6,256/s)
-   - **Best params/performance**: ST-MEM (21.5M params, 930 train/s)
+   - **Best params/performance**: MERL (ViT-Tiny) (5.5M params, 1097 train/s)
    - **Lowest memory**: ECG-PT / PPG-PT (0.4M params, 1.0 GB)
 
-4. **T4 vs A100 performance gap**
+4. **Standard attention beats custom patterns in wall-clock time**
+   - ST-MEM (85.2M, 65.5 GFLOPs) is faster than ECG-JEPA (85.4M, 45.4 GFLOPs) despite higher FLOPs
+   - Standard `nn.TransformerEncoder` benefits from highly optimized CUDA kernels
+   - Custom structured attention (row+column masks) adds overhead not reflected in FLOPs
+
+5. **T4 vs A100 performance gap**
    - Transformer models: 5-8× slower on T4
    - CNN models: 3-5× slower on T4
    - Models requiring batch reduction: 10-50× slower
+
+6. **PulsePPG has high FLOPs due to long sequences**
+   - Despite being a ResNet1D, PulsePPG processes 12,000 samples (240s @ 50Hz)
+   - This results in 55.5 GFLOPs, comparable to transformer models
 
 ---
 

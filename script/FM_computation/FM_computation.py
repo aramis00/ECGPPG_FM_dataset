@@ -1424,78 +1424,79 @@ def create_heartbert():
 # papagei - ResNet1D-MoE model
 
 class PaPaGei(nn.Module):
-    """PaPaGei-S: ResNet1D-MoE base_filters=32, n_block=18, kernel_size=3, stride=2
-       (from papagei-foundation-model/training_mt.py)
-       Output dim: 512 (n_classes in config)"""
-    def __init__(s):
+    """PaPaGei-S: 18 blocks, base=32, kernel=3, stride=2, output=512"""
+    def __init__(self):
         super().__init__()
-        # base_filters=32, n_block=18, increasefilter_gap=4
-        # Channels: 32->32->32->32 | 64->64->64->64 | 128->128->128->128 | 256->256->256->256 | 512 (n_classes)
-        s.conv1 = nn.Conv1d(1, 32, 3, 1, 1)
-        s.bn1 = nn.BatchNorm1d(32)
-
-        # 18 blocks with proper channel progression
-        s.blocks = nn.ModuleList()
-        s.shortcuts = nn.ModuleList()
-        channels = [32]*4 + [64]*4 + [128]*4 + [256]*4 + [512]*2  # 18 blocks
+        self.conv1 = nn.Conv1d(1, 32, 3, 1, 1)
+        self.bn1 = nn.BatchNorm1d(32)
+        
+        self.blocks = nn.ModuleList()
+        self.shortcuts = nn.ModuleList()
+        # Correct: 18 blocks, doubles every 4, max channel = 256
+        channels = [32]*4 + [64]*4 + [128]*4 + [256]*6
         in_c = 32
         for i, out_c in enumerate(channels):
             downsample = (i % 2 == 1)
-            s.blocks.append(nn.Sequential(
+            self.blocks.append(nn.Sequential(
                 nn.Conv1d(in_c, out_c, 3, 2 if downsample else 1, 1),
                 nn.BatchNorm1d(out_c), nn.ReLU(),
                 nn.Conv1d(out_c, out_c, 3, 1, 1), nn.BatchNorm1d(out_c)
             ))
             if in_c != out_c or downsample:
-                s.shortcuts.append(nn.Sequential(nn.Conv1d(in_c, out_c, 1, 2 if downsample else 1), nn.BatchNorm1d(out_c)))
+                self.shortcuts.append(nn.Sequential(
+                    nn.Conv1d(in_c, out_c, 1, 2 if downsample else 1), 
+                    nn.BatchNorm1d(out_c)
+                ))
             else:
-                s.shortcuts.append(nn.Identity())
+                self.shortcuts.append(nn.Identity())
             in_c = out_c
+        
+        # FC projection head (missing in original benchmark)
+        self.fc = nn.Linear(256, 512)
 
-    def forward(s, x):
-        x = nn.ReLU()(s.bn1(s.conv1(x)))
-        for block, shortcut in zip(s.blocks, s.shortcuts):
-            x = nn.ReLU()(block(x) + shortcut(x))
-        return x.mean(dim=-1)  # GAP -> (B, 512)
+    def forward(self, x):
+        x = F.relu(self.bn1(self.conv1(x)))
+        for block, shortcut in zip(self.blocks, self.shortcuts):
+            x = F.relu(block(x) + shortcut(x))
+        x = x.mean(dim=-1)  # GAP → (B, 256)
+        return self.fc(x)   # → (B, 512)
 
 # pulseppg - ResNet1D model
 
 class PulsePPG(nn.Module):
-    """Pulse-PPG: base_filters=128, kernel_size=11, n_block=12, finalpool=max
-       (from pulseppg/experiments/configs/PulsePPG_expconfigs.py)
-       Output dim: 512 (after 12 blocks with increasefilter_gap=4)"""
-    def __init__(s):
+    """PulsePPG: 12 blocks, base=128, kernel=11, stride=2, output=512"""
+    def __init__(self):
         super().__init__()
-        # Config: base_filters=128, kernel_size=11, stride=2, n_block=12, finalpool=max
-        # Channel progression: 128->128->128->128->256->256->256->256->512->512->512->512
-        s.instnorm = nn.InstanceNorm1d(1)
-        s.conv1 = nn.Conv1d(1, 128, 11, 1, 5)
-        s.bn1 = nn.BatchNorm1d(128)
-
-        # 12 blocks with proper channel/stride progression
-        s.blocks = nn.ModuleList()
-        s.shortcuts = nn.ModuleList()
+        self.instnorm = nn.InstanceNorm1d(1)
+        self.conv1 = nn.Conv1d(1, 128, 11, 1, 5)
+        self.bn1 = nn.BatchNorm1d(128)
+        
+        self.blocks = nn.ModuleList()
+        self.shortcuts = nn.ModuleList()
         channels = [128]*4 + [256]*4 + [512]*4
         in_c = 128
         for i, out_c in enumerate(channels):
-            downsample = (i % 2 == 1)  # Every other block downsamples
-            s.blocks.append(nn.Sequential(
+            downsample = (i % 2 == 1)
+            self.blocks.append(nn.Sequential(
                 nn.Conv1d(in_c, out_c, 11, 2 if downsample else 1, 5),
                 nn.BatchNorm1d(out_c), nn.ReLU(),
                 nn.Conv1d(out_c, out_c, 11, 1, 5), nn.BatchNorm1d(out_c)
             ))
             if in_c != out_c or downsample:
-                s.shortcuts.append(nn.Sequential(nn.Conv1d(in_c, out_c, 1, 2 if downsample else 1), nn.BatchNorm1d(out_c)))
+                self.shortcuts.append(nn.Sequential(
+                    nn.Conv1d(in_c, out_c, 1, 2 if downsample else 1), 
+                    nn.BatchNorm1d(out_c)
+                ))
             else:
-                s.shortcuts.append(nn.Identity())
+                self.shortcuts.append(nn.Identity())
             in_c = out_c
 
-    def forward(s, x):
-        x = s.instnorm(x)
-        x = nn.ReLU()(s.bn1(s.conv1(x)))
-        for block, shortcut in zip(s.blocks, s.shortcuts):
-            x = nn.ReLU()(block(x) + shortcut(x))
-        return torch.max(x, dim=-1)[0]  # Max pooling -> (B, 512)
+    def forward(self, x):
+        x = self.instnorm(x)
+        x = F.relu(self.bn1(self.conv1(x)))
+        for block, shortcut in zip(self.blocks, self.shortcuts):
+            x = F.relu(block(x) + shortcut(x))
+        return x.mean(dim=-1)  
 
 
 # =============================================================================
@@ -1584,14 +1585,14 @@ MODEL_SPECS = [
         leads=1, seq_len=500, fdim=64, hz=100, duration_s=5.0, input_kind="raw"
     ),
     ModelSpec(
+        name="heartgpt_ppg",
+        factory=lambda: HeartGPT(vocab_size=101),  
+        leads=1, seq_len=500, fdim=64, hz=50, duration_s=10.0, input_kind="raw" 
+    ),
+    ModelSpec(
         name="heartbert",
         factory=create_heartbert,
         leads=1, seq_len=512, fdim=768, hz=None, duration_s=None, input_kind="tokenized"
-    ),
-    ModelSpec(
-        name="heartgpt_ppg",
-        factory=lambda: HeartGPT(vocab_size=102),
-        leads=1, seq_len=500, fdim=64, hz=100, duration_s=5.0, input_kind="raw"
     ),
     ModelSpec(
         name="papagei",
@@ -1601,7 +1602,7 @@ MODEL_SPECS = [
     ModelSpec(
         name="pulseppg",
         factory=lambda: PulsePPG(),
-        leads=1, seq_len=1000, fdim=512, hz=50, duration_s=20.0, input_kind="raw"
+        leads=1, seq_len=12000, fdim=512, hz=50, duration_s=240.0, input_kind="raw" 
     ),
 ]
 
