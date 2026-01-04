@@ -61,7 +61,7 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 | [MERL](https://doi.org/10.48550/arXiv.2403.06659) | 2024 | CNN (Text: Transformer) | CL | MIMIC-IV-ECG | 771K | [Code](https://github.com/cheliu-computation/MERL-ICML2024) | [Weights](https://drive.google.com/drive/folders/13wb4DppUciMn-Y_qC2JRWTbZdz3xX0w2) |
 | [MELP](https://doi.org/10.48550/arXiv.2506.21803) | 2025 | CNN+Transformer (Text: Transformer) | CL+M/R/G | MIMIC-IV-ECG | 760K | [Code](https://github.com/HKU-MedAI/MELP) | [Weights](https://huggingface.co/fuyingw/MELP_Encoder) |
 | [KED](https://doi.org/10.1016/j.xcrm.2024.101875) | 2024 | CNN (Text: Transformer) | CL | MIMIC-IV-ECG | 800K | [Code](https://github.com/control-spiderman/ECGFM-KED/) | [Weights](https://zenodo.org/records/14881564) |
-| [ECGFounder](https://doi.org/10.1056/AIoa2401033) | 2024 | CNN | SL (multilabel) | HEED | 10.7M | [Code](https://github.com/PKUDigitalHealth/ECGFounder) | [Weights](PKUDigitalHealth/ECGFounder) |
+| [ECGFounder](https://doi.org/10.1056/AIoa2401033) | 2024 | CNN | SL (multilabel) | HEED | 10.7M | [Code](https://github.com/PKUDigitalHealth/ECGFounder) | [Weights](https://huggingface.co/PKUDigitalHealth/ECGFounder/tree/main) |
 | [ST-MEM](https://doi.org/10.48550/arXiv.2402.09450) | 2024 | Transformer | M/R/G | CSN, Code-15 | 189K | [Code](https://github.com/vuno/ST-MEM) | [Weights](https://github.com/vuno/ST-MEM) |
 
 ### Single-Lead ECG Foundation Models

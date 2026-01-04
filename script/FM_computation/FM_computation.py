@@ -450,8 +450,8 @@ class S4DLayer(nn.Module):
         return s.norm(y + x.transpose(1, 2)).transpose(1, 2)  # Residual + norm
 
 class ECGCPCModel(nn.Module):
-    """Accurate ECG-CPC: Conv1D encoder stack + single S4 layer"""
-    def __init__(s, d_input=12, d_model=512, d_state=8, dropout=0.1):
+    """ECG-CPC: Conv1D encoder stack + 4 S4 layers (verified from checkpoint)"""
+    def __init__(s, d_input=12, d_model=512, d_state=8, n_layers=4, dropout=0.1):
         super().__init__()
         # 4-layer Conv1D encoder (matching ECG-CPC)
         s.encoder = nn.Sequential(
@@ -461,12 +461,13 @@ class ECGCPCModel(nn.Module):
             nn.Conv1d(d_model, d_model, kernel_size=1), nn.BatchNorm1d(d_model), nn.ReLU(),
             nn.Conv1d(d_model, d_model, kernel_size=1), nn.BatchNorm1d(d_model), nn.ReLU(),
         )
-        # Single S4 layer (not 4!)
-        s.s4_layer = S4DLayer(d_model, d_state, dropout)
+        # 4 S4 layers (verified from checkpoint: s4_layers.0 through s4_layers.3)
+        s.s4_layers = nn.ModuleList([S4DLayer(d_model, d_state, dropout) for _ in range(n_layers)])
 
     def forward(s, x):
         x = s.encoder(x)      # (B, 12, 2400) → (B, 512, 1200)
-        x = s.s4_layer(x)     # (B, 512, 1200)
+        for layer in s.s4_layers:
+            x = layer(x)      # (B, 512, 1200) through 4 S4 layers
         return x.mean(dim=2)  # (B, 512)
 
     
@@ -1423,43 +1424,60 @@ def create_heartbert():
 
 # papagei - ResNet1D-MoE model
 
-class PaPaGei(nn.Module):
-    """PaPaGei-S: 18 blocks, base=32, kernel=3, stride=2, output=512"""
+
+class PaPaGeiS(nn.Module):
+    """PaPaGei-S: 18 blocks, base=32, channels to 512, output=512
+    Corrected from checkpoint: 5.79M params (was 3.2M)
+    """
     def __init__(self):
         super().__init__()
-        self.conv1 = nn.Conv1d(1, 32, 3, 1, 1)
-        self.bn1 = nn.BatchNorm1d(32)
+        self.first_conv = nn.Conv1d(1, 32, 3, 1, 1, bias=True)
+        self.first_bn = nn.BatchNorm1d(32)
         
+        channels = [32]*4 + [64]*4 + [128]*4 + [256]*4 + [512]*2
         self.blocks = nn.ModuleList()
-        self.shortcuts = nn.ModuleList()
-        # Correct: 18 blocks, doubles every 4, max channel = 256
-        channels = [32]*4 + [64]*4 + [128]*4 + [256]*6
         in_c = 32
         for i, out_c in enumerate(channels):
-            downsample = (i % 2 == 1)
-            self.blocks.append(nn.Sequential(
-                nn.Conv1d(in_c, out_c, 3, 2 if downsample else 1, 1),
-                nn.BatchNorm1d(out_c), nn.ReLU(),
-                nn.Conv1d(out_c, out_c, 3, 1, 1), nn.BatchNorm1d(out_c)
-            ))
-            if in_c != out_c or downsample:
-                self.shortcuts.append(nn.Sequential(
-                    nn.Conv1d(in_c, out_c, 1, 2 if downsample else 1), 
-                    nn.BatchNorm1d(out_c)
-                ))
-            else:
-                self.shortcuts.append(nn.Identity())
+            stride = 2 if (i % 2 == 1) else 1
+            self.blocks.append(nn.ModuleDict({
+                'bn1': nn.BatchNorm1d(in_c),
+                'conv1': nn.Conv1d(in_c, out_c, 3, stride, 1, bias=True),
+                'bn2': nn.BatchNorm1d(out_c),
+                'conv2': nn.Conv1d(out_c, out_c, 3, 1, 1, bias=True),
+            }))
             in_c = out_c
         
-        # FC projection head (missing in original benchmark)
-        self.fc = nn.Linear(256, 512)
+        self.final_bn = nn.BatchNorm1d(512)
+        self.dense = nn.Linear(512, 512)
+        
+        # Store channel info for forward pass
+        self._channels = [32]*4 + [64]*4 + [128]*4 + [256]*4 + [512]*2
 
     def forward(self, x):
-        x = F.relu(self.bn1(self.conv1(x)))
-        for block, shortcut in zip(self.blocks, self.shortcuts):
-            x = F.relu(block(x) + shortcut(x))
-        x = x.mean(dim=-1)  # GAP → (B, 256)
-        return self.fc(x)   # → (B, 512)
+        x = F.relu(self.first_bn(self.first_conv(x)))
+        
+        in_c = 32
+        for i, (block, out_c) in enumerate(zip(self.blocks, self._channels)):
+            stride = 2 if (i % 2 == 1) else 1
+            identity = x
+            
+            out = F.relu(block['bn1'](x))
+            out = block['conv1'](out)
+            out = F.relu(block['bn2'](out))
+            out = block['conv2'](out)
+            
+            # Shortcut with ceil_mode to match conv output size
+            if stride != 1:
+                identity = F.avg_pool1d(identity, stride, stride, ceil_mode=True)
+            if out_c != in_c:
+                identity = F.pad(identity, (0, 0, 0, out_c - in_c))
+            
+            x = out + identity
+            in_c = out_c
+        
+        x = F.relu(self.final_bn(x))
+        x = x.mean(dim=-1)
+        return self.dense(x)
 
 # pulseppg - ResNet1D model
 
@@ -1596,7 +1614,7 @@ MODEL_SPECS = [
     ),
     ModelSpec(
         name="papagei",
-        factory=lambda: PaPaGei(),
+        factory=lambda: PaPaGeiS(),
         leads=1, seq_len=1250, fdim=512, hz=125, duration_s=10.0, input_kind="raw"
     ),
     ModelSpec(

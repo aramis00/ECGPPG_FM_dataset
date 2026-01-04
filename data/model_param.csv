@@ -1,0 +1,19 @@
+﻿model,para_ckpt,bench,original_paper,cpc_paper
+ECG-JEPA,85.37,85.4,,87.2
+HuBERT-ECG,93.12,92.8,93,97.2
+DeepECG,90.88,90.4,90.37,
+ECG-FM,90.88,90.4,90.9,93.9
+HeartLang,44.56,47.7,,
+CPC,3.28,3,3.8,3.8
+ESI,88.45,85.6,85.56,
+MERL_tiny,5.47,5.5,,4.6
+MELP,65.59,62,,
+KED,7.92,7.9,,9.7
+ECGFounder (1-lead),30.89,30.8,,33.8
+ECG-PT,0.44,0.4,0.44,
+PPG-PT,0.44,0.4,0.44,
+HeartBERT,83.5,83.5,83.5,
+PaPaGei-S,5.8,5,5.7,
+PulsePPG,28.51,29.4,28.5,
+ST-MEM,85.15,85.2,,90.3
+ECGFounder (1-lead),30.87,30.8,,
