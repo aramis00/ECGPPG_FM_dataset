@@ -479,6 +479,36 @@ const MODELS = [
     "eval_compute": "Hardware,  training time",
     "eval_explainability": 0,
     "ecgs_numeric": null
+  },
+  {
+    "model": "ST-MEM",
+    "title": "Guiding Masked Representation Learning to Capture Spatio-Temporal Relationship of Electrocardiogram",
+    "doi": "https://doi.org/10.48550/arXiv.2402.09450",
+    "citation": "{RN163,\n   author = {Na, Yeongyeon and Park, Minje and Tae, Yunwon and Joo, Sunghoon},\n   title = {Guiding masked representation learning to capture spatio-temporal relationship of electrocardiogram},\n   journal = {arXiv preprint arXiv:2402.09450},\n   year = {2024},\n   type = {Journal Article}\n}\n",
+    "task": "• Multiclass classification (5~9 Dx.)",
+    "performance": "• ECG diagnosis – 5 Dx. (AUROC 0.93), 9 arrhythmia Dx. (AUROC 0.98)",
+    "Year": 2024,
+    "Backbone": "Transformer",
+    "Pretrain modality": "ecg",
+    "Pretrain Method": "M/R/G",
+    "Pretrain Dataset": "CSN, Code-15",
+    "ECGs (n)": "189K",
+    "Codelink": "https://github.com/vuno/ST-MEM",
+    "Weightlink": "https://github.com/vuno/ST-MEM",
+    "eval_data": "PTB-XL, CPSC2018, PhysioNet2017",
+    "ECGlead": 12,
+    "sampling_rate": 250.0,
+    "eval_LP": 1,
+    "eval_FT": 1,
+    "eval_zeroshot": "na",
+    "eval_data_efficiency": 1,
+    "eval_reduced_lead": 1,
+    "eval_ablation": 1,
+    "eval_fairness": 0,
+    "eval_privacy": 0,
+    "eval_compute": "Hardware",
+    "eval_explainability": 0,
+    "ecgs_numeric": 189000.0
   }
 ];
 
@@ -1348,8 +1378,9 @@ const ARCHITECTURES = [
   { model: "ECG-PT", architecture: "[Decoder-only Transformer (GPT-style)] + Next-token prediction (cross-entropy loss) on tokenized ECG/PPG (integer-scaled windows: 5s 100 Hz, ECG; 10s 50 Hz PPG)" },
   { model: "PPG-PT", architecture: "[Decoder-only Transformer (GPT-style)] + Next-token prediction (cross-entropy loss) on tokenized ECG/PPG (integer-scaled windows: 5s 100 Hz, ECG; 10s 50 Hz PPG)" },
   { model: "HeartBERT", architecture: "[RoBERTa-based Transformer Encoder] + Lloyd–Max quantization (100-level, 360 Hz resampled ECG → ASCII 'synthetic language') + SentencePiece BPE tokenizer → MLM on discretized ECG text" },
-  { model: "PaPaGei-S/-P", architecture: "[Conv front-end + BERT-style Transformer encoder] + Spectrogram patch masking + subject-level & morphology-aware contrastive SSL (MoE heads for IPA/SQI prediction)" },
-  { model: "PulsePPG", architecture: "[1D ResNet-26 Encoder + Dilated CNN Cross-Attention Distance Function + PPG Motif-based Relative Ranking] + Two-Phase Self-Supervised Pretraining (Masked Reconstruction + Relative Contrastive Learning)" }
+  { model: "PaPaGei-S/-P", architecture: "[ResNet-style 1D CNN (18 conv blocks, 32→256 filters) + FC projection head (512-d) (+ 2 MoE regression heads for PaPaGei-S)] + Subject-aware contrastive SSL (PaPaGei-P) / Morphology-aware SSL: sVRI-based contrastive & IPA/SQI regression (PaPaGei-S)" },
+  { model: "PulsePPG", architecture: "[1D ResNet-26 Encoder + Dilated CNN Cross-Attention Distance Function + PPG Motif-based Relative Ranking] + Two-Phase Self-Supervised Pretraining (Masked Reconstruction + Relative Contrastive Learning)" },
+  { model: "ST-MEM", architecture: "[ViT-B, lead-wise decoder] + masked reconstruction (spatio-temporal patchifying)" }
 ];
 
 // Benchmark data - A100
@@ -1359,21 +1390,21 @@ const BENCHMARKS_A100 = [
   { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: 790.4, Throughput: 40, Train_ms_per_sample: 76.9, Finetune_Hours: 21.4, Infer_Mem_GB: 3.03, Train_Mem_GB: 44.30 },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 117.4, Throughput: 273, Train_ms_per_sample: 11.8, Finetune_Hours: 3.3, Infer_Mem_GB: 1.03, Train_Mem_GB: 15.91 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 172.6, Throughput: 185, Train_ms_per_sample: 15.3, Finetune_Hours: 4.3, Infer_Mem_GB: 1.66, Train_Mem_GB: 10.44 },
-  { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 88.8, Throughput: 361, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 1.28, Train_Mem_GB: 6.80 },
+  { Model: "st_mem", Leads: 12, Params_M: 85.2, GFLOPs: 65.5, Infer_ms: 142.7, Throughput: 224, Train_ms_per_sample: 14.1, Finetune_Hours: 3.9, Infer_Mem_GB: 1.08, Train_Mem_GB: 11.38 },
+  { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 89.0, Throughput: 360, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 1.24, Train_Mem_GB: 6.76 },
   { Model: "melp", Leads: 12, Params_M: 62.0, GFLOPs: 27.3, Infer_ms: 82.0, Throughput: 390, Train_ms_per_sample: 7.7, Finetune_Hours: 2.1, Infer_Mem_GB: 0.92, Train_Mem_GB: 6.09 },
-  { Model: "heartlang", Leads: 12, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 54.7, Throughput: 586, Train_ms_per_sample: 6.1, Finetune_Hours: 1.7, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.90 },
+  { Model: "heartlang", Leads: 256, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 54.7, Throughput: 586, Train_ms_per_sample: 6.1, Finetune_Hours: 1.7, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.90 },
   { Model: "ecgfounder_12lead", Leads: 12, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 14.2, Throughput: 2256, Train_ms_per_sample: 1.6, Finetune_Hours: 0.4, Infer_Mem_GB: 0.64, Train_Mem_GB: 2.46 },
   { Model: "ecgfounder_1lead", Leads: 1, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 14.3, Throughput: 2238, Train_ms_per_sample: 1.5, Finetune_Hours: 0.4, Infer_Mem_GB: 0.63, Train_Mem_GB: 2.44 },
-  { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 4.7, Infer_ms: 5.2, Throughput: 6124, Train_ms_per_sample: 0.7, Finetune_Hours: 0.2, Infer_Mem_GB: 0.58, Train_Mem_GB: 1.15 },
-  { Model: "st_mem", Leads: 12, Params_M: 21.5, GFLOPs: 1.5, Infer_ms: 6.6, Throughput: 4876, Train_ms_per_sample: 1.1, Finetune_Hours: 0.3, Infer_Mem_GB: 0.50, Train_Mem_GB: 1.26 },
+  { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 55.5, Infer_ms: 27.1, Throughput: 1180, Train_ms_per_sample: 2.9, Finetune_Hours: 0.8, Infer_Mem_GB: 1.27, Train_Mem_GB: 4.69 },
   { Model: "ecgfm_ked", Leads: 12, Params_M: 7.9, GFLOPs: 1.2, Infer_ms: 13.4, Throughput: 2388, Train_ms_per_sample: 1.7, Finetune_Hours: 0.5, Infer_Mem_GB: 0.47, Train_Mem_GB: 1.10 },
   { Model: "merl_vit_tiny", Leads: 12, Params_M: 5.5, GFLOPs: 0.7, Infer_ms: 6.8, Throughput: 4678, Train_ms_per_sample: 0.9, Finetune_Hours: 0.3, Infer_Mem_GB: 0.45, Train_Mem_GB: 1.04 },
-  { Model: "papagei", Leads: 1, Params_M: 5.3, GFLOPs: 0.2, Infer_ms: 7.2, Throughput: 4430, Train_ms_per_sample: 1.0, Finetune_Hours: 0.3, Infer_Mem_GB: 0.43, Train_Mem_GB: 0.59 },
+  { Model: "papagei", Leads: 1, Params_M: 5.0, GFLOPs: 0.2, Infer_ms: 5.9, Throughput: 5414, Train_ms_per_sample: 1.6, Finetune_Hours: 0.4, Infer_Mem_GB: 0.05, Train_Mem_GB: 0.20 },
   { Model: "merl_resnet18", Leads: 12, Params_M: 3.8, GFLOPs: 3.5, Infer_ms: 3.3, Throughput: 9616, Train_ms_per_sample: 0.5, Finetune_Hours: 0.1, Infer_Mem_GB: 0.52, Train_Mem_GB: 1.31 },
+  { Model: "ecg_cpc", Leads: 12, Params_M: 3.0, GFLOPs: 7.0, Infer_ms: 22.1, Throughput: 1447, Train_ms_per_sample: 3.0, Finetune_Hours: 0.8, Infer_Mem_GB: 0.90, Train_Mem_GB: 4.10 },
   { Model: "s4_supervised", Leads: 12, Params_M: 2.2, GFLOPs: 1.1, Infer_ms: 5.1, Throughput: 6256, Train_ms_per_sample: 0.5, Finetune_Hours: 0.1, Infer_Mem_GB: 0.59, Train_Mem_GB: 1.14 },
-  { Model: "ecg_cpc", Leads: 12, Params_M: 1.4, GFLOPs: 3.2, Infer_ms: 7.2, Throughput: 4429, Train_ms_per_sample: 0.9, Finetune_Hours: 0.3, Infer_Mem_GB: 1.27, Train_Mem_GB: 2.13 },
-  { Model: "heartgpt_ppg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 19.2, Throughput: 1666, Train_ms_per_sample: 0.8, Finetune_Hours: 0.2, Infer_Mem_GB: 1.00, Train_Mem_GB: 1.05 },
-  { Model: "heartgpt_ecg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 19.3, Throughput: 1658, Train_ms_per_sample: 0.9, Finetune_Hours: 0.2, Infer_Mem_GB: 1.00, Train_Mem_GB: 1.05 }
+  { Model: "heartgpt_ecg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 20.0, Throughput: 1602, Train_ms_per_sample: 0.9, Finetune_Hours: 0.2, Infer_Mem_GB: 0.96, Train_Mem_GB: 1.01 },
+  { Model: "heartgpt_ppg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 19.6, Throughput: 1629, Train_ms_per_sample: 0.9, Finetune_Hours: 0.2, Infer_Mem_GB: 0.96, Train_Mem_GB: 1.01 }
 ];
 
 // Benchmark data - T4
@@ -1383,21 +1414,21 @@ const BENCHMARKS_T4 = [
   { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: 5055.7, Throughput: 6, Train_ms_per_sample: 517.7, Finetune_Hours: 143.8, Infer_Mem_GB: 3.03, Train_Mem_GB: 12.20 },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 620.6, Throughput: 52, Train_ms_per_sample: 58.1, Finetune_Hours: 16.1, Infer_Mem_GB: 1.03, Train_Mem_GB: 8.82 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 708.0, Throughput: 45, Train_ms_per_sample: 71.9, Finetune_Hours: 20.0, Infer_Mem_GB: 1.66, Train_Mem_GB: 10.39 },
-  { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 501.6, Throughput: 64, Train_ms_per_sample: 49.6, Finetune_Hours: 13.8, Infer_Mem_GB: 1.28, Train_Mem_GB: 6.72 },
+  { Model: "st_mem", Leads: 12, Params_M: 85.2, GFLOPs: 65.5, Infer_ms: 616.7, Throughput: 52, Train_ms_per_sample: 58.6, Finetune_Hours: 16.3, Infer_Mem_GB: 1.08, Train_Mem_GB: 11.38 },
+  { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 427.9, Throughput: 75, Train_ms_per_sample: 46.2, Finetune_Hours: 12.8, Infer_Mem_GB: 0.91, Train_Mem_GB: 6.34 },
   { Model: "melp", Leads: 12, Params_M: 62.0, GFLOPs: 27.3, Infer_ms: 419.4, Throughput: 76, Train_ms_per_sample: 44.3, Finetune_Hours: 12.3, Infer_Mem_GB: 0.93, Train_Mem_GB: 6.04 },
-  { Model: "heartlang", Leads: 12, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 269.0, Throughput: 119, Train_ms_per_sample: 32.7, Finetune_Hours: 9.1, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.87 },
+  { Model: "heartlang", Leads: 256, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 269.0, Throughput: 119, Train_ms_per_sample: 32.7, Finetune_Hours: 9.1, Infer_Mem_GB: 0.79, Train_Mem_GB: 4.87 },
   { Model: "ecgfounder_12lead", Leads: 12, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 115.5, Throughput: 277, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 0.61, Train_Mem_GB: 2.60 },
   { Model: "ecgfounder_1lead", Leads: 1, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 115.5, Throughput: 277, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 0.60, Train_Mem_GB: 2.57 },
-  { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 4.7, Infer_ms: 40.9, Throughput: 783, Train_ms_per_sample: 5.2, Finetune_Hours: 1.4, Infer_Mem_GB: 0.63, Train_Mem_GB: 1.19 },
-  { Model: "st_mem", Leads: 12, Params_M: 21.5, GFLOPs: 1.5, Infer_ms: 24.9, Throughput: 1285, Train_ms_per_sample: 2.7, Finetune_Hours: 0.8, Infer_Mem_GB: 0.50, Train_Mem_GB: 1.26 },
+  { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 55.5, Infer_ms: 312.6, Throughput: 102, Train_ms_per_sample: 43.0, Finetune_Hours: 11.9, Infer_Mem_GB: 0.77, Train_Mem_GB: 4.61 },
   { Model: "ecgfm_ked", Leads: 12, Params_M: 7.9, GFLOPs: 1.2, Infer_ms: 20.4, Throughput: 1571, Train_ms_per_sample: 2.4, Finetune_Hours: 0.7, Infer_Mem_GB: 0.47, Train_Mem_GB: 1.10 },
   { Model: "merl_vit_tiny", Leads: 12, Params_M: 5.5, GFLOPs: 0.7, Infer_ms: 18.5, Throughput: 1727, Train_ms_per_sample: 2.0, Finetune_Hours: 0.5, Infer_Mem_GB: 0.45, Train_Mem_GB: 1.04 },
-  { Model: "papagei", Leads: 1, Params_M: 5.3, GFLOPs: 0.2, Infer_ms: 6.3, Throughput: 5069, Train_ms_per_sample: 0.8, Finetune_Hours: 0.2, Infer_Mem_GB: 0.43, Train_Mem_GB: 0.60 },
+  { Model: "papagei", Leads: 1, Params_M: 5.0, GFLOPs: 0.2, Infer_ms: 7.3, Throughput: 4357, Train_ms_per_sample: 1.7, Finetune_Hours: 0.5, Infer_Mem_GB: 0.05, Train_Mem_GB: 0.22 },
   { Model: "merl_resnet18", Leads: 12, Params_M: 3.8, GFLOPs: 3.5, Infer_ms: 37.1, Throughput: 863, Train_ms_per_sample: 4.3, Finetune_Hours: 1.2, Infer_Mem_GB: 0.52, Train_Mem_GB: 1.29 },
+  { Model: "ecg_cpc", Leads: 12, Params_M: 3.0, GFLOPs: 7.0, Infer_ms: 123.0, Throughput: 260, Train_ms_per_sample: 12.0, Finetune_Hours: 3.3, Infer_Mem_GB: 0.90, Train_Mem_GB: 4.10 },
   { Model: "s4_supervised", Leads: 12, Params_M: 2.2, GFLOPs: 1.1, Infer_ms: 24.5, Throughput: 1309, Train_ms_per_sample: 2.2, Finetune_Hours: 0.6, Infer_Mem_GB: 0.59, Train_Mem_GB: 1.14 },
-  { Model: "ecg_cpc", Leads: 12, Params_M: 1.4, GFLOPs: 3.2, Infer_ms: 52.2, Throughput: 613, Train_ms_per_sample: 5.0, Finetune_Hours: 1.4, Infer_Mem_GB: 1.27, Train_Mem_GB: 2.13 },
-  { Model: "heartgpt_ppg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 82.9, Throughput: 386, Train_ms_per_sample: 4.0, Finetune_Hours: 1.1, Infer_Mem_GB: 1.00, Train_Mem_GB: 1.05 },
-  { Model: "heartgpt_ecg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 82.8, Throughput: 387, Train_ms_per_sample: 4.0, Finetune_Hours: 1.1, Infer_Mem_GB: 1.00, Train_Mem_GB: 1.05 }
+  { Model: "heartgpt_ppg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 78.3, Throughput: 409, Train_ms_per_sample: 4.3, Finetune_Hours: 1.2, Infer_Mem_GB: 0.62, Train_Mem_GB: 0.68 },
+  { Model: "heartgpt_ecg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 78.6, Throughput: 407, Train_ms_per_sample: 3.7, Finetune_Hours: 1.0, Infer_Mem_GB: 0.63, Train_Mem_GB: 0.68 }
 ];
 
 // Benchmark data - CPU
@@ -1407,21 +1438,21 @@ const BENCHMARKS_CPU = [
   { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 2554.9, Throughput: 3, Train_ms_per_sample: 982.9, Finetune_Hours: 273.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 4047.9, Throughput: 2, Train_ms_per_sample: 2432.5, Finetune_Hours: 675.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 1981.6, Throughput: 4, Train_ms_per_sample: 1159.1, Finetune_Hours: 322.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "st_mem", Leads: 12, Params_M: 85.2, GFLOPs: 65.5, Infer_ms: 2832.0, Throughput: 3, Train_ms_per_sample: 1008.3, Finetune_Hours: 280.1, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 1910.7, Throughput: 4, Train_ms_per_sample: 1080.2, Finetune_Hours: 300.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "melp", Leads: 12, Params_M: 62.0, GFLOPs: 27.3, Infer_ms: 2093.2, Throughput: 4, Train_ms_per_sample: 739.1, Finetune_Hours: 205.3, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "heartlang", Leads: 12, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 1163.2, Throughput: 7, Train_ms_per_sample: 707.5, Finetune_Hours: 196.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "heartlang", Leads: 256, Params_M: 47.7, GFLOPs: 9.9, Infer_ms: 1163.2, Throughput: 7, Train_ms_per_sample: 707.5, Finetune_Hours: 196.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecgfounder_12lead", Leads: 12, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 242.4, Throughput: 33, Train_ms_per_sample: 99.1, Finetune_Hours: 27.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecgfounder_1lead", Leads: 1, Params_M: 30.8, GFLOPs: 2.3, Infer_ms: 206.2, Throughput: 39, Train_ms_per_sample: 103.2, Finetune_Hours: 28.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 4.7, Infer_ms: 269.8, Throughput: 30, Train_ms_per_sample: 117.2, Finetune_Hours: 32.6, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "st_mem", Leads: 12, Params_M: 21.5, GFLOPs: 1.5, Infer_ms: 101.7, Throughput: 79, Train_ms_per_sample: 75.9, Finetune_Hours: 21.1, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "pulseppg", Leads: 1, Params_M: 29.4, GFLOPs: 55.5, Infer_ms: 2134.8, Throughput: 4, Train_ms_per_sample: 801.2, Finetune_Hours: 222.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecgfm_ked", Leads: 12, Params_M: 7.9, GFLOPs: 1.2, Infer_ms: 122.0, Throughput: 66, Train_ms_per_sample: 48.9, Finetune_Hours: 13.6, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "merl_vit_tiny", Leads: 12, Params_M: 5.5, GFLOPs: 0.7, Infer_ms: 97.5, Throughput: 82, Train_ms_per_sample: 63.3, Finetune_Hours: 17.6, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "papagei", Leads: 1, Params_M: 5.3, GFLOPs: 0.2, Infer_ms: 32.1, Throughput: 250, Train_ms_per_sample: 20.8, Finetune_Hours: 5.8, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "papagei", Leads: 1, Params_M: 5.0, GFLOPs: 0.2, Infer_ms: 28.3, Throughput: 283, Train_ms_per_sample: 8.4, Finetune_Hours: 2.3, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "merl_resnet18", Leads: 12, Params_M: 3.8, GFLOPs: 3.5, Infer_ms: 159.9, Throughput: 50, Train_ms_per_sample: 74.9, Finetune_Hours: 20.8, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "ecg_cpc", Leads: 12, Params_M: 3.0, GFLOPs: 7.0, Infer_ms: 842.6, Throughput: 9, Train_ms_per_sample: 270.6, Finetune_Hours: 75.2, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "s4_supervised", Leads: 12, Params_M: 2.2, GFLOPs: 1.1, Infer_ms: 151.9, Throughput: 53, Train_ms_per_sample: 100.1, Finetune_Hours: 27.8, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "ecg_cpc", Leads: 12, Params_M: 1.4, GFLOPs: 3.2, Infer_ms: 257.6, Throughput: 31, Train_ms_per_sample: 177.8, Finetune_Hours: 49.4, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "heartgpt_ppg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 383.6, Throughput: 21, Train_ms_per_sample: 344.0, Finetune_Hours: 95.5, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "heartgpt_ecg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 386.4, Throughput: 21, Train_ms_per_sample: 345.4, Finetune_Hours: 96.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 }
+  { Model: "heartgpt_ecg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 505.0, Throughput: 16, Train_ms_per_sample: 372.3, Finetune_Hours: 103.4, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "heartgpt_ppg", Leads: 1, Params_M: 0.4, GFLOPs: 0.3, Infer_ms: 320.2, Throughput: 25, Train_ms_per_sample: 355.2, Finetune_Hours: 98.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 }
 ];
 
 let currentBenchmarkData = BENCHMARKS_A100;
@@ -1472,12 +1503,12 @@ const MODEL_IO_MAP = {
     'MERL': { input: '12 leads × 5000 @ 500Hz', output_dim: '512 (ResNet18) / 192 (ViT-Tiny)' },
     'KED': { input: '12 leads × 1000 @ 100Hz', output_dim: 768 },
     'ECGFounder': { input: '12 leads × 5000 @ 500Hz (or 1 lead)', output_dim: 1024 },
-    'ST-MEM': { input: '12 leads × 2500 @ 250Hz', output_dim: 768 },
+    'ST-MEM': { input: '12 leads × 2250 @ 250Hz', output_dim: 768 },
     'ECG-PT': { input: '1 lead × 500 @ 100Hz', output_dim: 64 },
     'HeartBERT': { input: '1 lead × 512 (tokenized)', output_dim: 768 },
-    'PPG-PT': { input: '1 lead × 500 @ 100Hz', output_dim: 64 },
+    'PPG-PT': { input: '1 lead × 500 @ 50Hz', output_dim: 64 },
     'PaPaGei': { input: '1 lead × 1250 @ 125Hz', output_dim: 512 },
-    'PulsePPG': { input: '1 lead × 1000 @ 50Hz', output_dim: 512 }
+    'PulsePPG': { input: '1 lead × 12000 @ 50Hz', output_dim: 512 }
 };
 
 // Helper functions
