@@ -1485,6 +1485,22 @@ function getBenchmarkDisplayName(rawName) {
     return BENCHMARK_NAME_MAP[rawName] || rawName;
 }
 
+// Map benchmark display names to actual MODELS array model names for linking
+const BENCHMARK_TO_MODEL_MAP = {
+    'ECGFounder (12-lead)': 'ECGFounder',
+    'ECGFounder (1-lead)': 'ECGFounder',
+    'MERL (ResNet18)': 'MERL',
+    'MERL (ViT-Tiny)': 'MERL',
+    'S4 (supervised)': null  // No model card for baseline
+};
+
+function getBenchmarkModelName(displayName) {
+    if (displayName in BENCHMARK_TO_MODEL_MAP) {
+        return BENCHMARK_TO_MODEL_MAP[displayName];
+    }
+    return displayName;
+}
+
 // Architecture lookup by model name
 const ARCHITECTURE_MAP = {};
 ARCHITECTURES.forEach(a => { ARCHITECTURE_MAP[a.model] = a.architecture; });
@@ -1892,11 +1908,14 @@ function populateBenchmarks(data) {
         const inferMemSort = b.Infer_Mem_GB === "OOM" ? 999999 : (b.Infer_Mem_GB > 0 ? b.Infer_Mem_GB : 0);
         const trainMemSort = b.Train_Mem_GB === "OOM" ? 999999 : (b.Train_Mem_GB > 0 ? b.Train_Mem_GB : 0);
         const displayName = getBenchmarkDisplayName(b.Model);
+        const modelName = getBenchmarkModelName(displayName);
         // HeartLang uses 12 leads but pre-tokenizes to 256 tokens
         const leadsDisplay = b.Model === 'heartlang' ? b.Leads + '*' : b.Leads;
+        // S4 baseline has no model card, show as plain text
+        const modelNameCell = modelName ? `<span class="clickable" onclick="showModel('${modelName}')">${displayName}</span>` : `${displayName}<sup>‡</sup>`;
 
         tr.innerHTML = `
-            <td><span class="clickable" onclick="showModel('${displayName}')">${displayName}</span></td>
+            <td>${modelNameCell}</td>
             <td>${leadsDisplay}</td>
             <td data-order="${b.Params_M}">${b.Params_M.toFixed(1)}</td>
             <td data-order="${b.GFLOPs}">${b.GFLOPs.toFixed(1)}</td>

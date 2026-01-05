@@ -136,7 +136,7 @@
 
             <div class="stats-bar">
                 <div class="stat-item">
-                    <span class="stat-number">16</span>
+                    <span class="stat-number">17</span>
                     <span class="stat-label">Foundation Models</span>
                 </div>
                 <div class="stat-item">
@@ -148,7 +148,7 @@
                     <span class="stat-label">Reduced-Lead ECG Datasets</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">12</span>
+                    <span class="stat-number">14</span>
                     <span class="stat-label">PPG Datasets</span>
                 </div>
             </div>
@@ -226,7 +226,8 @@
                 Benchmarks: Batch size 32 (GPU) / 8 (CPU), with adaptive batch sizing for OOM (32→16→8→4→2→1). Each model uses its native input specification.
                 Finetune hours estimated for 100K samples × 10 epochs.<br>
                 <sup>*</sup> HeartLang uses 12 leads but is pre-tokenized to (B, 256, 96) via QRS-Tokenizer.<br>
-                <sup>†</sup> GFLOPs: thop does NOT correctly count matrix multiplications inside nn.MultiheadAttention (specifically q @ k and attn @ v operations). Transformer models may be undercounted.
+                <sup>†</sup> GFLOPs: thop does NOT correctly count matrix multiplications inside nn.MultiheadAttention (specifically q @ k and attn @ v operations). Transformer models may be undercounted.<br>
+                <sup>‡</sup> S4 (supervised) is a baseline end-to-end supervised model from <a href="https://doi.org/10.48550/arXiv.2509.25095" target="_blank">Al-Masud et al.</a>
             </p>
             <table id="benchmark-table" class="display">
                 <thead><tr>
