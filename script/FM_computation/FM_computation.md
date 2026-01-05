@@ -64,7 +64,7 @@ Total number of learnable parameters in the model, computed via `sum(p.numel() f
 ### FLOPs (Floating Point Operations)
 Computed using the `thop` library.
 
-> **Important Limitation**: `thop` does NOT correctly count matrix multiplications inside `nn.MultiheadAttention` (specifically q @ k and attn @ v operations). Transformer models may be **undercounted by ~50%**. However, for **relative comparisons** between models, this is acceptable as the undercounting is consistent.
+> **Important Limitation**: `thop` does NOT correctly count matrix multiplications inside `nn.MultiheadAttention` (specifically q @ k and attn @ v operations). Transformer models may be **undercounted by ~50%**. This affects FLOPs comparisons between CNN and transformer architectures, but does not impact empirically measured metrics (throughput, training time, memory), which capture all operations regardless of theoretical counting.
 
 ### Inference Metrics
 - **Latency (ms)**: Mean ± std over 50 runs per batch
