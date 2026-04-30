@@ -6,8 +6,8 @@ A step-by-step guide for clinicians and researchers seeking to apply ECG/PPG fou
 
 ## Table of Contents
 
-1. [Introduction: What are Foundation Models?](#1-introduction-what-are-foundation-models)
-2. [Quick Start Decision Flowchart](#2-quick-start-decision-flowchart)
+1. [Introduction: What are Foundation Models?](#introduction-what-are-foundation-models)
+2. [Quick Start Decision Flowchart](#quick-start-decision-flowchart)
 3. [Step 1: Define Your Task and Constraints](#step-1-define-your-task-and-constraints)
 4. [Step 2: Select a Foundation Model](#step-2-select-a-foundation-model)
 5. [Step 3: Set Up Environment and Download Weights](#step-3-set-up-environment-and-download-weights)
@@ -15,13 +15,12 @@ A step-by-step guide for clinicians and researchers seeking to apply ECG/PPG fou
 7. [Step 5: Extract Embeddings from Your ECG Data](#step-5-extract-embeddings-from-your-ecg-data)
 8. [Step 6: Adapt to Your Clinical Task](#step-6-adapt-to-your-clinical-task)
 9. [Step 7: Evaluate Rigorously](#step-7-evaluate-rigorously)
-10. [Reference: ecg-fm-benchmarking Repository](#reference-ecg-fm-benchmarking-repository)
-11. [Common Pitfalls and Troubleshooting](#common-pitfalls-and-troubleshooting)
-12. [Resources and Links](#resources-and-links)
+10. [Common Pitfalls and Troubleshooting](#common-pitfalls-and-troubleshooting)
+11. [Resources and Links](#resources-and-links)
 
 ---
 
-## 1. Introduction: What are Foundation Models?
+## Introduction: What are Foundation Models?
 
 Foundation models are large-scale neural networks pretrained on massive amounts of unlabeled data using self-supervised learning. They learn general-purpose representations that can be adapted to many downstream tasks.
 
@@ -40,11 +39,11 @@ Foundation models are large-scale neural networks pretrained on massive amounts 
 1. **Small labeled datasets**: FMs can achieve strong performance with limited labels by leveraging knowledge from pretraining
 2. **Reduced training time**: Linear probing trains in minutes, not hours
 3. **State-of-the-art features**: FMs often outperform hand-crafted ECG features
-4. **Transfer learning**: Models pretrained on millions of ECGs generalize to new populations and tasks
+4. **Transfer learning**: Pretrained representations may transfer to new populations and tasks, though performance is task- and dataset-dependent
 
 ---
 
-## 2. Quick Start Decision Flowchart
+## Quick Start Decision Flowchart
 
 ```
 ┌─────────────────────────────────────────┐
@@ -58,8 +57,8 @@ Foundation models are large-scale neural networks pretrained on massive amounts 
         │                         │
         ▼                         ▼
   Linear Probing            Consider Fine-tuning
-  (frozen weights +         (update all weights)
-   logistic regression)
+  (frozen weights +         (update all or
+   linear head)              partial weights)
         │                         │
         │                         │
         └────────────┬────────────┘
@@ -78,7 +77,7 @@ Foundation models are large-scale neural networks pretrained on massive amounts 
   Any model                Pre-extract embeddings
   (HuBERT-ECG,             on cloud GPU, then
    ST-MEM, etc.)           use locally or consider 
-                            light weight models (/Volumes/code/ecgfm/my_repo/ECGPPG_FM_dataset/script/FM_computation/FM_computation.md)
+                            lightweight models (see script/FM_computation/FM_computation.md)
 ```
 
 ---
@@ -136,14 +135,20 @@ Choose based on your ECG format and task requirements:
 
 | Model | Best For | Pretrain Data | Feature Dim | Input (Hz × sec) |
 |-------|----------|---------------|-------------|------------------|
-| **ECGFounder** | General diagnosis | 10.7M ECGs (HEED) | 1024 | 500 × 2.5s |
-| **HuBERT-ECG** | Rhythm disorders | 9.1M ECGs (multi-source) | 768 | 500 × 5s |
-| **ST-MEM** | Spatio-temporal features | 189K ECGs | 768 | 250 × 2.4s |
-| **ECG-JEPA** | Multi-lead analysis | 180K ECGs | 768 | 250 × 10s |
-| **MERL** | Fast inference | 771K ECGs (MIMIC-IV) | 512 | 500 × 2.5s |
-| **ECGFM-KED** | Knowledge-enhanced | 800K ECGs (MIMIC-IV) | 768 | 500 × 10s |
-| **CPC** | State-space modeling | 10.7M ECGs (HEED) | 512 | 240 × 2.5s |
-| **ECG-FM** | Wav2Vec2-based | 870K ECGs | 768 | 500 × 5s |
+| **ECGFounder** | General diagnosis | 10.7M ECGs (HEED) | 1024 | 500 × 10s |
+| **HuBERT-ECG** | Broad diagnostic coverage | 9.1M ECGs (multi-source) | 768 | 500 × 5s |
+| **ST-MEM** | Spatio-temporal features | 189K ECGs | 768 | 250 × 9s |
+| **ECG-JEPA** | Latent-space prediction (JEPA) | 180K ECGs | 768 | 250 × 10s |
+| **MERL** | Fast inference | 771K ECGs (MIMIC-IV) | 512 | 500 × 10s |
+| **ECGFM-KED** | Knowledge-enhanced | 800K ECGs (MIMIC-IV) | 768 | 100 × 10s |
+| **CPC** | State-space modeling | 10.7M ECGs (HEED) | 512 | 240 × 10s |
+| **ECG-FM** | Wav2Vec2-based | 870K ECGs | 768 | 500 × 10s |
+| **DeepECG-SSL** | Multi-source SSL | 1.9M ECGs (MIMIC-IV, Code-15, MHI*) | 768 | 250 × 10s |
+| **MELP** | Multi-scale ECG-text | 771K ECGs (MIMIC-IV) | 768 | 500 × 10s |
+| **ECG-ESI** | LLM-augmented ECG-text | 660K ECGs (PTB-XL, CSN, MIMIC-IV) | 1024 | 500 × 10s |
+| **HeartLang** | QRS-token (heartbeat-level) | 800K ECGs (MIMIC-IV) | 768 | 100 × 10s, tokenized |
+
+> *Input shapes reflect each model's original specification (what the released pretrained weights expect). Some benchmarking pipelines (e.g., `ecg-fm-benchmarking`) further truncate inputs for unified comparison; latency numbers cited elsewhere in this guide were measured at the original-spec lengths shown above.*
 
 #### For Single-Lead ECG
 
@@ -157,24 +162,46 @@ Choose based on your ECG format and task requirements:
 | Model | Best For | Pretrain Data | Notes |
 |-------|----------|---------------|-------|
 | **PPG-PT (HeartGPT)** | General PPG | 128M tokens | GPT-style |
-| **PaPaGei-S/-P** | Contrastive learning | 57K hours | CNN backbone |
+| **PaPaGei-S** | Wearable PPG | 57K hours | ResNet1D backbone, contrastive pretraining |
 | **PulsePPG** | Multi-task PPG | 55K hours | CNN + MLM |
 
 ### 2.2 Quick Recommendation
 
 | Scenario | Recommended Model | Reason |
 |----------|-------------------|--------|
-| **Best overall performance** | HuBERT-ECG or ECGFounder | Largest pretraining data, strong benchmarks |
+| **Largest pretraining corpus** | ECGFounder, CPC | Both pretrained on 10.7M ECGs (HEED) |
 | **Fastest inference** | MERL (ResNet) | Simple CNN, 9,616 samples/sec on A100 |
 | **Limited GPU memory** | MERL or CPC | Lower memory footprint |
-| **10-second recordings** | ECG-JEPA or ECGFM-KED | Designed for longer inputs |
-| **Quick start / reproducibility** | CPC | Integrated in ecg-fm-benchmarking |
+| **Multimodal text-ECG learning** | MERL, MELP, ECGFM-KED, or ESI | ECG-text contrastive pretraining; supports zero-shot classification from text prompts |
+| **Open-source state-space architecture** | CPC | Open-source SSM model |
+
+> *No single FM consistently outperforms others across all tasks and settings. Existing systematic benchmarks evaluate only a subset of available models, and methodological choices (e.g., unified preprocessing across heterogeneous models) may disadvantage models trained with model-specific input pipelines. Performance is task- and dataset-dependent — always validate on your own target endpoint.*
+
+### 2.3 Interpreting Benchmark Rankings
+
+Published benchmarks of ECG FMs apply unified preprocessing pipelines and standardized input specifications across heterogeneous architectures. This standardization is necessary for fair comparison, but it disproportionately affects models whose original specifications do not match the unified pipeline. As a result, **benchmark rankings partly reflect each architecture's robustness to input-spec mismatch — not pretraining quality alone**.
+
+Example: in the systematic 8-model benchmark from `ecg-fm-benchmarking`, the unified input fed to each encoder differs from the model's original specification as follows (per [`run.sh`](https://github.com/AI4HealthUOL/ecg-fm-benchmarking/blob/main/run.sh)):
+
+| Model | Original input | Benchmark input | Mismatch |
+|---|---|---|---|
+| **ECG-JEPA** | 250 Hz × 10s = 2500 | 250 Hz × 10s = 2500 | None ✓ |
+| **CPC** | 240 Hz × 10s = 2400 | 240 Hz × 2.5s = 600 | 4× truncation |
+| **ECGFounder** | 500 Hz × 10s = 5000 | 500 Hz × 2.5s = 1250 | 4× truncation |
+| **HuBERT-ECG** | 500 Hz × 5s → 5× decimated | 100 Hz × 5s = 500 | Shape ✓; preprocessing differences may remain |
+| **MERL** | 500 Hz × 10s = 5000 | 500 Hz × 2.5s = 1250 | 4× truncation |
+| **ST-MEM** | 250 Hz × 9s = 2250 | 250 Hz × 2.4s = 600 | 4× truncation; severe positional-embedding mismatch (8 patches vs 30 in pretraining) |
+| **ECGFM-KED** | 100 Hz × 10s = 1000 | 500 Hz × 10s = 5000 | 5× resolution upsample (high-frequency content unseen during pretraining) |
+
+The poor performance of the patch-based transformers (ST-MEM, MERL-ViT) may have suffered disproportionately under truncation because their positional structure was learned at a specific patch count that the benchmark no longer provides. And for the KED, its CNN front-end was trained at 100 Hz, so 5× upsampling shifts its kernels into a different time-resolution regime.
+
+**Implication for clinical use:** When applying any FM to your own data, prioritize matching the model's original input specification (Section 2.1) and original preprocessing pipeline (Section 4). Benchmark provide useful framework but the rankings should be interpreted with awareness of which architectures the benchmark's pipeline structurally favors. 
 
 ---
 
 ## Step 3: Set Up Environment and Download Weights
 
-### 3.1 Using ecg-fm-benchmarking (Recommended)
+### 3.1 Using ecg-fm-benchmarking
 
 The [`ecg-fm-benchmarking`](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) repository provides unified code for 8 foundation models with consistent interfaces for linear probing, frozen evaluation, and fine-tuning.
 
@@ -203,6 +230,10 @@ conda env create -f ecg_fm_env.yaml
 | **ECGFM-KED** | Zenodo | [Link](https://zenodo.org/records/14881564) |
 | **HuBERT-ECG** | HuggingFace | `huggingface-cli download Edoardo-BS/hubert-ecg-base` |
 | **ECG-FM** | HuggingFace | `huggingface-cli download wanglab/ecg-fm` |
+| **DeepECG-SSL** | HuggingFace | `huggingface-cli download heartwise/SSL_Pretrained_model` |
+| **MELP** | HuggingFace | `huggingface-cli download fuyingw/MELP_Encoder` |
+| **ECG-ESI** | Google Drive | [Link](https://drive.google.com/drive/folders/1I3ECWBEm-Yxhzl1xgx5JE-tEhDRDtN0o) |
+| **HeartLang** | HuggingFace | `huggingface-cli download PKUDigitalHealth/HeartLang` |
 
 **Example download with HuggingFace CLI:**
 ```bash
@@ -241,10 +272,14 @@ Each model author designed their preprocessing based on:
 | **ECG-JEPA** | 250 Hz | - | - | 8 leads (I, II, V1-V6) |
 | **ST-MEM** | 250 Hz | - | - | 12 leads |
 | **MERL** | 500 Hz | Min-max [0,1] × 1000 | - | 12 leads |
-| **ECGFM-KED** | 500 Hz | Z-score | - | 12 leads |
+| **ECGFM-KED** | 100 Hz | Z-score | - | 12 leads |
 | **CPC** | 240 Hz | Z-score (internal) | - | 12 leads |
 | **HuBERT-ECG** | 500 Hz | [-1, 1] scaling | FIR Bandpass 0.05-47Hz | 12 leads (flattened) |
-| **ECG-FM** | 500 Hz | - | - | 12 leads |
+| **ECG-FM** | 500 Hz | Z-score (`Standardize()` transform) | - | 12 leads |
+| **DeepECG-SSL** | 250 Hz | Z-score (optional mean/std files) | NeuroKit `ecg_clean` (emrich2023, conditional) | 12 leads |
+| **MELP** | 500 Hz | Min-max [0, 1] | NeuroKit `ecg_clean` (emrich2023) | 12 leads |
+| **ECG-ESI** | 500 Hz | Z-score | None found | 12 leads |
+| **HeartLang** | 100 Hz | Min-max ([-3, 3] or [0, 1], dataset-dependent) | Butterworth bandpass 0.67-40Hz or FIR 0.5Hz HPF | Pre-tokenized (256 QRS windows × 96 samples) |
 
 ### 4.2 Common Preprocessing Operations
 
@@ -292,6 +327,10 @@ def bandpass_filter(ecg, lowcut, highcut, fs, order=4):
 | **ECGFM-KED** | [GitHub](https://github.com/control-spiderman/ECGFM-KED/) | Z-score normalization |
 | **HuBERT-ECG** | [GitHub](https://github.com/Edoar-do/HuBERT-ECG) | FIR bandpass + lead flattening |
 | **ECG-FM** | [GitHub](https://github.com/bowang-lab/ECG-FM/) | Check preprocessing code |
+| **DeepECG-SSL** | [GitHub](https://github.com/HeartWise-AI/DeepECG_Docker) | Check `utils/` for preprocessing |
+| **MELP** | [GitHub](https://github.com/HKU-MedAI/MELP) | NeuroKit ECG cleaning (emrich2023) |
+| **ECG-ESI** | [GitHub](https://github.com/comp-well-org/ESI) | Check repo for preprocessing |
+| **HeartLang** | [GitHub](https://github.com/PKUDigitalHealth/HeartLang) | QRS-based tokenization (heartbeat windows) |
 
 ### 4.4 Note on Benchmarking Frameworks
 
@@ -326,6 +365,11 @@ The table below shows the **standard/final layer** extraction points. However, *
 | **ECGFM-KED** | Backbone + projection | Mean over time | (batch, 768) |
 | **CPC** | S4 encoder output (final) | Mean over time | (batch, 512) |
 | **HuBERT-ECG** | `last_hidden_state` (final) | Mean over time | (batch, 768) |
+| **ECG-FM** | `encoder_out` (transformer final) | Masked mean: `x.sum(dim=1) / (x != 0).sum(dim=1)` | (batch, 768) |
+| **DeepECG-SSL** | `encoder_out` (ECGTransformerClassifier) | Masked mean: `x.sum(dim=1) / (x != 0).sum(dim=1)` | (batch, 768) |
+| **MELP** | Transformer encoder output | `torch.mean(x, dim=1)` over time | (batch, 768) |
+| **ECG-ESI** | Final latent embedding (post-encoder) | L2-normalized (no temporal pooling) | (batch, 1024) |
+| **HeartLang** | CLS token (final transformer block) | CLS extraction (no pooling) | (batch, 768) |
 
 ### 5.3 Extracting Features from Intermediate Layers
 
@@ -444,13 +488,15 @@ labels = data['labels']
 
 ### 6.1 Evaluation Approaches
 
-The benchmarking framework supports three adaptation strategies:
+There are three common adaptation strategies:
 
-| Approach | What's Trained | When to Use | Training Time |
+| Approach | What's Trained | When to Use | Training Time* |
 |----------|----------------|-------------|---------------|
-| **Linear Probing** | Only classifier (logistic regression) | Small datasets (<1,000 samples) | Minutes |
+| **Linear Probing** | Only classifier (linear head, e.g., logistic regression) | Small datasets (<1,000 samples) | Minutes |
 | **Frozen Evaluation** | Classifier + attention head | Medium datasets (1,000-5,000) | ~30 min |
 | **Fine-tuning** | All model weights | Large datasets (>5,000) | Hours |
+
+> *Indicative training times; actual values depend on dataset size, embedding dimension, head architecture, and hardware. See [`script/FM_computation/FM_computation.md`](./script/FM_computation/FM_computation.md) for measured per-sample training times across models and hardware tiers.*
 
 ### 6.2 Linear Probing (Recommended for Small Datasets)
 
@@ -488,26 +534,7 @@ y_pred_proba = clf.predict_proba(X_test_scaled)
 
 ### 6.3 Using ecg-fm-benchmarking for Full Pipeline
 
-```bash
-# Configure paths in run.sh
-BASE_DIR="/path/to/ecg-fm-benchmarking"
-CHECKPOINTS_DIR="/path/to/checkpoints"
-DATASET_DIR="/path/to/your/datasets"
-
-# Choose evaluation mode
-EVAL_MODE="linear"      # Linear probing (frozen encoder + linear head)
-# EVAL_MODE="frozen"    # Frozen encoder + learnable attention head
-# EVAL_MODE="finetuning_linear"  # Fine-tune all weights
-
-# Choose model
-MODEL="hubert_ecg_base"  # or: ecg_founder, st_mem, merl_resnet, ecgfm_ked, cpc
-
-# Choose dataset (or configure your own in the script)
-DATASET="ptbxl_all"
-
-# Run
-bash run.sh
-```
+For an end-to-end pipeline (linear probing, frozen evaluation, or fine-tuning) across the 8 models supported by `ecg-fm-benchmarking`, configure paths and model/evaluation choices in [`run.sh`](https://github.com/AI4HealthUOL/ecg-fm-benchmarking/blob/main/run.sh) and follow the repo's documentation. Note the caveats on standardized preprocessing in §4.4 above.
 
 ### 6.4 Fine-tuning Best Practices
 
@@ -635,54 +662,6 @@ def subgroup_analysis(df, y_true, y_pred_proba, group_col):
 
 ---
 
-## Reference: ecg-fm-benchmarking Repository
-
-The [`ecg-fm-benchmarking`](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) repository provides a unified framework for comparing foundation models. While useful as a **reference implementation**, we recommend using original model repositories for best performance.
-
-### What ecg-fm-benchmarking Provides
-
-| Feature | Description | Caveat |
-|---------|-------------|--------|
-| Unified interface | 8 foundation models | Does not include all available FMs (17+ exist) |
-| Evaluation modes | Linear probing, frozen, fine-tuning | ✅ Useful for comparison |
-| Standardized preprocessing | Consistent across models | ⚠️ May reduce individual model performance |
-| Benchmark datasets | 12 public datasets | ✅ Good for reproducibility |
-
-### When to Use ecg-fm-benchmarking
-
-✅ **Good for:**
-- Quick comparison of multiple models on the same task
-- Reproducing benchmark results from the paper
-- Understanding the general workflow of FM evaluation
-- Learning the training/evaluation pipeline structure
-
-⚠️ **Consider original repos instead for:**
-- Maximizing performance on your specific task
-- Using models not included in the benchmark (9+ additional FMs)
-- Ensuring preprocessing matches original pretraining
-- Production/clinical deployment
-
-### Example: Using Original Repo vs Benchmark
-
-**Option A: Original Repository (Recommended for best performance)**
-```bash
-# Example with ECGFounder
-git clone https://github.com/PKUDigitalHealth/ECGFounder.git
-cd ECGFounder
-# Follow their README for setup and preprocessing
-# Uses author-intended preprocessing pipeline
-```
-
-**Option B: ecg-fm-benchmarking (For quick comparison)**
-```bash
-git clone https://github.com/AI4HealthUOL/ecg-fm-benchmarking.git
-cd ecg-fm-benchmarking
-conda env create -f env.yaml
-# Uses standardized preprocessing (may differ from original)
-```
-
----
-
 ## Common Pitfalls and Troubleshooting
 
 ### ❌ Pitfall 1: Preprocessing Mismatch
@@ -755,6 +734,10 @@ ecg_resampled = resampy.resample(ecg, sr_source=500, sr_target=250, axis=-1)
 | ECGFM-KED | [GitHub](https://github.com/control-spiderman/ECGFM-KED/) | [Zenodo](https://zenodo.org/records/14881564) |
 | ECG-CPC | [GitHub](https://github.com/AI4HealthUOL/ecg-fm-benchmarking) | [Figshare](https://figshare.com/articles/dataset/ECG-CPC_Checkpoint_zip/30192604) |
 | ECG-FM | [GitHub](https://github.com/bowang-lab/ECG-FM/) | [HuggingFace](https://huggingface.co/wanglab/ecg-fm) |
+| DeepECG-SSL | [GitHub](https://github.com/HeartWise-AI/DeepECG_Docker) | [HuggingFace](https://huggingface.co/heartwise/SSL_Pretrained_model/tree/main) |
+| MELP | [GitHub](https://github.com/HKU-MedAI/MELP) | [HuggingFace](https://huggingface.co/fuyingw/MELP_Encoder) |
+| ECG-ESI | [GitHub](https://github.com/comp-well-org/ESI) | [Google Drive](https://drive.google.com/drive/folders/1I3ECWBEm-Yxhzl1xgx5JE-tEhDRDtN0o) |
+| HeartLang | [GitHub](https://github.com/PKUDigitalHealth/HeartLang) | [HuggingFace](https://huggingface.co/PKUDigitalHealth/HeartLang/) |
 
 ### Benchmark Datasets
 
@@ -774,23 +757,5 @@ ecg_resampled = resampy.resample(ecg, sr_source=500, sr_target=250, axis=-1)
 
 ---
 
-## Citation
-
-If you use this guide or the ecg-fm-benchmarking repository, please cite:
-
-```bibtex
-@misc{almasud2025benchmarkingecgfoundationalmodels,
-      title={Benchmarking ECG Foundational Models: A Reality Check Across Clinical Tasks}, 
-      author={M A Al-Masud and Juan Miguel Lopez Alcaraz and Nils Strodthoff},
-      year={2025},
-      eprint={2509.25095},
-      archivePrefix={arXiv},
-      primaryClass={eess.SP},
-      url={https://arxiv.org/abs/2509.25095}, 
-}
-```
-
----
-
-*Last updated: January 2026*
+*Last updated: April 2026*
 
