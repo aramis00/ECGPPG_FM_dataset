@@ -177,6 +177,26 @@ Choose based on your ECG format and task requirements:
 
 > *No single FM consistently outperforms others across all tasks and settings. Existing systematic benchmarks evaluate only a subset of available models, and methodological choices (e.g., unified preprocessing across heterogeneous models) may disadvantage models trained with model-specific input pipelines. Performance is task- and dataset-dependent — always validate on your own target endpoint.*
 
+### 2.3 Interpreting Benchmark Rankings
+
+Published benchmarks of ECG FMs apply unified preprocessing pipelines and standardized input specifications across heterogeneous architectures. This standardization is necessary for fair comparison, but it disproportionately affects models whose original specifications do not match the unified pipeline. As a result, **benchmark rankings partly reflect each architecture's robustness to input-spec mismatch — not pretraining quality alone**.
+
+Example: in the systematic 8-model benchmark from `ecg-fm-benchmarking`, the unified input fed to each encoder differs from the model's original specification as follows (per [`run.sh`](https://github.com/AI4HealthUOL/ecg-fm-benchmarking/blob/main/run.sh)):
+
+| Model | Original input | Benchmark input | Mismatch |
+|---|---|---|---|
+| **ECG-JEPA** | 250 Hz × 10s = 2500 | 250 Hz × 10s = 2500 | None ✓ |
+| **CPC** | 240 Hz × 10s = 2400 | 240 Hz × 2.5s = 600 | 4× truncation |
+| **ECGFounder** | 500 Hz × 10s = 5000 | 500 Hz × 2.5s = 1250 | 4× truncation |
+| **HuBERT-ECG** | 500 Hz × 5s → 5× decimated | 100 Hz × 5s = 500 | Shape ✓; preprocessing differences may remain |
+| **MERL** | 500 Hz × 10s = 5000 | 500 Hz × 2.5s = 1250 | 4× truncation |
+| **ST-MEM** | 250 Hz × 9s = 2250 | 250 Hz × 2.4s = 600 | 4× truncation; severe positional-embedding mismatch (8 patches vs 30 in pretraining) |
+| **ECGFM-KED** | 100 Hz × 10s = 1000 | 500 Hz × 10s = 5000 | 5× resolution upsample (high-frequency content unseen during pretraining) |
+
+The poor performance of the patch-based transformers (ST-MEM, MERL-ViT) may have suffered disproportionately under truncation because their positional structure was learned at a specific patch count that the benchmark no longer provides. And for the KED, its CNN front-end was trained at 100 Hz, so 5× upsampling shifts its kernels into a different time-resolution regime.
+
+**Implication for clinical use:** When applying any FM to your own data, prioritize matching the model's original input specification (Section 2.1) and original preprocessing pipeline (Section 4). Benchmark provide useful framework but the rankings should be interpreted with awareness of which architectures the benchmark's pipeline structurally favors. 
+
 ---
 
 ## Step 3: Set Up Environment and Download Weights
