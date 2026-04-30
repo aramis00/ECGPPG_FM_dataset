@@ -133,7 +133,7 @@ large_datasets = datasets_12lead[datasets_12lead['records_numeric'] > 100000]
 | PPG-BP | 657 | ✓ | - | China | O | <a href="https://doi.org/10.6084/m9.figshare.5459299.v5" target="_blank">Link</a> |
 | PPG DaLiA | 15 | ✓ | ✓ | Germany | O | <a href="https://doi.org/10.24432/C53890" target="_blank">Link</a> |
 | WESAD | 15 | ✓ | ✓ | Germany | O | <a href="https://doi.org/10.24432/C57K5T" target="_blank">Link</a> |
-| TROIKA 115,116 (= IEEEPPG) | 12 | ✓ | ✓ | China | O | <a href="https://zenodo.org/records/3902710" target="_blank">Link</a> |
+| TROIKA (= IEEEPPG) | 12 | ✓ | ✓ | China | O | <a href="https://zenodo.org/records/3902710" target="_blank">Link</a> |
 | ECSMP | 89 | ✓ | ✓ | China | O | <a href="https://data.mendeley.com/datasets/vn5nknh3mn/2" target="_blank">Link</a> |
 
 ---
@@ -154,9 +154,9 @@ script/FM_computation/
 
 Key findings:
 - **Training time is dominated by sequence length and FLOPs**, not parameter count
-- **HuBERT-ECG** (92.8M params) trains ~50× faster than **ECG-FM** (90.4M params) due to aggressive downsampling
+- **HuBERT-ECG** (92.8M params) trains ~3× faster than **ECG-FM** (90.4M params) due to more aggressive downsampling (93 vs 312 transformer tokens)
 - **MERL (ResNet18)** achieves fastest inference at 9,616 samples/sec on A100
-- Large Wav2Vec2 models (ECG-FM, DeepECG) require significant GPU memory (40+ GB for training)
+- Training memory scales with sequence × hidden dim: ESI (ConvNeXtV2-Base) is the largest training-memory consumer in the suite (~16 GB on A100)
 
 See <a href="script/FM_computation/FM_computation.md" target="_blank">`script/FM_computation/FM_computation.md`</a> for detailed benchmark results and methodology.
 
