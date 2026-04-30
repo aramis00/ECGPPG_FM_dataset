@@ -84,6 +84,8 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 
 ## Benchmark Results
 
+> **Note (April 2026)**: ECG-FM and DeepECG values were updated after an implementation change to their input handling — they now feed the 12 ECG leads as `Conv1d` channels (matching the `fairseq-signals` configuration with `in_d=12`), rather than flattening leads into the time axis. Other models are unchanged from the original December 2025 / January 2026 runs. Updated raw values are in `results/ecg_benchmark_A100_20260430_105057.{csv,json}`, `results/ecg_benchmark_t4_20260430_111335.{csv,json}`, and `results/ecg_benchmark_20260430_131019.{csv,json}` (CPU).
+
 ### Hardware Configurations
 
 | Hardware | GPU | VRAM | Batch Size | PyTorch |
@@ -101,8 +103,8 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | Model | Params | GFLOPs | Infer (ms) | Infer/s | Train Batch | ms/sample | Train/s | FT Time (h) | Inf Mem | Train Mem |
 |-------|--------|--------|------------|---------|-------------|-----------|---------|-------------|---------|-----------|
 | HuBERT-ECG | 92.8M | 18.0 | 40.7 | 786 | 32 | 3.7 | 268 | 1.0 | 1.0 GB | 4.1 GB |
-| ECG-FM | 90.4M | 646.0 | 2047.9 | 16 | 16 | 186.5 | 5 | 51.8 | 5.3 GB | 44.3 GB |
-| DeepECG | 90.4M | 323.0 | 790.4 | 40 | 32 | 76.9 | 13 | 21.4 | 3.0 GB | 44.3 GB |
+| ECG-FM | 90.4M | 53.8 | 116.3 | 275 | 32 | 9.9 | 101 | 2.8 | 2.2 GB | 9.8 GB |
+| DeepECG | 90.4M | 26.9 | 61.5 | 520 | 32 | 5.6 | 178 | 1.6 | 2.0 GB | 6.1 GB |
 | ESI | 85.6M | 46.8 | 117.4 | 273 | 32 | 11.8 | 85 | 3.3 | 1.0 GB | 15.9 GB |
 | ECG-JEPA | 85.4M | 45.4 | 172.6 | 185 | 32 | 15.3 | 65 | 4.3 | 1.7 GB | 10.4 GB |
 | ST-MEM | 85.2M | 65.5 | 142.7 | 224 | 32 | 14.1 | 71 | 3.9 | 1.1 GB | 11.4 GB |
@@ -135,8 +137,8 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | Model | Params | GFLOPs | Infer (ms) | Infer/s | Train Batch | ms/sample | Train/s | FT Time (h) |
 |-------|--------|--------|------------|---------|-------------|-----------|---------|-------------|
 | HuBERT-ECG | 92.8M | 18.0 | 224.5 | 143 | 32 | 18.7 | 54 | 5.2 |
-| ECG-FM | 90.4M | 646.0 | 12735.2 | 3 | 4 | 1502.8 | 0.7 | 417.4 |
-| DeepECG | 90.4M | 323.0 | 5055.7 | 6 | 8 | 517.7 | 2 | 143.8 |
+| ECG-FM | 90.4M | 53.8 | 618.0 | 52 | 32 | 57.6 | 17 | 16.0 |
+| DeepECG | 90.4M | 26.9 | 307.2 | 104 | 32 | 27.1 | 37 | 7.5 |
 | ESI | 85.6M | 46.8 | 620.6 | 52 | 16 | 58.1 | 17 | 16.1 |
 | ECG-JEPA | 85.4M | 45.4 | 708.0 | 45 | 32 | 71.9 | 14 | 20.0 |
 | ST-MEM | 85.2M | 65.5 | 616.7 | 52 | 32 | 58.6 | 17 | 16.3 |
@@ -169,6 +171,8 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | Model | Params | GFLOPs | Infer (ms) | Infer/s | ms/sample | Train/s | FT Time (h) |
 |-------|--------|--------|------------|---------|-----------|---------|-------------|
 | HuBERT-ECG | 92.8M | 18.0 | 863.3 | 9.3 | 474.7 | 2.1 | 131.8 |
+| ECG-FM | 90.4M | 53.8 | 8030.1 | 4.0 | 967.9 | 1.0 | 268.9 |
+| DeepECG | 90.4M | 26.9 | 4197.6 | 8.0 | 461.7 | 2.2 | 128.2 |
 | ESI | 85.6M | 46.8 | 2554.9 | 3.1 | 982.9 | 1.0 | 273.0 |
 | ECG-JEPA | 85.4M | 45.4 | 4047.9 | 2.0 | 2432.5 | 0.4 | 675.7 |
 | ST-MEM | 85.2M | 65.5 | 2832.0 | 2.8 | 1008.3 | 1.0 | 280.1 |
@@ -180,8 +184,6 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 | MERL (ResNet18) | 3.8M | 3.5 | 159.9 | 50.0 | 74.9 | 13.4 | 20.8 |
 | CPC | 3.0M | 7.0 | 842.6 | 9.5 | 270.6 | 3.7 | 75.2 |
 | S4 (supervised) | 2.2M | 1.1 | 151.9 | 52.7 | 100.1 | 10.0 | 27.8 |
-
-> **Note**: ECG-FM and DeepECG crash on CPU (OOM even with batch size reduced to 1)
 
 #### Single-Lead ECG & PPG Models
 
@@ -202,8 +204,8 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 
 | Model | Params | Architecture | CPU (samples/s) | A100 (samples/s) | T4 (samples/s) | A100 Speedup | T4 Speedup |
 |-------|--------|--------------|-----------------|------------------|----------------|--------------|------------|
-| ECG-FM | 90.4M | Wav2Vec2 | OOM | 16 | 3 | — | — |
-| DeepECG | 90.4M | Wav2Vec2 | OOM | 40 | 6 | — | — |
+| ECG-FM | 90.4M | Wav2Vec2 | 4.0 | 275 | 52 | 69× | 13× |
+| DeepECG | 90.4M | Wav2Vec2 | 8.0 | 520 | 104 | 65× | 13× |
 | HuBERT-ECG | 92.8M | HuBERT | 9.3 | 786 | 143 | 85× | 15× |
 | ESI | 85.6M | ConvNeXtV2 | 3.1 | 273 | 52 | 88× | 17× |
 | ECG-JEPA | 85.4M | ViT | 2.0 | 185 | 45 | 93× | 23× |
@@ -233,13 +235,12 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 ### Key Insights
 
 1. **Training time is dominated by sequence length and FLOPs, not parameters**
-   - HuBERT-ECG (92.8M params) trains ~50× faster than ECG-FM (90.4M params) on A100
-   - This is due to aggressive downsampling (93 tokens vs 3,750 tokens)
+   - HuBERT-ECG (92.8M params) trains ~3× faster than ECG-FM (90.4M params) on A100
+   - This reflects HuBERT-ECG's aggressive downsampling (5× lead decimation + lead flattening → 93 tokens) vs ECG-FM's multi-channel input → 312 tokens
 
-2. **Memory is the bottleneck for large Wav2Vec2 models**
-   - ECG-FM requires batch reduction (32→16 on A100, 32→4 on T4)
-   - DeepECG requires batch reduction (32→8 on T4)
-   - Both ECG-FM and DeepECG crash on CPU (OOM even with batch size reduced to 1)
+2. **Training memory scales with sequence length × hidden dim, not parameters alone**
+   - ESI (5000 samples × 1024 wide ConvNeXtV2 channels) uses the most training memory in the suite (~16 GB on A100)
+   - Wav2Vec2 models (ECG-FM, DeepECG, MELP) fit comfortably at batch=32 across A100 / T4 / CPU
 
 3. **Efficient architectures for deployment**
    - **Fastest inference (A100)**: MERL (ResNet18) (9,616/s), S4 (supervised) (6,256/s)
@@ -318,6 +319,6 @@ Projected time to fine-tune on 100,000 samples for 10 epochs, based on per-sampl
 |----------------|----------------|---------------|
 | Small (ECG-PT, S4) | 0.5-1.0 | 1.0-2.0 |
 | Medium (MERL, ECGFounder) | 1.0-2.0 | 2.0-4.0 |
-| Large (ECG-FM, HuBERT-ECG) | 2.0-5.0 | 6.0-45.0 |
+| Large (HuBERT-ECG, ECG-FM, ESI) | 1.0-5.0 | 4.0-16.0 |
 
 ---
