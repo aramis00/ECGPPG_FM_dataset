@@ -531,9 +531,43 @@ def create_hubert():
 
 # ecgfm — Wav2Vec2 model
 
+def _patch_wav2vec_first_conv(model, in_channels):
+    """Replace the first Conv1d of a HF Wav2Vec2Model to accept `in_channels`
+    instead of 1. fairseq-signals uses in_d=12 (leads as channels)."""
+    old = model.feature_extractor.conv_layers[0].conv
+    model.feature_extractor.conv_layers[0].conv = nn.Conv1d(
+        in_channels=in_channels,
+        out_channels=old.out_channels,
+        kernel_size=old.kernel_size,
+        stride=old.stride,
+        bias=old.bias is not None,
+    )
+
+
+def _wav2vec_multichannel_forward(model, x):
+    """Run a HF Wav2Vec2Model on multi-channel (B, C, T) input by calling its
+    components manually. We bypass `Wav2Vec2Model.forward` because HF's
+    `Wav2Vec2FeatureEncoder.forward` does `input_values[:, None]` (assuming 1D
+    audio), which would expand (B, C, T) into 4D and break Conv1d.
+    """
+    # CNN feature extractor — call conv layers directly on (B, C, T)
+    h = x
+    for conv_layer in model.feature_extractor.conv_layers:
+        h = conv_layer(h)              # (B, 256, T/16)
+    h = h.transpose(1, 2)              # (B, T/16, 256)
+    h, _ = model.feature_projection(h) # (B, T/16, 768)
+    h = model.encoder(h)[0]            # (B, T/16, 768)
+    return h
+
+
 def create_wav2vec():
     """ECG-FM: Wav2Vec2, 12 layers, 768 dim
-    From: fairseq-signals/examples/w2v_cmsc (bowang-lab/ECG-FM)"""
+    From: fairseq-signals/examples/w2v_cmsc (bowang-lab/ECG-FM)
+
+    Real fairseq-signals config sets in_d=12 (leads as channels) — input stays
+    (B, 12, 5000) and produces 312 transformer tokens. The previous version
+    flattened leads into time, inflating tokens to 3,750 and FLOPs ~20x.
+    """
     from transformers import Wav2Vec2Config, Wav2Vec2Model
 
     cfg = Wav2Vec2Config(
@@ -541,9 +575,9 @@ def create_wav2vec():
         num_hidden_layers=12,
         num_attention_heads=12,
         intermediate_size=3072,
-        conv_dim=(256, 256, 256, 256),        # 4 conv layers 
-        conv_stride=(2, 2, 2, 2),              # Total stride: 16 
-        conv_kernel=(2, 2, 2, 2),           
+        conv_dim=(256, 256, 256, 256),        # 4 conv layers
+        conv_stride=(2, 2, 2, 2),              # Total stride: 16
+        conv_kernel=(2, 2, 2, 2),
         num_conv_pos_embeddings=128,
         num_conv_pos_embedding_groups=16,
         mask_time_prob=0.0,
@@ -554,12 +588,11 @@ def create_wav2vec():
         def __init__(self):
             super().__init__()
             self.model = Wav2Vec2Model(cfg)
+            _patch_wav2vec_first_conv(self.model, in_channels=12)
 
         def forward(self, x):
-            # x: (B, 12, 5000)
-            # Flatten leads into single sequence (as done in fairseq-signals)
-            x = x.reshape(x.size(0), -1)  # (B, 60000) 
-            return self.model(x).last_hidden_state
+            # x: (B, 12, 5000) — leads as channels, no flattening
+            return _wav2vec_multichannel_forward(self.model, x)
 
     return ECGFMWrapper()
 
@@ -567,7 +600,7 @@ def create_wav2vec():
 
 def create_heartwise_ssl():
     """HeartWise SSL: Wav2Vec2-CMSC, 12 layers, 768 dim
-    From: fairseq-signals w2v_cmsc architecture
+    From: fairseq-signals w2v_cmsc architecture (in_d=12, leads as channels).
     """
     from transformers import Wav2Vec2Config, Wav2Vec2Model
 
@@ -590,12 +623,11 @@ def create_heartwise_ssl():
         def __init__(self):
             super().__init__()
             self.model = Wav2Vec2Model(cfg)
+            _patch_wav2vec_first_conv(self.model, in_channels=12)
 
         def forward(self, x):
-            # x: (B, 12, 2500)
-            # Flatten leads into single sequence (as done in fairseq-signals)
-            x = x.reshape(x.size(0), -1)  # (B, 30000)
-            return self.model(x).last_hidden_state
+            # x: (B, 12, 2500) — leads as channels, no flattening
+            return _wav2vec_multichannel_forward(self.model, x)
 
     return HeartWiseSSLWrapper()
 
