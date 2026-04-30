@@ -24,12 +24,14 @@ HuBERT-ECG,HuBERT-ECG as a self-supervised foundation model for broad and scalab
 • Prognostic prediction (mortality)","• ECG diagnosis – 164 Dx. (0.85, overlap pretraining)
 • 2 yr mortality – Chagas cohort (0.87 - c.f. SL 0.88)","• Efficient inference via aggressive down-sampling (93M params)
 • Lower benchmark performance**",2024,CNN+Transformer,ecg,M/R/G,"CODE, CPSC, CPSC-Extra, PTB, PTB-XL, Georgia, CSN, Tianchi, MIMIC-IV, SPH",9.1M,https://github.com/Edoar-do/HuBERT-ECG,https://huggingface.co/Edoardo-BS,"CODE, CPSC, CPSC-Extra, PTB, PTB-XL, Georgia, CSN, Tianchi, SPH, SaMi-Trop",12,100,0,1,na,1,0,1,0,0,"Hardware, training time proxy: No. of steps per dataset",saliency map,9100000
-DeepECG,Foundation models for generalizable electrocardiogram interpretation: comparison of supervised and self-supervised electrocardiogram foundation models,https://doi.org/10.1101/2025.03.02.25322575 ,"{RN3,
-   author = {Nolin-Lapalme, Alexis and Sowa, Achille and Delfrate, Jacques and Tastet, Olivier and Corbin, Denis and Kulbay, Merve and Ozdemir, Derman and No√´l, Marie-Jeanne and Marois-Blanchet, Fran√ßois-Christophe and Harvey, Fran√ßois},
-   title = {Foundation models for generalizable electrocardiogram interpretation: comparison of supervised and self-supervised electrocardiogram foundation models},
-   journal = {medRxiv},
-   DOI = {https://doi.org/10.1101/2025.03.02.25322575 },
-   year = {2025},
+DeepECG,Foundation models for electrocardiogram interpretation: clinical implications,https://doi.org/10.1093/eurheartj/ehaf1119,"{RN3,
+   author = {Nolin-Lapalme, Alexis and Sowa, Achille and Delfrate, Jacques and Tastet, Olivier and Corbin, Denis and Kulbay, Merve and Ozdemir, Derman and Noël, Marie-Jeanne and Marois-Blanchet, François-Christophe and Harvey, François and Sharma, Surbhi and Ansari, Minhaj and Chiu, I Min and D'souza, Valentina and Friedman, Sam F. and Chassé, Michaël and Potter, Brian J. and Afilalo, Jonathan and Elias, Pierre Adil and Jabbour, Gilbert and Bahani, Mourad and Dubé, Marie-Pierre and Boyle, Patrick M. and Chatterjee, Neal A. and Barrios, Joshua and Tison, Geoffrey H. and Ouyang, David and Maddah, Mahnaz and Khurshid, Shaan and Cadrin-Tourigny, Julia and Tadros, Rafik and Hussin, Julie and Avram, Robert},
+   title = {Foundation models for electrocardiogram interpretation: clinical implications},
+   journal = {European Heart Journal},
+   pages = {ehaf1119},
+   DOI = {10.1093/eurheartj/ehaf1119},
+   year = {2026},
+   note = {Online ahead of print},
    type = {Journal Article}
 }
 ","• Multilabel classification (77 Dx.)

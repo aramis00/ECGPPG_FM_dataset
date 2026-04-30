@@ -61,9 +61,9 @@
   },
   {
     "model": "DeepECG",
-    "title": "Foundation models for generalizable electrocardiogram interpretation: comparison of supervised and self-supervised electrocardiogram foundation models",
-    "doi": "https://doi.org/10.1101/2025.03.02.25322575 ",
-    "citation": "{RN3,\n   author = {Nolin-Lapalme, Alexis and Sowa, Achille and Delfrate, Jacques and Tastet, Olivier and Corbin, Denis and Kulbay, Merve and Ozdemir, Derman and No\u00ebl, Marie-Jeanne and Marois-Blanchet, Fran\u00e7ois-Christophe and Harvey, Fran\u00e7ois},\n   title = {Foundation models for generalizable electrocardiogram interpretation: comparison of supervised and self-supervised electrocardiogram foundation models},\n   journal = {medRxiv},\n   DOI = {https://doi.org/10.1101/2025.03.02.25322575 },\n   year = {2025},\n   type = {Journal Article}\n}\n",
+    "title": "Foundation models for electrocardiogram interpretation: clinical implications",
+    "doi": "https://doi.org/10.1093/eurheartj/ehaf1119",
+    "citation": "{RN3,\n   author = {Nolin-Lapalme, Alexis and Sowa, Achille and Delfrate, Jacques and Tastet, Olivier and Corbin, Denis and Kulbay, Merve and Ozdemir, Derman and No\u00ebl, Marie-Jeanne and Marois-Blanchet, Fran\u00e7ois-Christophe and Harvey, Fran\u00e7ois and Sharma, Surbhi and Ansari, Minhaj and Chiu, I Min and D'souza, Valentina and Friedman, Sam F. and Chass\u00e9, Micha\u00ebl and Potter, Brian J. and Afilalo, Jonathan and Elias, Pierre Adil and Jabbour, Gilbert and Bahani, Mourad and Dub\u00e9, Marie-Pierre and Boyle, Patrick M. and Chatterjee, Neal A. and Barrios, Joshua and Tison, Geoffrey H. and Ouyang, David and Maddah, Mahnaz and Khurshid, Shaan and Cadrin-Tourigny, Julia and Tadros, Rafik and Hussin, Julie and Avram, Robert},\n   title = {Foundation models for electrocardiogram interpretation: clinical implications},\n   journal = {European Heart Journal},\n   pages = {ehaf1119},\n   DOI = {10.1093/eurheartj/ehaf1119},\n   year = {2026},\n   note = {Online ahead of print},\n   type = {Journal Article}\n}\n",
     "task": "\u2022 Multilabel classification (77 Dx.)\n\u2022 Clinical assessment (LVEF category, pericarditis, LQTS subtype)\n\u2022 Prognostic prediction (5-Year incident Afib (iAF5)) \t",
     "performance": "\u2022 Multilabel classification: AUROC 0.98 (external)\n\u2022 iAF5 prediction: AUROC 0.74 (MHI-ds)\n\u2022 LVEF\u226440% prediction: AUROC 0.92 ",
     "Year": 2025,
