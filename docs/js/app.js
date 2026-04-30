@@ -1355,8 +1355,8 @@ const ARCHITECTURES = [
 // Benchmark data - A100
 const BENCHMARKS_A100 = [
   { Model: "hubert_ecg", Leads: 12, Params_M: 92.8, GFLOPs: 18.0, Infer_ms: 40.7, Throughput: 786, Train_ms_per_sample: 3.7, Finetune_Hours: 1.0, Infer_Mem_GB: 1.02, Train_Mem_GB: 4.05 },
-  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 646.0, Infer_ms: 2047.9, Throughput: 16, Train_ms_per_sample: 186.5, Finetune_Hours: 51.8, Infer_Mem_GB: 5.31, Train_Mem_GB: 44.30 },
-  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: 790.4, Throughput: 40, Train_ms_per_sample: 76.9, Finetune_Hours: 21.4, Infer_Mem_GB: 3.03, Train_Mem_GB: 44.30 },
+  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 53.8, Infer_ms: 116.3, Throughput: 275, Train_ms_per_sample: 9.9, Finetune_Hours: 2.8, Infer_Mem_GB: 2.15, Train_Mem_GB: 9.77 },
+  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 26.9, Infer_ms: 61.5, Throughput: 520, Train_ms_per_sample: 5.6, Finetune_Hours: 1.6, Infer_Mem_GB: 1.95, Train_Mem_GB: 6.11 },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 117.4, Throughput: 273, Train_ms_per_sample: 11.8, Finetune_Hours: 3.3, Infer_Mem_GB: 1.03, Train_Mem_GB: 15.91 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 172.6, Throughput: 185, Train_ms_per_sample: 15.3, Finetune_Hours: 4.3, Infer_Mem_GB: 1.66, Train_Mem_GB: 10.44 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 88.8, Throughput: 361, Train_ms_per_sample: 8.9, Finetune_Hours: 2.5, Infer_Mem_GB: 1.28, Train_Mem_GB: 6.80 },
@@ -1379,8 +1379,8 @@ const BENCHMARKS_A100 = [
 // Benchmark data - T4
 const BENCHMARKS_T4 = [
   { Model: "hubert_ecg", Leads: 12, Params_M: 92.8, GFLOPs: 18.0, Infer_ms: 224.5, Throughput: 143, Train_ms_per_sample: 18.7, Finetune_Hours: 5.2, Infer_Mem_GB: 0.96, Train_Mem_GB: 4.05 },
-  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 646.0, Infer_ms: 12735.2, Throughput: 3, Train_ms_per_sample: 1502.8, Finetune_Hours: 417.4, Infer_Mem_GB: 5.31, Train_Mem_GB: 12.21 },
-  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: 5055.7, Throughput: 6, Train_ms_per_sample: 517.7, Finetune_Hours: 143.8, Infer_Mem_GB: 3.03, Train_Mem_GB: 12.20 },
+  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 53.8, Infer_ms: 618.0, Throughput: 52, Train_ms_per_sample: 57.6, Finetune_Hours: 16.0, Infer_Mem_GB: 1.12, Train_Mem_GB: 8.72 },
+  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 26.9, Infer_ms: 307.2, Throughput: 104, Train_ms_per_sample: 27.1, Finetune_Hours: 7.5, Infer_Mem_GB: 0.92, Train_Mem_GB: 5.07 },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 620.6, Throughput: 52, Train_ms_per_sample: 58.1, Finetune_Hours: 16.1, Infer_Mem_GB: 1.03, Train_Mem_GB: 8.82 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 708.0, Throughput: 45, Train_ms_per_sample: 71.9, Finetune_Hours: 20.0, Infer_Mem_GB: 1.66, Train_Mem_GB: 10.39 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 501.6, Throughput: 64, Train_ms_per_sample: 49.6, Finetune_Hours: 13.8, Infer_Mem_GB: 1.28, Train_Mem_GB: 6.72 },
@@ -1403,8 +1403,8 @@ const BENCHMARKS_T4 = [
 // Benchmark data - CPU
 const BENCHMARKS_CPU = [
   { Model: "hubert_ecg", Leads: 12, Params_M: 92.8, GFLOPs: 18.0, Infer_ms: 863.3, Throughput: 9, Train_ms_per_sample: 474.7, Finetune_Hours: 131.8, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
-  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 646.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
-  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 323.0, Infer_ms: "OOM", Throughput: "OOM", Train_ms_per_sample: "OOM", Finetune_Hours: "OOM", Infer_Mem_GB: "OOM", Train_Mem_GB: "OOM" },
+  { Model: "ecgfm", Leads: 12, Params_M: 90.4, GFLOPs: 53.8, Infer_ms: 8030.1, Throughput: 4, Train_ms_per_sample: 967.9, Finetune_Hours: 268.9, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
+  { Model: "deepecg", Leads: 12, Params_M: 90.4, GFLOPs: 26.9, Infer_ms: 4197.6, Throughput: 8, Train_ms_per_sample: 461.7, Finetune_Hours: 128.2, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "esi", Leads: 12, Params_M: 85.6, GFLOPs: 46.8, Infer_ms: 2554.9, Throughput: 3, Train_ms_per_sample: 982.9, Finetune_Hours: 273.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "ecg_jepa", Leads: 8, Params_M: 85.4, GFLOPs: 45.4, Infer_ms: 4047.9, Throughput: 2, Train_ms_per_sample: 2432.5, Finetune_Hours: 675.7, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
   { Model: "heartbert", Leads: 1, Params_M: 83.5, GFLOPs: 43.5, Infer_ms: 1981.6, Throughput: 4, Train_ms_per_sample: 1159.1, Finetune_Hours: 322.0, Infer_Mem_GB: 0, Train_Mem_GB: 0 },
